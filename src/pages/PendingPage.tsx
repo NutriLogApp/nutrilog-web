@@ -13,7 +13,7 @@ export default function PendingPage() {
       </h2>
       <p className="text-slate-500 mb-8">{t("pending.subtitle")}</p>
       <button onClick={() => signOut()} className="text-sm text-slate-400 underline">
-        Sign out
+        {t("profile.signOut")}
       </button>
     </div>
   );
