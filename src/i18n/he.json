@@ -1,0 +1,10 @@
+{
+  "login": { "title": "NutriLog", "subtitle": "עקוב אחר התזונה שלך", "signIn": "התחבר עם Google" },
+  "pending": { "title": "ממתין לאישור", "subtitle": "מנהל המערכת יאשר את חשבונך בקרוב." },
+  "dashboard": { "greeting": "בוקר טוב", "goal": "יעד", "remaining": "נותר", "todayLog": "יומן היום" },
+  "log": { "title": "הוסף ארוחה", "text": "טקסט", "photo": "תמונה", "barcode": "ברקוד", "save": "שמור ביומן", "recent": "אחרונים", "aiResult": "תוצאת AI — ערוך אם צריך" },
+  "trends": { "title": "מגמות" },
+  "profile": { "title": "פרופיל", "goals": "היעדים שלי", "theme": "ערכת נושא", "signOut": "התנתק" },
+  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
+  "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" }
+}
