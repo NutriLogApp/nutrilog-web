@@ -1,0 +1,10 @@
+{
+  "login": { "title": "NutriLog", "subtitle": "Track your nutrition, your way", "signIn": "Sign in with Google" },
+  "pending": { "title": "Waiting for approval", "subtitle": "An admin will approve your account shortly." },
+  "dashboard": { "greeting": "Good morning", "goal": "Goal", "remaining": "remaining", "todayLog": "Today's Log" },
+  "log": { "title": "Log Food", "text": "Text", "photo": "Photo", "barcode": "Barcode", "save": "Save to Log", "recent": "Recent", "aiResult": "AI Result — edit if needed" },
+  "trends": { "title": "Trends" },
+  "profile": { "title": "Profile", "goals": "My Goals", "theme": "App Theme", "signOut": "Sign out" },
+  "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
+  "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" }
+}
