@@ -53,7 +53,13 @@
     "lunch": "ארוחת צהריים",
     "dinner": "ארוחת ערב",
     "catCollection": "אוסף חתולים",
-    "streakDays": "ימי רצף"
+    "streakDays": "ימי רצף",
+    "appearance": "מראה",
+    "darkMode": "מצב תצוגה",
+    "colorTheme": "ערכת צבעים",
+    "auto": "אוטומטי",
+    "light": "בהיר",
+    "dark": "כהה"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },

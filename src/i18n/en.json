@@ -53,7 +53,13 @@
     "lunch": "Lunch",
     "dinner": "Dinner",
     "catCollection": "Cat Collection",
-    "streakDays": "day streak"
+    "streakDays": "day streak",
+    "appearance": "Appearance",
+    "darkMode": "Display Mode",
+    "colorTheme": "Color Theme",
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },
