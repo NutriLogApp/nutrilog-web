@@ -27,7 +27,8 @@
     "caloriesAuto": "קלוריות מחושבות מהמאקרו (ח×4 + ש×9 + פ×4)",
     "dailyLog": "יומן יומי",
     "glassOfWater": "כוס מים",
-    "manageDrinks": "נהל משקאות בפרופיל"
+    "manageDrinks": "נהל משקאות בפרופיל",
+    "entries": "רשומות"
   },
   "log": {
     "title": "הוסף אוכל",
@@ -63,8 +64,6 @@
     "breakfast": "ארוחת בוקר",
     "lunch": "ארוחת צהריים",
     "dinner": "ארוחת ערב",
-    "catCollection": "אוסף חתולים",
-    "streakDays": "ימי רצף",
     "appearance": "מראה",
     "darkMode": "מצב תצוגה",
     "colorTheme": "ערכת צבעים",
@@ -82,7 +81,9 @@
     "drinkPlaceholder": "למשל בירה 500 מל, תה עם סוכר, לאטה",
     "parseFailed": "לא ניתן לנתח את המשקה",
     "waterContent": "מים",
-    "timeFormat": "פורמט שעה"
+    "timeFormat": "פורמט שעה",
+    "appSettings": "הגדרות אפליקציה",
+    "personalSettings": "הגדרות אישיות"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },
