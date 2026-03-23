@@ -56,18 +56,18 @@ export default function ProfilePage() {
 
   if (isLoading) return (
     <div className="flex items-center justify-center h-64">
-      <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }} />
+      <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
     </div>
   );
 
   const currentTheme = themes[activeTheme];
 
   return (
-    <div className="p-4 max-w-lg mx-auto space-y-4">
-      <h1 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>{t("profile.title")}</h1>
+    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
+      <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("profile.title")}</h1>
 
       {/* User info */}
-      <div className="rounded-xl p-4 flex items-center gap-3" style={{ backgroundColor: "var(--bg-card)" }}>
+      <div className="glass-card p-4 flex items-center gap-3 animate-fade-up">
         {profile?.avatar_url ? <img src={profile.avatar_url} alt="" className="w-14 h-14 rounded-full" /> : <div className="w-14 h-14 rounded-full" style={{ backgroundColor: "var(--bg-input)" }} />}
         <div className="flex-1 min-w-0">
           <p className="font-semibold truncate" style={{ color: "var(--text-primary)" }}>{profile?.name}</p>
@@ -77,14 +77,14 @@ export default function ProfilePage() {
       </div>
 
       {/* Settings rows */}
-      <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "var(--bg-card)" }}>
+      <div className="glass-card overflow-hidden animate-fade-up">
         {[
           { icon: Target, label: t("profile.goals"), onClick: () => setShowGoalsModal(true), extra: null },
           { icon: Palette, label: t("profile.appearance"), onClick: () => setShowAppearanceModal(true), extra: <span className="w-6 h-6 rounded-full shrink-0" style={{ background: `linear-gradient(135deg, ${currentTheme.start}, ${currentTheme.end})` }} /> },
           { icon: Clock, label: t("profile.eatingWindows"), onClick: () => setShowWindowsModal(true), extra: null },
         ].map(({ icon: Icon, label, onClick, extra }, idx) => (
-          <button key={idx} onClick={onClick} className="w-full flex items-center gap-3 p-4" style={{ borderTop: idx > 0 ? `1px solid var(--border)` : undefined }}>
-            <Icon size={18} style={{ color: "var(--theme-start)" }} />
+          <button key={idx} onClick={onClick} className="w-full flex items-center gap-3 p-4 active:scale-[0.98] transition-transform" style={{ borderTop: idx > 0 ? `1px solid var(--border)` : undefined }}>
+            <Icon size={18} style={{ color: "var(--theme-accent)" }} />
             <span className="flex-1 text-start text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{label}</span>
             {extra}
             <Chevron lang={i18n.language} />
@@ -95,13 +95,13 @@ export default function ProfilePage() {
       <CatCollection />
 
       {/* Language */}
-      <div className="rounded-xl p-4" style={{ backgroundColor: "var(--bg-card)" }}>
+      <div className="glass-card p-4 animate-fade-up">
         <h2 className="font-semibold mb-3" style={{ color: "var(--text-secondary)" }}>{t("profile.language")}</h2>
         <div className="flex gap-2">
           {[{ code: "en", label: "English" }, { code: "he", label: "עברית" }].map((lang) => (
             <button key={lang.code} onClick={() => switchLanguage(lang.code)}
               className="flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-all"
-              style={{ borderColor: i18n.language === lang.code ? "var(--theme-start)" : "var(--border)", backgroundColor: i18n.language === lang.code ? "var(--bg-input)" : "transparent", color: "var(--text-primary)" }}>
+              style={{ borderColor: i18n.language === lang.code ? "var(--theme-accent)" : "var(--border)", backgroundColor: i18n.language === lang.code ? "var(--bg-input)" : "transparent", color: "var(--text-primary)" }}>
               {lang.label}
             </button>
           ))}
@@ -109,7 +109,7 @@ export default function ProfilePage() {
       </div>
 
       {profile?.role === "admin" && (
-        <button onClick={() => navigate("/admin")} className="w-full rounded-xl p-4 flex items-center gap-3 font-medium" style={{ backgroundColor: "var(--bg-card)", color: "var(--text-secondary)" }}>
+        <button onClick={() => navigate("/admin")} className="glass-card w-full p-4 flex items-center gap-3 font-medium active:scale-[0.98] transition-transform animate-fade-up" style={{ color: "var(--text-secondary)" }}>
           <Shield size={18} /> <span className="flex-1 text-start">{t("admin.title")}</span> <Chevron lang={i18n.language} />
         </button>
       )}
@@ -132,7 +132,7 @@ export default function ProfilePage() {
                 className="w-full rounded-lg px-3 py-2 text-sm mt-1" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
             </div>
           ))}
-          <button onClick={saveGoals} disabled={updateMut.isPending} className="w-full py-2.5 rounded-lg text-white text-sm font-medium"
+          <button onClick={saveGoals} disabled={updateMut.isPending} className="w-full py-2.5 rounded-lg text-white text-sm font-medium active:scale-[0.98] transition-transform"
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>{t("profile.save")}</button>
         </div>
       </Modal>
@@ -144,7 +144,7 @@ export default function ProfilePage() {
           {(["auto", "light", "dark"] as const).map((mode) => (
             <button key={mode} onClick={() => switchDarkMode(mode)}
               className="flex-1 py-2 rounded-lg text-sm font-medium border-2 transition-all"
-              style={{ borderColor: darkMode === mode ? "var(--theme-start)" : "var(--border)", backgroundColor: darkMode === mode ? "var(--bg-input)" : "transparent", color: "var(--text-primary)" }}>
+              style={{ borderColor: darkMode === mode ? "var(--theme-accent)" : "var(--border)", backgroundColor: darkMode === mode ? "var(--bg-input)" : "transparent", color: "var(--text-primary)" }}>
               {t(`profile.${mode}`)}
             </button>
           ))}
@@ -154,7 +154,7 @@ export default function ProfilePage() {
           {(Object.entries(themes) as [ThemeName, (typeof themes)[ThemeName]][]).map(([name, theme]) => (
             <button key={name} onClick={() => switchTheme(name)}
               className="flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all"
-              style={{ borderColor: activeTheme === name ? "var(--theme-start)" : "var(--border)", backgroundColor: activeTheme === name ? "var(--bg-input)" : "transparent", transform: activeTheme === name ? "scale(1.05)" : undefined }}>
+              style={{ borderColor: activeTheme === name ? "var(--theme-accent)" : "var(--border)", backgroundColor: activeTheme === name ? "var(--bg-input)" : "transparent", transform: activeTheme === name ? "scale(1.05)" : undefined }}>
               <span className="w-8 h-8 rounded-full" style={{ background: `linear-gradient(135deg, ${theme.start}, ${theme.end})` }} />
               <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{theme.label}</span>
             </button>

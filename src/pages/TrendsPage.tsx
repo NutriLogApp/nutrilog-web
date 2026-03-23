@@ -60,10 +60,10 @@ export default function TrendsPage() {
   ];
 
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>{t("trends.title")}</h1>
+    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
+      <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("trends.title")}</h1>
 
-      <div className="flex gap-1 rounded-lg p-1 mb-4" style={{ backgroundColor: "var(--bg-input)" }}>
+      <div className="flex gap-1 rounded-lg p-1 animate-fade-up" style={{ backgroundColor: "var(--bg-input)" }}>
         {ranges.map((r) => (
           <button
             key={r.value}
@@ -81,10 +81,10 @@ export default function TrendsPage() {
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
           <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-               style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }} />
+               style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
         </div>
       ) : (
-        <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: "var(--bg-card)" }}>
+        <div className="glass-card p-4 animate-fade-up">
           <h2 className="text-sm font-medium mb-3" style={{ color: "var(--text-secondary)" }}>{t("trends.calories")}</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
@@ -100,7 +100,7 @@ export default function TrendsPage() {
                   <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[4, 4, 0, 0]} />
                 </>
               ) : (
-                <Bar dataKey="calories" fill="var(--theme-start)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[4, 4, 0, 0]} />
               )}
             </BarChart>
           </ResponsiveContainer>
@@ -108,7 +108,7 @@ export default function TrendsPage() {
       )}
 
       {data && (
-        <div className="mt-4 rounded-xl p-4 shadow-sm" style={{ backgroundColor: "var(--bg-card)" }}>
+        <div className="glass-card p-4 animate-fade-up">
           <h2 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("trends.avgPerDay")}</h2>
           {(() => {
             const days = data.days.filter((d) => d.entry_count > 0);

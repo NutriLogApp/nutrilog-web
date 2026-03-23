@@ -25,7 +25,7 @@ export default function WeightChart() {
   }));
 
   return (
-    <div className="rounded-xl p-4 shadow-sm mt-4" style={{ backgroundColor: "var(--bg-card)" }}>
+    <div className="glass-card p-4 animate-fade-up">
       <h2 className="text-sm font-medium mb-3" style={{ color: "var(--text-secondary)" }}>{t("weight.title")}</h2>
 
       {chartData.length > 1 && (
@@ -38,7 +38,7 @@ export default function WeightChart() {
             <Line
               type="monotone"
               dataKey="weight"
-              stroke="var(--theme-start)"
+              stroke="var(--theme-accent)"
               strokeWidth={2}
               dot={{ r: 3 }}
             />
@@ -54,12 +54,12 @@ export default function WeightChart() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={t("weight.placeholder")}
           className="flex-1 border rounded-lg px-3 py-2 text-sm"
-          style={{ borderColor: "var(--border)" }}
+          style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-input)", color: "var(--text-primary)" }}
         />
         <button
           onClick={() => logMut.mutate()}
           disabled={!input || logMut.isPending}
-          className="px-4 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-50"
+          className="px-4 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-50 active:scale-[0.98] transition-transform"
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
         >
           {t("weight.log")}
