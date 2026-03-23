@@ -173,7 +173,7 @@ export default function ProfilePage() {
       </Modal>
 
       <Modal open={showDrinksModal} onClose={() => setShowDrinksModal(false)} title={t("profile.customDrinks")}>
-        <DrinkManager onClose={() => setShowDrinksModal(false)} />
+        <DrinkManager />
       </Modal>
 
       {showRetakeQuiz && (
