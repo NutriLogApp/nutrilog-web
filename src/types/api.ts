@@ -80,6 +80,8 @@ export interface ProfileOut {
   height_cm: number | null;
   activity_level: string | null;
   daily_water_goal_ml: number;
+  goal_weight_kg: number | null;
+  onboarding_done: boolean;
   current_streak: number;
   longest_streak: number;
 }

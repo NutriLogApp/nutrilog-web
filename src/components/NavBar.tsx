@@ -1,12 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, PlusCircle, BarChart3, User, Users } from "lucide-react";
+import { Home, CalendarDays, BarChart3, User, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getFriendRequests } from "@/services/socialService";
 
 const tabs = [
   { path: "/", icon: Home, labelKey: "nav.home" },
-  { path: "/log", icon: PlusCircle, labelKey: "nav.log" },
+  { path: "/myday", icon: CalendarDays, labelKey: "nav.myday" },
   { path: "/friends", icon: Users, labelKey: "nav.friends" },
   { path: "/trends", icon: BarChart3, labelKey: "nav.trends" },
   { path: "/profile", icon: User, labelKey: "nav.profile" },
