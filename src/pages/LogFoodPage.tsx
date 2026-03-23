@@ -162,7 +162,7 @@ export default function LogFoodPage() {
             className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50"
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
           >
-            {parsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : "Analyze"}
+            {parsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.analyze")}
           </button>
         </div>
       )}
@@ -208,7 +208,7 @@ export default function LogFoodPage() {
             className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50"
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
           >
-            {parsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : "Look up"}
+            {parsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.lookup")}
           </button>
         </div>
       )}

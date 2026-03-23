@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { Navigate } from "react-router-dom";
+import { getProfile } from "@/services/profileService";
 import { listUsers, updateUserStatus } from "@/services/adminService";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -12,6 +14,11 @@ export default function AdminPage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
 
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
+  });
+
   const { data: users, isLoading } = useQuery({
     queryKey: ["adminUsers"],
     queryFn: listUsers,
@@ -23,7 +30,11 @@ export default function AdminPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["adminUsers"] }),
   });
 
-  if (isLoading) {
+  if (!profileLoading && profile?.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
+  if (isLoading || profileLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div

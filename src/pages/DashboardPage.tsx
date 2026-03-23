@@ -86,7 +86,7 @@ export default function DashboardPage() {
       <div className="space-y-2">
         {data.entries.length === 0 && (
           <p className="text-sm text-slate-400 text-center py-8">
-            No entries yet — tap + to log food
+            {t("dashboard.noEntries")}
           </p>
         )}
         {data.entries.map((entry) => (

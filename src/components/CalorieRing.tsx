@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface Props {
   consumed: number;
   goal: number;
@@ -5,6 +7,7 @@ interface Props {
 }
 
 export default function CalorieRing({ consumed, goal, size = 160 }: Props) {
+  const { t } = useTranslation();
   const radius = (size - 16) / 2;
   const circumference = 2 * Math.PI * radius;
   const pct = Math.min(consumed / (goal || 1), 1);
@@ -43,7 +46,7 @@ export default function CalorieRing({ consumed, goal, size = 160 }: Props) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-2xl font-bold text-slate-900">{consumed}</span>
-        <span className="text-xs text-slate-400">{remaining} left</span>
+        <span className="text-xs text-slate-400">{remaining} {t("dashboard.remaining")}</span>
       </div>
     </div>
   );

@@ -75,7 +75,7 @@ export default function TrendsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-xl p-4 shadow-sm">
-          <h2 className="text-sm font-medium text-slate-700 mb-3">Calories</h2>
+          <h2 className="text-sm font-medium text-slate-700 mb-3">{t("trends.calories")}</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -91,7 +91,7 @@ export default function TrendsPage() {
       {/* Macro breakdown for the range */}
       {data && (
         <div className="mt-4 bg-white rounded-xl p-4 shadow-sm">
-          <h2 className="text-sm font-medium text-slate-700 mb-2">Avg / day</h2>
+          <h2 className="text-sm font-medium text-slate-700 mb-2">{t("trends.avgPerDay")}</h2>
           {(() => {
             const days = data.days.filter((d) => d.entry_count > 0);
             const n = days.length || 1;

@@ -3,10 +3,10 @@ import { Home, PlusCircle, BarChart3, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const tabs = [
-  { path: "/", icon: Home, labelKey: "dashboard.greeting" },
-  { path: "/log", icon: PlusCircle, labelKey: "log.title" },
-  { path: "/trends", icon: BarChart3, labelKey: "trends.title" },
-  { path: "/profile", icon: User, labelKey: "profile.title" },
+  { path: "/", icon: Home, labelKey: "nav.home" },
+  { path: "/log", icon: PlusCircle, labelKey: "nav.log" },
+  { path: "/trends", icon: BarChart3, labelKey: "nav.trends" },
+  { path: "/profile", icon: User, labelKey: "nav.profile" },
 ] as const;
 
 export default function NavBar() {
@@ -27,7 +27,7 @@ export default function NavBar() {
             }`}
           >
             <Icon size={22} />
-            <span>{t(labelKey).split(" ")[0]}</span>
+            <span>{t(labelKey)}</span>
           </button>
         );
       })}

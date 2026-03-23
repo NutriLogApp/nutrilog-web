@@ -40,6 +40,8 @@ vi.mock("react-i18next", () => ({
         "log.save": "Save to Log",
         "log.recent": "Recent",
         "log.aiResult": "AI Result",
+        "log.analyze": "Analyze",
+        "log.lookup": "Look up",
       };
       return map[key] ?? key;
     },

@@ -94,7 +94,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-2 gap-3">
           {(
             [
-              ["daily_cal_goal", "Calories", "kcal"],
+              ["daily_cal_goal", t("profile.calories"), "kcal"],
               ["daily_protein_goal_g", t("macros.protein"), "g"],
               ["daily_fat_goal_g", t("macros.fat"), "g"],
               ["daily_carbs_goal_g", t("macros.carbs"), "g"],
@@ -124,7 +124,7 @@ export default function ProfilePage() {
               "linear-gradient(135deg, var(--theme-start), var(--theme-end))",
           }}
         >
-          Save
+          {t("profile.save")}
         </button>
       </div>
 
@@ -162,7 +162,7 @@ export default function ProfilePage() {
 
       {/* Language */}
       <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-        <h2 className="font-semibold text-slate-700 mb-3">Language</h2>
+        <h2 className="font-semibold text-slate-700 mb-3">{t("profile.language")}</h2>
         <div className="flex gap-2">
           {[
             { code: "en", label: "English" },

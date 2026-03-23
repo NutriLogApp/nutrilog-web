@@ -13,4 +13,19 @@ apiClient.interceptors.request.use(async (config) => {
   return config;
 });
 
+apiClient.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    if (error.response?.status === 401) {
+      const { error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) {
+        window.location.href = "/login";
+      } else {
+        return apiClient(error.config);
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 export default apiClient;

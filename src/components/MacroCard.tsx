@@ -16,7 +16,7 @@ export default function MacroCard({ label, value, goal, unit = "g", color }: Pro
         {Math.round(value)}
         <span className="text-xs font-normal text-slate-400">{unit}</span>
       </p>
-      {goal && (
+      {goal != null && (
         <div className="mt-1.5 h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-500"
