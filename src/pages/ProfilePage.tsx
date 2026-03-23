@@ -342,13 +342,24 @@ export default function ProfilePage() {
 
       {/* Time Format */}
       <Modal open={modal === "timeFormat"} onClose={() => setModal(null)} title={t("profile.timeFormat")}>
-        <div className="flex gap-3">
+        <h3 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("profile.clockFormat")}</h3>
+        <div className="flex gap-3 mb-4">
           {[{ val: true, label: "24h", example: "14:30" }, { val: false, label: "12h", example: "2:30 PM" }].map((opt) => (
-            <button key={String(opt.val)} onClick={() => { updateMut.mutate({ use_24h: opt.val }); setModal(null); }}
-              className="flex-1 py-4 rounded-xl border-2 transition-all active:scale-[0.97] flex flex-col items-center gap-1"
+            <button key={String(opt.val)} onClick={() => { updateMut.mutate({ use_24h: opt.val }); }}
+              className="flex-1 py-3 rounded-xl border-2 transition-all active:scale-[0.97] flex flex-col items-center gap-1"
               style={{ borderColor: (profile?.use_24h ?? true) === opt.val ? "var(--theme-accent)" : "var(--border)", backgroundColor: (profile?.use_24h ?? true) === opt.val ? "var(--bg-input)" : "transparent" }}>
-              <span className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{opt.label}</span>
-              <span className="text-xs" style={{ color: "var(--text-muted)" }}>{opt.example}</span>
+              <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{opt.label}</span>
+              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{opt.example}</span>
+            </button>
+          ))}
+        </div>
+        <h3 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("profile.weekStart")}</h3>
+        <div className="flex gap-3">
+          {[{ val: 0, label: t("profile.sunday") }, { val: 1, label: t("profile.monday") }].map((opt) => (
+            <button key={opt.val} onClick={() => { updateMut.mutate({ first_day_of_week: opt.val }); }}
+              className="flex-1 py-3 rounded-xl border-2 transition-all active:scale-[0.97]"
+              style={{ borderColor: (profile?.first_day_of_week ?? 0) === opt.val ? "var(--theme-accent)" : "var(--border)", backgroundColor: (profile?.first_day_of_week ?? 0) === opt.val ? "var(--bg-input)" : "transparent", color: "var(--text-primary)" }}>
+              <span className="text-sm font-semibold">{opt.label}</span>
             </button>
           ))}
         </div>

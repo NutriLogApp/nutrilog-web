@@ -70,10 +70,19 @@ export default function DashboardPage() {
 
   return (
     <div className="px-5 pt-8 pb-4 max-w-lg mx-auto">
-      {/* Greeting */}
-      <h1 className="text-[26px] font-bold tracking-tight mb-8 animate-fade-up" style={{ color: "var(--text-primary)" }}>
-        {getGreeting(t)}
-      </h1>
+      {/* Greeting + streak */}
+      <div className="flex items-center justify-between mb-8 animate-fade-up">
+        <h1 className="text-[26px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
+          {getGreeting(t)}
+        </h1>
+        {profile && profile.current_streak > 0 && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+            style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}>
+            <span className="text-sm">🔥</span>
+            <span className="text-xs font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>{profile.current_streak}</span>
+          </div>
+        )}
+      </div>
 
       {/* Hero ring — floating, with glow */}
       <div className="flex flex-col items-center mb-6 animate-fade-up stagger-1">

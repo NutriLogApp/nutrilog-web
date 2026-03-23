@@ -1,15 +1,32 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Sparkles, RefreshCw } from "lucide-react";
-import { getDailyInsight } from "@/services/insightService";
+import { getDailyInsight, refreshInsight } from "@/services/insightService";
 
 export default function DailyInsight() {
   const { t } = useTranslation();
-  const { data, isLoading, refetch } = useQuery({
+  const qc = useQueryClient();
+  const [spinning, setSpinning] = useState(false);
+
+  const { data, isLoading } = useQuery({
     queryKey: ["insight"],
     queryFn: getDailyInsight,
-    staleTime: 10 * 60 * 1000, // 10 min
+    staleTime: 10 * 60 * 1000,
   });
+
+  const refreshMut = useMutation({
+    mutationFn: refreshInsight,
+    onMutate: () => setSpinning(true),
+    onSuccess: (newData) => {
+      qc.setQueryData(["insight"], newData);
+      setTimeout(() => setSpinning(false), 600);
+    },
+    onError: () => setSpinning(false),
+  });
+
+  const refreshesLeft = data?.refreshes_left ?? 5;
+  const canRefresh = refreshesLeft > 0 && !spinning;
 
   return (
     <div className="glass-card p-4">
@@ -23,11 +40,19 @@ export default function DailyInsight() {
             <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
               {t("insight.title")}
             </span>
-            <button onClick={() => refetch()} disabled={isLoading}
-              className="p-1 rounded-full transition-all active:scale-90"
-              style={{ color: "var(--text-muted)" }}>
-              <RefreshCw size={12} className={isLoading ? "animate-spin" : ""} />
-            </button>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[9px] font-medium tabular-nums" style={{ color: "var(--text-muted)" }}>
+                {refreshesLeft}/5
+              </span>
+              <button
+                onClick={() => canRefresh && refreshMut.mutate()}
+                disabled={!canRefresh}
+                className="p-1.5 rounded-full transition-all active:scale-90 disabled:opacity-30"
+                style={{ color: "var(--text-muted)" }}
+              >
+                <RefreshCw size={13} className={spinning || isLoading ? "animate-spin" : ""} style={{ transition: "transform 0.3s ease" }} />
+              </button>
+            </div>
           </div>
           {isLoading ? (
             <div className="flex gap-1.5 py-2">
