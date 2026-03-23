@@ -45,7 +45,7 @@ export default function NavBar() {
               onClick={() => navigate(path)}
               className="flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-medium transition-all duration-200 relative"
               style={{
-                color: active ? "var(--theme-start)" : "var(--text-muted)",
+                color: active ? "var(--theme-accent)" : "var(--text-muted)",
                 transform: active ? "scale(1.08)" : "scale(1)",
               }}
             >

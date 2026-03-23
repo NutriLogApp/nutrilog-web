@@ -54,7 +54,7 @@ export default function EatingWindows({ onClose }: Props) {
               value={w.start_time}
               onChange={(e) => update(i, "start_time", e.target.value)}
               className="flex-1 border rounded-lg px-3 py-2 text-sm"
-              style={{ borderColor: "var(--border)" }}
+              style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-input)", color: "var(--text-primary)" }}
             />
             <span style={{ color: "var(--text-muted)" }}>—</span>
             <input
@@ -62,7 +62,7 @@ export default function EatingWindows({ onClose }: Props) {
               value={w.end_time}
               onChange={(e) => update(i, "end_time", e.target.value)}
               className="flex-1 border rounded-lg px-3 py-2 text-sm"
-              style={{ borderColor: "var(--border)" }}
+              style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-input)", color: "var(--text-primary)" }}
             />
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function EatingWindows({ onClose }: Props) {
       <button
         onClick={() => saveMut.mutate()}
         disabled={saveMut.isPending}
-        className="w-full py-2.5 rounded-lg text-white text-sm font-medium"
+        className="w-full py-2.5 rounded-lg text-white text-sm font-medium active:scale-[0.98] transition-transform"
         style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
       >
         {t("profile.save")}

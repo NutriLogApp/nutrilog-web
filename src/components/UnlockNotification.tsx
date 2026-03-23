@@ -33,9 +33,9 @@ export default function UnlockNotification() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30">
-      <button onClick={dismiss} className="w-full max-w-lg rounded-t-2xl p-6 text-center shadow-xl" style={{ backgroundColor: "var(--bg-card)" }}>
+      <button onClick={dismiss} className="glass-card w-full max-w-lg rounded-t-2xl p-6 text-center active:scale-[0.98] transition-transform" style={{ boxShadow: "var(--shadow-elevated)" }}>
         <span className="text-5xl block mb-3">{newCat.emoji}</span>
-        <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("pet.unlocked", { name: newCat.name })}</p>
+        <p className="text-lg font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{t("pet.unlocked", { name: newCat.name })}</p>
         <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>{t("pet.tapDismiss")}</p>
       </button>
     </div>

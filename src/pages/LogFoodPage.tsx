@@ -81,15 +81,15 @@ export default function LogFoodPage() {
   ];
 
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>{t("log.title")}</h1>
+    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
+      <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("log.title")}</h1>
 
-      <div className="flex gap-1 rounded-lg p-1 mb-4" style={{ backgroundColor: "var(--bg-input)" }}>
+      <div className="flex gap-1 rounded-lg p-1 animate-fade-up" style={{ backgroundColor: "var(--bg-input)" }}>
         {tabButtons.map(({ key, icon: Icon, label }) => (
           <button key={key} onClick={() => { setTab(key); setItems([]); setError(null); }}
             className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-sm font-medium transition-colors"
             style={tab === key
-              ? { backgroundColor: "var(--bg-card)", color: "var(--text-primary)", boxShadow: "0 1px 2px rgba(0,0,0,0.1)" }
+              ? { backgroundColor: "var(--bg-card)", color: "var(--text-primary)", boxShadow: "var(--shadow-card)" }
               : { color: "var(--text-muted)" }}>
             <Icon size={16} /> {label}
           </button>
@@ -97,12 +97,12 @@ export default function LogFoodPage() {
       </div>
 
       {tab === "text" && (
-        <div className="space-y-2">
+        <div className="space-y-2 animate-fade-up">
           <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder={t("log.placeholder")}
-            className="w-full rounded-lg p-3 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-[var(--theme-start)]"
-            style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)", border: "1px solid var(--border)" }} />
+            className="w-full rounded-lg p-3 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
+            style={{ backgroundColor: "var(--bg-input)", borderColor: "var(--border)", color: "var(--text-primary)", border: "1px solid var(--border)" }} />
           <button onClick={handleParseText} disabled={parsing || !text.trim()}
-            className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50"
+            className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50 active:scale-[0.98] transition-transform"
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
             {parsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.analyze")}
           </button>
@@ -110,27 +110,27 @@ export default function LogFoodPage() {
       )}
 
       {tab === "photo" && (
-        <div className="space-y-2">
+        <div className="space-y-2 animate-fade-up">
           <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={handleImageChange} className="hidden" />
           <button onClick={() => fileRef.current?.click()} disabled={parsing}
-            className="w-full py-8 border-2 border-dashed rounded-lg text-sm flex flex-col items-center gap-2"
+            className="glass-card w-full py-8 border-2 border-dashed text-sm flex flex-col items-center gap-2 active:scale-[0.98] transition-transform"
             style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
             {parsing ? <Loader2 size={24} className="animate-spin" /> : <><Camera size={24} /><span>{t("log.takePhoto")}</span></>}
           </button>
         </div>
       )}
 
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
 
       {items.length > 0 && (
-        <div className="mt-4">
+        <div className="animate-fade-up">
           <p className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>{t("log.aiResult")}</p>
           <div className="space-y-2">
             {items.map((item, i) => {
               const isHe = i18n.language === "he";
               const displayName = isHe && item.food_name_he ? item.food_name_he : item.food_name;
               return (
-                <div key={i} className="rounded-lg p-3" style={{ backgroundColor: "var(--bg-card)" }}>
+                <div key={i} className="glass-card-sm p-3">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>{displayName}</span>
                     <span className="text-xs" style={{ color: "var(--text-muted)" }}>{item.calories} {t("dashboard.kcal")}</span>
@@ -151,7 +151,7 @@ export default function LogFoodPage() {
             })}
           </div>
           <button onClick={handleSave} disabled={saveMut.isPending}
-            className="w-full mt-4 py-3 rounded-lg text-white font-medium disabled:opacity-50"
+            className="w-full mt-4 py-3 rounded-lg text-white font-medium disabled:opacity-50 active:scale-[0.98] transition-transform"
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
             {saveMut.isPending ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.save")}
           </button>
@@ -159,13 +159,12 @@ export default function LogFoodPage() {
       )}
 
       {items.length === 0 && recentFoods.data && recentFoods.data.length > 0 && (
-        <div className="mt-6">
+        <div className="animate-fade-up">
           <p className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>{t("log.recent")}</p>
           <div className="space-y-1">
             {recentFoods.data.map((rf, i) => (
               <button key={i} onClick={() => addRecentItem({ food_name: rf.food_name, food_name_he: rf.food_name_he, grams: rf.grams, calories: rf.calories, protein_g: rf.protein_g, fat_g: rf.fat_g, carbs_g: rf.carbs_g, confidence: "high" })}
-                className="w-full text-start rounded-lg p-3 text-sm flex justify-between"
-                style={{ backgroundColor: "var(--bg-card)" }}>
+                className="glass-card-sm w-full text-start p-3 text-sm flex justify-between active:scale-[0.98] transition-transform">
                 <span style={{ color: "var(--text-primary)" }}>{i18n.language === "he" && rf.food_name_he ? rf.food_name_he : rf.food_name}</span>
                 <span style={{ color: "var(--text-muted)" }}>{rf.calories} {t("dashboard.kcal")}</span>
               </button>

@@ -19,7 +19,7 @@ export default function CatCollection() {
   if (!data) return null;
 
   return (
-    <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: "var(--bg-card)" }}>
+    <div className="glass-card p-4 animate-fade-up">
       <h2 className="font-semibold mb-3" style={{ color: "var(--text-secondary)" }}>{t("profile.catCollection")}</h2>
       <div className="flex gap-3 overflow-x-auto pb-2">
         {data.cats.map((cat: CatInfo) => {
@@ -29,8 +29,8 @@ export default function CatCollection() {
               key={cat.name}
               onClick={() => cat.unlocked && selectMut.mutate(cat.name)}
               disabled={!cat.unlocked}
-              className={`flex flex-col items-center gap-1 min-w-16 p-2 rounded-lg border-2 transition-colors ${
-                active ? "border-[var(--theme-start)]"
+              className={`flex flex-col items-center gap-1 min-w-16 p-2 rounded-lg border-2 transition-colors active:scale-[0.98] ${
+                active ? "border-[var(--theme-accent)]"
                   : cat.unlocked ? "border-transparent"
                   : "border-transparent opacity-40"
               }`}

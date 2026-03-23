@@ -39,22 +39,21 @@ export default function AdminPage() {
       <div className="flex items-center justify-center h-64">
         <div
           className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-          style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }}
+          style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }}
         />
       </div>
     );
   }
 
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
+    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
+      <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
 
-      <div className="space-y-2">
+      <div className="space-y-2 animate-fade-up">
         {users?.map((user) => (
           <div
             key={user.id}
-            className="rounded-xl p-4 shadow-sm flex items-center gap-3"
-            style={{ backgroundColor: "var(--bg-card)" }}
+            className="glass-card p-4 flex items-center gap-3"
           >
             <div className="flex-1 min-w-0">
               <p className="font-medium truncate" style={{ color: "var(--text-primary)" }}>{user.name}</p>
@@ -71,7 +70,7 @@ export default function AdminPage() {
                   onClick={() =>
                     statusMut.mutate({ id: user.id, status: "active" })
                   }
-                  className="text-xs px-3 py-1 rounded-lg bg-emerald-500 text-white"
+                  className="text-xs px-3 py-1 rounded-lg bg-emerald-500 text-white active:scale-[0.98] transition-transform"
                 >
                   {t("admin.approve")}
                 </button>
@@ -81,7 +80,7 @@ export default function AdminPage() {
                   onClick={() =>
                     statusMut.mutate({ id: user.id, status: "suspended" })
                   }
-                  className="text-xs px-3 py-1 rounded-lg bg-red-500 text-white"
+                  className="text-xs px-3 py-1 rounded-lg bg-red-500 text-white active:scale-[0.98] transition-transform"
                 >
                   {t("admin.suspend")}
                 </button>

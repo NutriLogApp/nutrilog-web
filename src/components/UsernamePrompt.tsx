@@ -20,12 +20,18 @@ export default function UsernamePrompt({ onDone }: Props) {
   });
 
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h2 className="text-lg font-bold mb-2" style={{ color: "var(--text-primary)" }}>{t("friends.setUsername")}</h2>
-      <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>{t("friends.usernameHint")}</p>
-      <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("friends.username")} className="w-full border rounded-lg px-3 py-2 text-sm mb-2" style={{ borderColor: "var(--border)" }} />
-      {error && <p className="text-red-500 text-xs mb-2">{error}</p>}
-      <button onClick={() => mut.mutate()} disabled={!value.trim() || mut.isPending} className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50" style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
+    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
+      <div className="animate-fade-up">
+        <h2 className="text-lg font-bold tracking-tight mb-2" style={{ color: "var(--text-primary)" }}>{t("friends.setUsername")}</h2>
+        <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>{t("friends.usernameHint")}</p>
+      </div>
+      <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("friends.username")}
+        className="w-full border rounded-lg px-3 py-2 text-sm animate-fade-up"
+        style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-input)", color: "var(--text-primary)" }} />
+      {error && <p className="text-red-500 text-xs">{error}</p>}
+      <button onClick={() => mut.mutate()} disabled={!value.trim() || mut.isPending}
+        className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50 active:scale-[0.98] transition-transform animate-fade-up"
+        style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
         {t("friends.saveUsername")}
       </button>
     </div>
