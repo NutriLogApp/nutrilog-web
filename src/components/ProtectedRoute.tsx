@@ -10,9 +10,9 @@ export default function ProtectedRoute({ children }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-slate-200 border-t-transparent animate-spin"
-             style={{ borderTopColor: "var(--theme-start)" }} />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "var(--bg-page)" }}>
+        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+             style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }} />
       </div>
     );
   }
