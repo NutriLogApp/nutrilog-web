@@ -31,10 +31,7 @@ export default function CalorieRing({ consumed, goal }: Props) {
         </div>
       </div>
       <div className="mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-white/80 rounded-full transition-all duration-500"
-          style={{ width: `${pctDisplay}%` }}
-        />
+        <div className="h-full bg-white/80 rounded-full transition-all duration-500" style={{ width: `${pctDisplay}%` }} />
       </div>
     </div>
   );

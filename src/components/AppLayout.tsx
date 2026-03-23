@@ -3,7 +3,7 @@ import NavBar from "./NavBar";
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 auto-dark">
+    <div className="min-h-screen pb-20" style={{ backgroundColor: "var(--bg-page)", color: "var(--text-primary)" }}>
       <Outlet />
       <NavBar />
     </div>
