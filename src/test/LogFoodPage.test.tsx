@@ -18,7 +18,6 @@ vi.mock("@/services/foodService", () => ({
     },
   ]),
   parseImage: vi.fn(),
-  lookupBarcode: vi.fn(),
 }));
 
 vi.mock("@/services/entriesService", () => ({
@@ -36,12 +35,18 @@ vi.mock("react-i18next", () => ({
         "log.title": "Log Food",
         "log.text": "Text",
         "log.photo": "Photo",
-        "log.barcode": "Barcode",
         "log.save": "Save to Log",
         "log.recent": "Recent",
         "log.aiResult": "AI Result",
         "log.analyze": "Analyze",
-        "log.lookup": "Look up",
+        "log.placeholder": "e.g. 2 eggs, toast",
+        "log.g": "g",
+        "log.failedText": "Failed",
+        "log.failedImage": "Failed",
+        "dashboard.kcal": "kcal",
+        "macros.protein": "Protein",
+        "macros.fat": "Fat",
+        "macros.carbs": "Carbs",
       };
       return map[key] ?? key;
     },
@@ -65,7 +70,6 @@ describe("LogFoodPage", () => {
     expect(screen.getByText("Log Food")).toBeInTheDocument();
     expect(screen.getByText("Text")).toBeInTheDocument();
     expect(screen.getByText("Photo")).toBeInTheDocument();
-    expect(screen.getByText("Barcode")).toBeInTheDocument();
   });
 
   it("parses text and shows AI result", async () => {

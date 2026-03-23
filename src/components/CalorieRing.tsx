@@ -25,12 +25,11 @@ export default function CalorieRing({ consumed, goal }: Props) {
             {pctDisplay}% · {onTrack ? t("dashboard.onTrack") : t("dashboard.offTrack")}
           </p>
         </div>
-        <div className="text-right">
+        <div className="text-end">
           <p className="text-3xl font-bold">{remaining}</p>
           <p className="text-sm opacity-80">{t("dashboard.left")}</p>
         </div>
       </div>
-      {/* Progress bar */}
       <div className="mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
         <div
           className="h-full bg-white/80 rounded-full transition-all duration-500"

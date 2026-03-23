@@ -9,6 +9,7 @@
     "remaining": "remaining",
     "left": "left",
     "kcalToday": "kcal today",
+    "kcal": "kcal",
     "onTrack": "on track",
     "offTrack": "off track",
     "max": "max",
@@ -20,20 +21,25 @@
     "title": "Log Food",
     "text": "Text",
     "photo": "Photo",
-    "barcode": "Barcode",
     "save": "Save to Log",
     "recent": "Recent",
     "aiResult": "AI Result — edit if needed",
     "analyze": "Analyze",
-    "lookup": "Look up",
     "placeholder": "e.g. 2 eggs, toast with butter, coffee",
     "takePhoto": "Tap to take a photo",
-    "enterBarcode": "Enter barcode number",
     "failedText": "Failed to parse text",
     "failedImage": "Failed to parse image",
-    "barcodeNotFound": "Barcode not found"
+    "g": "g"
   },
-  "trends": { "title": "Trends", "calories": "Calories", "avgPerDay": "Avg / day" },
+  "trends": {
+    "title": "Trends",
+    "calories": "Calories",
+    "avgPerDay": "Avg / day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "kcal": "kcal"
+  },
   "profile": {
     "title": "Profile",
     "goals": "My Goals",
@@ -69,7 +75,9 @@
     "setUsername": "Set your username",
     "usernameHint": "Choose a username to start using social features",
     "saveUsername": "Save username",
-    "usernameTaken": "Username taken or invalid"
+    "usernameTaken": "Username taken or invalid",
+    "username": "username",
+    "friendsCount": "Friends"
   },
   "groups": {
     "newCompetition": "New Competition",
@@ -79,6 +87,11 @@
     "leaderboard": "Leaderboard",
     "weekOf": "Week of",
     "days": "days",
-    "members": "members"
+    "members": "members",
+    "pts": "pts"
+  },
+  "pet": {
+    "unlocked": "You unlocked {{name}}!",
+    "tapDismiss": "Tap to dismiss"
   }
 }

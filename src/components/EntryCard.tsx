@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { EntryOut } from "@/types/api";
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function EntryCard({ entry, onDelete }: Props) {
+  const { t } = useTranslation();
   const time = new Date(entry.logged_at).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
@@ -17,7 +19,7 @@ export default function EntryCard({ entry, onDelete }: Props) {
       <div className="flex-1 min-w-0">
         <p className="font-medium text-slate-900 truncate">{entry.description}</p>
         <p className="text-xs text-slate-400 mt-0.5">
-          {time} · {entry.total_calories} kcal
+          {time} · {entry.total_calories} {t("dashboard.kcal")}
         </p>
       </div>
       <button

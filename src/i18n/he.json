@@ -9,6 +9,7 @@
     "remaining": "נותר",
     "left": "נותר",
     "kcalToday": "קלוריות היום",
+    "kcal": "קק״ל",
     "onTrack": "בכיוון",
     "offTrack": "מחוץ ליעד",
     "max": "מקסימום",
@@ -20,20 +21,25 @@
     "title": "הוסף ארוחה",
     "text": "טקסט",
     "photo": "תמונה",
-    "barcode": "ברקוד",
     "save": "שמור ביומן",
     "recent": "אחרונים",
     "aiResult": "תוצאת AI — ערוך אם צריך",
     "analyze": "נתח",
-    "lookup": "חפש",
     "placeholder": "למשל 2 ביצים, טוסט עם חמאה, קפה",
     "takePhoto": "לחץ לצילום",
-    "enterBarcode": "הכנס מספר ברקוד",
     "failedText": "לא ניתן לנתח טקסט",
     "failedImage": "לא ניתן לנתח תמונה",
-    "barcodeNotFound": "ברקוד לא נמצא"
+    "g": "גרם"
   },
-  "trends": { "title": "מגמות", "calories": "קלוריות", "avgPerDay": "ממוצע / יום" },
+  "trends": {
+    "title": "מגמות",
+    "calories": "קלוריות",
+    "avgPerDay": "ממוצע / יום",
+    "week": "שבוע",
+    "month": "חודש",
+    "year": "שנה",
+    "kcal": "קק״ל"
+  },
   "profile": {
     "title": "פרופיל",
     "goals": "היעדים שלי",
@@ -69,7 +75,9 @@
     "setUsername": "בחר שם משתמש",
     "usernameHint": "בחר שם משתמש כדי להשתמש בתכונות חברתיות",
     "saveUsername": "שמור שם משתמש",
-    "usernameTaken": "שם משתמש תפוס או לא תקין"
+    "usernameTaken": "שם משתמש תפוס או לא תקין",
+    "username": "שם משתמש",
+    "friendsCount": "חברים"
   },
   "groups": {
     "newCompetition": "תחרות חדשה",
@@ -79,6 +87,11 @@
     "leaderboard": "טבלת דירוג",
     "weekOf": "שבוע של",
     "days": "ימים",
-    "members": "חברים"
+    "members": "חברים",
+    "pts": "נק׳"
+  },
+  "pet": {
+    "unlocked": "פתחת את {{name}}!",
+    "tapDismiss": "לחץ לסגירה"
   }
 }

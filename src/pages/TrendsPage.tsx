@@ -2,13 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { getRangeStats } from "@/services/statsService";
 
@@ -22,7 +16,7 @@ function dateRange(days: number) {
   };
 }
 
-type Range = 7 | 14 | 30;
+type Range = 7 | 30 | 365;
 
 export default function TrendsPage() {
   const { t } = useTranslation();
@@ -37,13 +31,12 @@ export default function TrendsPage() {
   const chartData = (data?.days ?? []).map((d) => ({
     date: d.date.slice(5),
     calories: d.total_calories,
-    goal: d.goal_calories ?? 0,
   }));
 
-  const ranges: { value: Range; label: string }[] = [
-    { value: 7, label: "7d" },
-    { value: 14, label: "14d" },
-    { value: 30, label: "30d" },
+  const ranges: { value: Range; labelKey: string }[] = [
+    { value: 7, labelKey: "trends.week" },
+    { value: 30, labelKey: "trends.month" },
+    { value: 365, labelKey: "trends.year" },
   ];
 
   return (
@@ -56,22 +49,18 @@ export default function TrendsPage() {
             key={r.value}
             onClick={() => setRange(r.value)}
             className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              range === r.value
-                ? "bg-white text-slate-900 shadow-sm"
-                : "text-slate-500"
+              range === r.value ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
             }`}
           >
-            {r.label}
+            {t(r.labelKey)}
           </button>
         ))}
       </div>
 
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
-          <div
-            className="w-8 h-8 rounded-full border-2 border-slate-200 border-t-transparent animate-spin"
-            style={{ borderTopColor: "var(--theme-start)" }}
-          />
+          <div className="w-8 h-8 rounded-full border-2 border-slate-200 border-t-transparent animate-spin"
+               style={{ borderTopColor: "var(--theme-start)" }} />
         </div>
       ) : (
         <div className="bg-white rounded-xl p-4 shadow-sm">
@@ -88,7 +77,6 @@ export default function TrendsPage() {
         </div>
       )}
 
-      {/* Macro breakdown for the range */}
       {data && (
         <div className="mt-4 bg-white rounded-xl p-4 shadow-sm">
           <h2 className="text-sm font-medium text-slate-700 mb-2">{t("trends.avgPerDay")}</h2>
@@ -105,18 +93,18 @@ export default function TrendsPage() {
               <div className="grid grid-cols-4 gap-2 text-center text-sm">
                 <div>
                   <p className="font-bold text-slate-900">{avg.cal}</p>
-                  <p className="text-xs text-slate-400">kcal</p>
+                  <p className="text-xs text-slate-400">{t("trends.kcal")}</p>
                 </div>
                 <div>
-                  <p className="font-bold text-blue-500">{avg.p}g</p>
+                  <p className="font-bold text-blue-500">{avg.p}{t("log.g")}</p>
                   <p className="text-xs text-slate-400">{t("macros.protein")}</p>
                 </div>
                 <div>
-                  <p className="font-bold text-amber-500">{avg.f}g</p>
+                  <p className="font-bold text-amber-500">{avg.f}{t("log.g")}</p>
                   <p className="text-xs text-slate-400">{t("macros.fat")}</p>
                 </div>
                 <div>
-                  <p className="font-bold text-emerald-500">{avg.c}g</p>
+                  <p className="font-bold text-emerald-500">{avg.c}{t("log.g")}</p>
                   <p className="text-xs text-slate-400">{t("macros.carbs")}</p>
                 </div>
               </div>
