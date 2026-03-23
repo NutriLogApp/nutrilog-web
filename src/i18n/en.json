@@ -27,7 +27,8 @@
     "caloriesAuto": "Calories calculated from macros (P×4 + F×9 + C×4)",
     "dailyLog": "Daily Log",
     "glassOfWater": "Glass of Water",
-    "manageDrinks": "Manage drinks in Profile"
+    "manageDrinks": "Manage drinks in Profile",
+    "entries": "entries"
   },
   "log": {
     "title": "Add Food",
@@ -63,8 +64,6 @@
     "breakfast": "Breakfast",
     "lunch": "Lunch",
     "dinner": "Dinner",
-    "catCollection": "Cat Collection",
-    "streakDays": "day streak",
     "appearance": "Appearance",
     "darkMode": "Display Mode",
     "colorTheme": "Color Theme",
@@ -82,7 +81,9 @@
     "drinkPlaceholder": "e.g. beer 500ml, tea with sugar, latte",
     "parseFailed": "Could not analyze this drink",
     "waterContent": "water",
-    "timeFormat": "Time Format"
+    "timeFormat": "Time Format",
+    "appSettings": "App Settings",
+    "personalSettings": "Personal Settings"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },

@@ -34,70 +34,100 @@ export default function MyDayPage() {
   });
 
   const use24h = profile?.use_24h ?? true;
-  const waterPct = water ? Math.min(water.amount_ml / (water.goal_ml || 1), 1) : 0;
+  const waterAmt = water?.amount_ml ?? 0;
+  const waterGoal = water?.goal_ml ?? 2000;
+  const waterPct = Math.min(waterAmt / (waterGoal || 1), 1);
+  const totalCal = stats?.entries.reduce((s, e) => s + e.total_calories, 0) ?? 0;
 
   return (
-    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
-      {/* Header */}
-      <h1 className="text-2xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>
-        {t("myday.title")}
-      </h1>
-
-      {/* Two equal action buttons */}
-      <div className="flex gap-3 animate-fade-up stagger-1">
-        <button onClick={() => setShowAddFood(true)}
-          className="flex-1 glass-card-sm p-4 flex flex-col items-center gap-2 transition-all active:scale-[0.97]">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
-            style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-            <UtensilsCrossed size={18} />
-          </div>
-          <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>{t("myday.addFood")}</span>
-        </button>
-        <button onClick={() => setShowAddDrink(true)}
-          className="flex-1 glass-card-sm p-4 flex flex-col items-center gap-2 transition-all active:scale-[0.97]">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #38bdf8, #0ea5e9)" }}>
-            <Droplets size={18} color="white" />
-          </div>
-          <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>{t("myday.addDrink")}</span>
-          <span className="text-[10px] tabular-nums" style={{ color: "var(--text-muted)" }}>
-            {water?.amount_ml ?? 0}/{water?.goal_ml ?? 2000}{t("water.ml")}
+    <div className="px-5 pt-8 pb-4 max-w-lg mx-auto">
+      {/* Header with daily summary */}
+      <div className="flex items-end justify-between mb-6 animate-fade-up">
+        <div>
+          <h1 className="text-[26px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{t("myday.title")}</h1>
+          <p className="text-[13px] font-medium mt-0.5 tabular-nums" style={{ color: "var(--text-muted)" }}>
+            {stats?.entries.length ?? 0} {t("myday.entries")} · {totalCal} {t("dashboard.kcal")}
+          </p>
+        </div>
+        {/* Water pill */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ backgroundColor: "var(--bg-input)" }}>
+          <Droplets size={12} color="#38bdf8" />
+          <span className="text-[11px] font-semibold tabular-nums" style={{ color: "var(--text-secondary)" }}>
+            {waterAmt}/{waterGoal}
           </span>
-        </button>
-      </div>
-
-      {/* Water progress bar */}
-      <div className="animate-fade-up stagger-2">
-        <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
-          <div className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${waterPct * 100}%`, background: "linear-gradient(90deg, #38bdf8, #0ea5e9)" }} />
+          <div className="w-8 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--border)" }}>
+            <div className="h-full rounded-full" style={{ width: `${waterPct * 100}%`, backgroundColor: "#38bdf8" }} />
+          </div>
         </div>
       </div>
 
-      {/* Daily log — food entries, newest first (backend already sorts desc) */}
-      <div className="animate-fade-up stagger-3">
-        <h2 className="text-base font-bold mb-3" style={{ color: "var(--text-primary)" }}>{t("myday.dailyLog")}</h2>
-        <div className="space-y-2.5">
-          {(!stats || stats.entries.length === 0) && (
-            <p className="text-sm text-center py-8 font-medium" style={{ color: "var(--text-muted)" }}>{t("myday.noFood")}</p>
-          )}
-          {stats?.entries.map((entry) => {
+      {/* Action bar — two equal buttons, horizontal */}
+      <div className="flex gap-3 mb-7 animate-fade-up stagger-1">
+        <button onClick={() => setShowAddFood(true)}
+          className="flex-1 glass-card-sm py-3.5 flex items-center justify-center gap-2.5 transition-all active:scale-[0.97]">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
+            style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
+            <UtensilsCrossed size={15} />
+          </div>
+          <span className="text-[13px] font-semibold" style={{ color: "var(--text-primary)" }}>{t("myday.addFood")}</span>
+        </button>
+        <button onClick={() => setShowAddDrink(true)}
+          className="flex-1 glass-card-sm py-3.5 flex items-center justify-center gap-2.5 transition-all active:scale-[0.97]">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, #38bdf8, #0ea5e9)" }}>
+            <Droplets size={15} color="white" />
+          </div>
+          <span className="text-[13px] font-semibold" style={{ color: "var(--text-primary)" }}>{t("myday.addDrink")}</span>
+        </button>
+      </div>
+
+      {/* Timeline entries */}
+      <div className="animate-fade-up stagger-2">
+        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "var(--text-muted)" }}>
+          {t("myday.dailyLog")}
+        </h2>
+
+        {(!stats || stats.entries.length === 0) && (
+          <div className="text-center py-12">
+            <p className="text-5xl mb-3">🍽</p>
+            <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>{t("myday.noFood")}</p>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          {stats?.entries.map((entry, idx) => {
             const time = formatTime(entry.logged_at, use24h);
             return (
-              <div key={entry.id} className="glass-card-sm p-4 flex items-center gap-3">
-                <button onClick={() => setEditEntry(entry)} className="flex-1 min-w-0 text-start">
-                  <p className="font-semibold text-sm truncate" style={{ color: "var(--text-primary)" }}>{entry.description}</p>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <span className="text-[11px] font-medium tabular-nums" style={{ color: "var(--text-muted)" }}>{time}</span>
-                    <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>·</span>
-                    <span className="text-[11px] font-semibold tabular-nums" style={{ color: "var(--theme-accent)" }}>{entry.total_calories} {t("dashboard.kcal")}</span>
-                  </div>
+              <div key={entry.id}
+                className="glass-card-sm flex items-center transition-all hover:scale-[1.005]"
+                style={{ animationDelay: `${(idx + 3) * 50}ms` }}>
+                {/* Time column */}
+                <div className="w-14 shrink-0 py-4 flex flex-col items-center"
+                  style={{ borderInlineEnd: "1px solid var(--border)" }}>
+                  <span className="text-[11px] font-bold tabular-nums" style={{ color: "var(--text-muted)" }}>{time}</span>
+                </div>
+
+                {/* Content */}
+                <button onClick={() => setEditEntry(entry)} className="flex-1 min-w-0 py-3.5 px-3.5 text-start">
+                  <p className="font-semibold text-[13px] truncate" style={{ color: "var(--text-primary)" }}>{entry.description}</p>
+                  <p className="text-[11px] font-semibold tabular-nums mt-0.5" style={{ color: "var(--theme-accent)" }}>
+                    {entry.total_calories} {t("dashboard.kcal")}
+                  </p>
                 </button>
-                <button onClick={() => setEditEntry(entry)} className="p-2 rounded-full transition-all active:scale-90" style={{ color: "var(--text-muted)" }}>
-                  <Pencil size={14} />
-                </button>
-                <button onClick={() => deleteMut.mutate(entry.id)} className="p-2 rounded-full transition-all hover:bg-red-500/10 active:scale-90" style={{ color: "var(--text-muted)" }}>
-                  <Trash2 size={14} />
-                </button>
+
+                {/* Actions */}
+                <div className="flex items-center pe-2 gap-0.5 shrink-0">
+                  <button onClick={() => setEditEntry(entry)}
+                    className="p-2.5 rounded-full transition-all active:scale-90"
+                    style={{ color: "var(--text-muted)" }}>
+                    <Pencil size={13} />
+                  </button>
+                  <button onClick={() => deleteMut.mutate(entry.id)}
+                    className="p-2.5 rounded-full transition-all active:scale-90 hover:bg-red-500/10"
+                    style={{ color: "var(--text-muted)" }}>
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -108,11 +138,9 @@ export default function MyDayPage() {
       <Modal open={showAddFood} onClose={() => setShowAddFood(false)} title={t("log.title")}>
         <LogFoodModal onDone={() => { setShowAddFood(false); qc.invalidateQueries({ queryKey: ["dailyStats"] }); }} />
       </Modal>
-
       <Modal open={showAddDrink} onClose={() => setShowAddDrink(false)} title={t("myday.addDrink")}>
-        <DrinkPickerModal onDone={() => { setShowAddDrink(false); }} />
+        <DrinkPickerModal onDone={() => setShowAddDrink(false)} />
       </Modal>
-
       {editEntry && (
         <Modal open={!!editEntry} onClose={() => setEditEntry(null)} title={t("myday.editEntry")}>
           <EntryEditModal entry={editEntry} onClose={() => setEditEntry(null)} />
