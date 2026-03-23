@@ -9,6 +9,7 @@ import MacroCard from "@/components/MacroCard";
 import EntryCard from "@/components/EntryCard";
 import PetCat from "@/components/PetCat";
 import UnlockNotification from "@/components/UnlockNotification";
+import CompetitionWidget from "@/components/CompetitionWidget";
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -73,6 +74,8 @@ export default function DashboardPage() {
           color="#10b981"
         />
       </div>
+
+      <CompetitionWidget />
 
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-semibold text-slate-700">{t("dashboard.todayLog")}</h2>

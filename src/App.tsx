@@ -10,6 +10,10 @@ import LogFoodPage from "@/pages/LogFoodPage";
 import TrendsPage from "@/pages/TrendsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AdminPage from "@/pages/AdminPage";
+import FriendsPage from "@/pages/FriendsPage";
+import AddFriendPage from "@/pages/AddFriendPage";
+import GroupLeaderboardPage from "@/pages/GroupLeaderboardPage";
+import CreateGroupPage from "@/pages/CreateGroupPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/AppLayout";
 import "@/i18n";
@@ -44,6 +48,10 @@ export default function App() {
               >
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/log" element={<LogFoodPage />} />
+                <Route path="/friends" element={<FriendsPage />} />
+                <Route path="/friends/add" element={<AddFriendPage />} />
+                <Route path="/friends/groups/new" element={<CreateGroupPage />} />
+                <Route path="/friends/groups/:groupId" element={<GroupLeaderboardPage />} />
                 <Route path="/trends" element={<TrendsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/admin" element={<AdminPage />} />

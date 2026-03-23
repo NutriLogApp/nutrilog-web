@@ -68,6 +68,7 @@ export interface ProfileOut {
   name: string;
   avatar_url: string | null;
   role: string;
+  username: string | null;
   language: string;
   theme: string;
   daily_cal_goal: number | null;

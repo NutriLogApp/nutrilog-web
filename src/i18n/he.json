@@ -2,7 +2,7 @@
   "login": { "title": "NutriLog", "subtitle": "עקוב אחר התזונה שלך", "signIn": "התחבר עם Google" },
   "pending": { "title": "ממתין לאישור", "subtitle": "מנהל המערכת יאשר את חשבונך בקרוב." },
   "dashboard": { "greeting": "בוקר טוב", "goal": "יעד", "remaining": "נותר", "todayLog": "יומן היום", "noEntries": "אין רשומות עדיין — הקש + כדי להוסיף" },
-  "nav": { "home": "בית", "log": "הוסף", "trends": "מגמות", "profile": "פרופיל" },
+  "nav": { "home": "בית", "log": "הוסף", "friends": "חברים", "trends": "מגמות", "profile": "פרופיל" },
   "log": { "title": "הוסף ארוחה", "text": "טקסט", "photo": "תמונה", "barcode": "ברקוד", "save": "שמור ביומן", "recent": "אחרונים", "aiResult": "תוצאת AI — ערוך אם צריך", "analyze": "נתח", "lookup": "חפש" },
   "trends": { "title": "מגמות", "calories": "קלוריות", "avgPerDay": "ממוצע / יום" },
   "profile": { "title": "פרופיל", "goals": "היעדים שלי", "theme": "ערכת נושא", "language": "שפה", "signOut": "התנתק", "save": "שמור", "calories": "קלוריות" },
