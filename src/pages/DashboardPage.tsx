@@ -41,8 +41,8 @@ export default function DashboardPage() {
   if (isLoading || !data) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 rounded-full border-2 border-slate-200 border-t-transparent animate-spin"
-             style={{ borderTopColor: "var(--theme-start)" }} />
+        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+             style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }} />
       </div>
     );
   }
@@ -51,48 +51,36 @@ export default function DashboardPage() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4">
-      {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-slate-900">{getGreeting(t)}</h1>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <h1 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>{getGreeting(t)}</h1>
+        <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
           {t("dashboard.goal")}: {goal.toLocaleString()} {t("dashboard.kcal")}
         </p>
       </div>
 
-      {/* Calorie card */}
       <CalorieRing consumed={data.total_calories} goal={goal} />
 
-      {/* Macros */}
       <div className="flex gap-2">
         <MacroCard label={t("macros.protein")} value={data.total_protein_g} goal={data.goal_protein_g} color="#3b82f6" />
         <MacroCard label={t("macros.fat")} value={data.total_fat_g} goal={data.goal_fat_g} color="#f59e0b" />
         <MacroCard label={t("macros.carbs")} value={data.total_carbs_g} goal={data.goal_carbs_g} color="#10b981" />
       </div>
 
-      {/* Water tracker */}
       <WaterTracker />
-
-      {/* Pet with streak badge */}
       <PetCat />
-
-      {/* Competition */}
       <CompetitionWidget />
 
-      {/* Today's log */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-slate-700">{t("dashboard.todayLog")}</h2>
-      </div>
+      <h2 className="font-semibold" style={{ color: "var(--text-secondary)" }}>{t("dashboard.todayLog")}</h2>
 
       <div className="space-y-2">
         {data.entries.length === 0 && (
-          <p className="text-sm text-slate-400 text-center py-6">{t("dashboard.noEntries")}</p>
+          <p className="text-sm text-center py-6" style={{ color: "var(--text-muted)" }}>{t("dashboard.noEntries")}</p>
         )}
         {data.entries.map((entry) => (
           <EntryCard key={entry.id} entry={entry} onDelete={(id) => deleteMut.mutate(id)} />
         ))}
       </div>
 
-      {/* Floating camera FAB */}
       <button
         onClick={() => navigate("/log")}
         className="fixed bottom-24 end-4 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white z-40"

@@ -1,73 +1,61 @@
 @import "tailwindcss";
 
+/* ========== Theme Colors ========== */
 :root {
   --theme-start: #0d9488;
   --theme-end: #0891b2;
-  --bg-primary: #f8fafc;
+
+  /* Light mode (default) */
+  --bg-page: #f8fafc;
   --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
   --border: #e2e8f0;
+  --border-light: #f1f5f9;
 }
 
-/* Dark mode vars */
-.dark-active {
-  --bg-primary: #0f172a;
-  --bg-card: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border: #334155;
-}
-
-/* Auto dark: only when system prefers dark AND no force override */
+/* ========== Dark Mode ========== */
+/* Auto: system prefers dark, user hasn't forced light */
 @media (prefers-color-scheme: dark) {
-  html:not(.force-light) .auto-dark {
-    --bg-primary: #0f172a;
-    --bg-card: #1e293b;
+  html:not(.force-light) {
+    --bg-page: #0c1322;
+    --bg-card: #162032;
+    --bg-input: #1e293b;
     --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --border: #334155;
+    --text-secondary: #c8d5e3;
+    --text-muted: #7c8da3;
+    --border: #283548;
+    --border-light: #1e293b;
   }
 }
 
-/* Force dark regardless of system */
-html.force-dark .auto-dark {
-  --bg-primary: #0f172a;
-  --bg-card: #1e293b;
+/* Force dark */
+html.force-dark {
+  --bg-page: #0c1322;
+  --bg-card: #162032;
+  --bg-input: #1e293b;
   --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
+  --text-secondary: #c8d5e3;
+  --text-muted: #7c8da3;
+  --border: #283548;
+  --border-light: #1e293b;
+}
+
+/* Force light */
+html.force-light {
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
   --text-muted: #94a3b8;
-  --border: #334155;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
 }
 
-/* Apply CSS vars to Tailwind classes */
-.auto-dark {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-}
-.auto-dark .bg-slate-50 { background-color: var(--bg-primary); }
-.auto-dark .bg-white { background-color: var(--bg-card); }
-.auto-dark .text-slate-900 { color: var(--text-primary); }
-.auto-dark .text-slate-700 { color: var(--text-secondary); }
-.auto-dark .text-slate-600 { color: var(--text-secondary); }
-.auto-dark .text-slate-500 { color: var(--text-muted); }
-.auto-dark .text-slate-400 { color: var(--text-muted); }
-.auto-dark .border-slate-200 { border-color: var(--border); }
-.auto-dark .border-slate-100 { border-color: var(--border); }
-.auto-dark .divide-slate-100 > :not(:first-child) { border-color: var(--border); }
-.auto-dark .bg-slate-100 { background-color: #1e293b; }
-.auto-dark .bg-slate-200 { background-color: #334155; }
-.auto-dark .bg-slate-50 { background-color: var(--bg-primary); }
-.auto-dark nav { background-color: var(--bg-primary); border-color: var(--border); }
-.auto-dark .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-
-/* RTL support */
-.rtl\:rotate-180 { transform: rotate(0deg); }
-[dir="rtl"] .rtl\:rotate-180 { transform: rotate(180deg); }
-
+/* ========== Animations ========== */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }

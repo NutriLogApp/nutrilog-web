@@ -1,8 +1,3 @@
-import { useEffect, useState } from "react";
-
-// Rive is optional — only loads if .riv file exists
-let RiveComponent: React.ComponentType<{ src: string; stateMachines: string; className?: string }> | null = null;
-
 const MOOD_EMOJI: Record<string, string> = {
   ecstatic: "😸",
   happy: "😺",
@@ -21,56 +16,20 @@ const MOOD_ANIM: Record<string, string> = {
 
 interface Props {
   mood: string;
-  size?: number;
 }
 
 /**
- * RiveCat: renders a Rive animation if `/rive/cat.riv` exists,
- * otherwise falls back to emoji.
- *
- * To activate Rive:
- * 1. Create a .riv file with a state machine called "moods"
- *    and 5 states: ecstatic, happy, meh, sad, hungry
- * 2. Place it at public/rive/cat.riv
- * 3. The component will auto-detect and use it
- *
- * The state machine should have a numeric input called "mood"
- * where: 0=hungry, 1=sad, 2=meh, 3=happy, 4=ecstatic
+ * RiveCat: Currently renders emoji fallback.
+ * To activate Rive animations:
+ * 1. Create a .riv file in Rive editor with state machine "moods"
+ * 2. Place at public/rive/cat.riv
+ * 3. Uncomment the Rive loading code below
  */
-export default function RiveCat({ mood, size = 56 }: Props) {
-  const [useRive, setUseRive] = useState(false);
-  const [RiveComp, setRiveComp] = useState<typeof RiveComponent>(null);
+export default function RiveCat({ mood }: Props) {
+  // Rive integration placeholder — uncomment when .riv file is ready:
+  // import("@rive-app/react-canvas") for dynamic loading
 
-  useEffect(() => {
-    // Check if .riv file exists
-    fetch("/rive/cat.riv", { method: "HEAD" })
-      .then((r) => {
-        if (r.ok) {
-          // Dynamically import Rive only if file exists
-          import("@rive-app/react-canvas").then((mod) => {
-            setRiveComp(() => mod.default);
-            setUseRive(true);
-          });
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  if (useRive && RiveComp) {
-    return (
-      <div style={{ width: size, height: size }}>
-        <RiveComp
-          src="/rive/cat.riv"
-          stateMachines="moods"
-          className="w-full h-full"
-        />
-      </div>
-    );
-  }
-
-  // Fallback: styled emoji
   const emoji = MOOD_EMOJI[mood] ?? "😺";
   const anim = MOOD_ANIM[mood] ?? "";
-
   return <span className={`text-2xl ${anim}`}>{emoji}</span>;
 }

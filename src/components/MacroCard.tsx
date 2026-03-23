@@ -12,21 +12,18 @@ export default function MacroCard({ label, value, goal, color }: Props) {
   const pct = goal ? Math.min(value / goal, 1) : 0;
 
   return (
-    <div className="bg-white rounded-xl p-3 flex-1 shadow-sm">
-      <p className="text-[11px] uppercase tracking-wider text-slate-400 mb-1">{label}</p>
+    <div className="rounded-xl p-3 flex-1" style={{ backgroundColor: "var(--bg-card)" }}>
+      <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
       <p className="text-xl font-bold" style={{ color }}>
         {Math.round(value)}
-        <span className="text-xs font-normal text-slate-400">{t("log.g")}</span>
+        <span className="text-xs font-normal" style={{ color: "var(--text-muted)" }}>{t("log.g")}</span>
       </p>
       {goal != null && (
         <>
-          <div className="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${pct * 100}%`, backgroundColor: color }}
-            />
+          <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct * 100}%`, backgroundColor: color }} />
           </div>
-          <p className="text-[10px] text-slate-400 mt-1">
+          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>
             {t("dashboard.max")} {goal}{t("log.g")}
           </p>
         </>
