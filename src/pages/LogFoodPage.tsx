@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Camera, Type, Loader2 } from "lucide-react";
+import i18n from "@/i18n";
 import { parseText, parseImage } from "@/services/foodService";
 import { createEntry } from "@/services/entriesService";
 import { getRecentFoods } from "@/services/recentFoodsService";
@@ -86,7 +87,8 @@ export default function LogFoodPage() {
 
   function handleSave() {
     if (items.length === 0) return;
-    const description = items.map((i) => i.food_name).join(", ");
+    const isHe = i18n.language === "he";
+    const description = items.map((i) => (isHe && i.food_name_he ? i.food_name_he : i.food_name)).join(", ");
     saveMut.mutate({
       description,
       source: tab === "photo" ? "image" : "text",
@@ -180,26 +182,32 @@ export default function LogFoodPage() {
         <div className="mt-4">
           <p className="text-xs text-slate-400 mb-2">{t("log.aiResult")}</p>
           <div className="space-y-2">
-            {items.map((item, i) => (
-              <div key={i} className="bg-white rounded-lg p-3 shadow-sm">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm text-slate-900">{item.food_name}</span>
-                  <span className="text-xs text-slate-400">{item.calories} {t("dashboard.kcal")}</span>
+            {items.map((item, i) => {
+              const isHe = i18n.language === "he";
+              const displayName = isHe && item.food_name_he ? item.food_name_he : item.food_name;
+              return (
+                <div key={i} className="bg-white rounded-lg p-3 shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-sm text-slate-900">{displayName}</span>
+                    <span className="text-xs text-slate-400">{item.calories} {t("dashboard.kcal")}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <label className="text-xs text-slate-400">{t("log.g")}:</label>
+                    <input
+                      type="number"
+                      value={item.grams}
+                      onChange={(e) => updateItemGrams(i, +e.target.value || 0)}
+                      className="w-20 border border-slate-200 rounded px-2 py-1 text-sm"
+                    />
+                  </div>
+                  <div className="flex gap-3 text-[11px] text-slate-400">
+                    <span><span className="text-blue-500 font-medium">{item.protein_g}</span> {t("macros.protein")}</span>
+                    <span><span className="text-amber-500 font-medium">{item.fat_g}</span> {t("macros.fat")}</span>
+                    <span><span className="text-emerald-500 font-medium">{item.carbs_g}</span> {t("macros.carbs")}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-slate-400">{t("log.g")}:</label>
-                  <input
-                    type="number"
-                    value={item.grams}
-                    onChange={(e) => updateItemGrams(i, +e.target.value || 0)}
-                    className="w-20 border border-slate-200 rounded px-2 py-1 text-sm"
-                  />
-                  <span className="text-xs text-slate-400 ms-auto">
-                    {t("macros.protein").charAt(0)}:{item.protein_g} {t("macros.fat").charAt(0)}:{item.fat_g} {t("macros.carbs").charAt(0)}:{item.carbs_g}
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <button
@@ -231,7 +239,7 @@ export default function LogFoodPage() {
                 }
                 className="w-full text-start bg-white rounded-lg p-3 shadow-sm text-sm flex justify-between"
               >
-                <span className="text-slate-900">{rf.food_name}</span>
+                <span className="text-slate-900">{i18n.language === "he" && rf.food_name_he ? rf.food_name_he : rf.food_name}</span>
                 <span className="text-slate-400">{rf.calories} {t("dashboard.kcal")}</span>
               </button>
             ))}
