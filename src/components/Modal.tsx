@@ -12,8 +12,8 @@ export default function Modal({ open, onClose, title, children }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
-      style={{ backgroundColor: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+      className="fixed inset-0 flex items-end sm:items-center justify-center"
+      style={{ zIndex: 60, backgroundColor: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
       onClick={onClose}
     >
       <div
@@ -31,11 +31,9 @@ export default function Modal({ open, onClose, title, children }: Props) {
       >
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{title}</h2>
-          <button
-            onClick={onClose}
+          <button onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-90"
-            style={{ backgroundColor: "var(--bg-input)", color: "var(--text-muted)" }}
-          >
+            style={{ backgroundColor: "var(--bg-input)", color: "var(--text-muted)" }}>
             <X size={16} />
           </button>
         </div>

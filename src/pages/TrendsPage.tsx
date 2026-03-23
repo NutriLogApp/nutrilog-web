@@ -1,16 +1,26 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, Scale } from "lucide-react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
 import { getRangeStats } from "@/services/statsService";
+import { getProfile } from "@/services/profileService";
+import { getWeightHistory } from "@/services/weightService";
 
-function getWeekRange() {
-  const end = new Date();
-  const start = new Date();
-  start.setDate(end.getDate() - 6);
+function getWeekRange(firstDay: number = 0) {
+  // firstDay: 0=Sunday, 1=Monday
+  const now = new Date();
+  const currentDay = now.getDay(); // 0=Sunday
+  const diff = (currentDay - firstDay + 7) % 7;
+  const start = new Date(now);
+  start.setDate(now.getDate() - diff);
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  // Don't go past today
+  const today = new Date();
+  if (end > today) end.setTime(today.getTime());
   return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
 }
 
@@ -31,7 +41,9 @@ function formatDate(dateStr: string): string {
 export default function TrendsPage() {
   const { t } = useTranslation();
   const [range, setRange] = useState<Range>("week");
-  const { start, end } = range === "week" ? getWeekRange() : getMonthRange();
+  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
+  const firstDay = profile?.first_day_of_week ?? 0;
+  const { start, end } = range === "week" ? getWeekRange(firstDay) : getMonthRange();
 
   const { data, isLoading } = useQuery({
     queryKey: ["rangeStats", start, end],
@@ -144,6 +156,41 @@ export default function TrendsPage() {
           </span>
         </div>
       )}
+      {/* Weight trend */}
+      <WeightTrend />
+    </div>
+  );
+}
+
+function WeightTrend() {
+  const { t } = useTranslation();
+  const { data: history } = useQuery({ queryKey: ["weightHistory"], queryFn: getWeightHistory });
+
+  if (!history || history.length < 2) return null;
+
+  const chartData = history.map((w) => ({
+    date: `${w.date.slice(8)}/${w.date.slice(5, 7)}`,
+    weight: w.weight_kg,
+  }));
+
+  return (
+    <div className="glass-card p-4 mt-4 animate-fade-up stagger-4">
+      <div className="flex items-center gap-2 mb-4">
+        <Scale size={14} style={{ color: "var(--theme-accent)" }} />
+        <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.title")}</h2>
+        <span className="text-xs font-bold tabular-nums ms-auto" style={{ color: "var(--theme-accent)" }}>
+          {history[history.length - 1].weight_kg} kg
+        </span>
+      </div>
+      <ResponsiveContainer width="100%" height={120}>
+        <LineChart data={chartData}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+          <XAxis dataKey="date" tick={{ fontSize: 9, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: 9, fill: "var(--text-muted)" }} width={30} axisLine={false} tickLine={false} domain={["dataMin - 1", "dataMax + 1"]} />
+          <Tooltip contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 11 }} />
+          <Line type="monotone" dataKey="weight" stroke="var(--theme-accent)" strokeWidth={2} dot={{ r: 2.5, fill: "var(--theme-accent)" }} />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }

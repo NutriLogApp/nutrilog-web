@@ -83,6 +83,7 @@ export interface ProfileOut {
   goal_weight_kg: number | null;
   onboarding_done: boolean;
   use_24h: boolean;
+  first_day_of_week: number;
   friend_code: string | null;
   current_streak: number;
   longest_streak: number;
@@ -100,6 +101,7 @@ export interface ProfileUpdate {
   height_cm?: number;
   activity_level?: string;
   use_24h?: boolean;
+  first_day_of_week?: number;
 }
 
 export interface RecentFoodItem {
