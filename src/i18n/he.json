@@ -24,7 +24,10 @@
     "addFood": "הוסף אוכל",
     "addDrink": "הוסף משקה",
     "editEntry": "עריכת רשומה",
-    "caloriesAuto": "קלוריות מחושבות מהמאקרו (ח×4 + ש×9 + פ×4)"
+    "caloriesAuto": "קלוריות מחושבות מהמאקרו (ח×4 + ש×9 + פ×4)",
+    "dailyLog": "יומן יומי",
+    "glassOfWater": "כוס מים",
+    "manageDrinks": "נהל משקאות בפרופיל"
   },
   "log": {
     "title": "הוסף אוכל",
@@ -78,7 +81,8 @@
     "drinkHint": "תאר את המשקה ואנחנו נחשב את הערכים התזונתיים",
     "drinkPlaceholder": "למשל בירה 500 מל, תה עם סוכר, לאטה",
     "parseFailed": "לא ניתן לנתח את המשקה",
-    "waterContent": "מים"
+    "waterContent": "מים",
+    "timeFormat": "פורמט שעה"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },
