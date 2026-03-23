@@ -6,6 +6,8 @@ import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
 import { useState, useEffect } from "react";
+import CatCollection from "@/components/CatCollection";
+import EatingWindows from "@/components/EatingWindows";
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
@@ -128,6 +130,8 @@ export default function ProfilePage() {
         </button>
       </div>
 
+      <EatingWindows />
+
       {/* Theme picker */}
       <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
         <h2 className="font-semibold text-slate-700 mb-3">{t("profile.theme")}</h2>
@@ -159,6 +163,8 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
+
+      <CatCollection />
 
       {/* Language */}
       <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
