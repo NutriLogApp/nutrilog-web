@@ -25,20 +25,22 @@ export default function NavBar() {
   const hasBadge = requests && requests.length > 0;
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 flex justify-around py-2 z-50">
+    <nav
+      className="fixed bottom-0 inset-x-0 flex justify-around py-2 z-50"
+      style={{ backgroundColor: "var(--bg-primary)", borderTop: "1px solid var(--border)" }}
+    >
       {tabs.map(({ path, icon: Icon, labelKey }) => {
         const active = path === "/" ? pathname === "/" : pathname.startsWith(path);
         return (
           <button
             key={path}
             onClick={() => navigate(path)}
-            className={`flex flex-col items-center gap-0.5 px-3 py-1 text-xs transition-colors relative ${
-              active ? "text-[var(--theme-start)]" : "text-slate-400"
-            }`}
+            className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs transition-colors relative"
+            style={{ color: active ? "var(--theme-start)" : "var(--text-muted)" }}
           >
             <Icon size={22} />
             {path === "/friends" && hasBadge && (
-              <span className="absolute top-0 right-2 w-2 h-2 rounded-full bg-red-500" />
+              <span className="absolute top-0 end-2 w-2 h-2 rounded-full bg-red-500" />
             )}
             <span>{t(labelKey)}</span>
           </button>
