@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Trash2, Loader2 } from "lucide-react";
+import { Trash2, Loader2, Coffee, Beer, Wine, CupSoda, Milk, Droplets, GlassWater } from "lucide-react";
 import { listDrinks, parseDrink, createDrink, deleteDrink, type DrinkOut, type DrinkParseResult } from "@/services/drinksService";
 import i18n from "@/i18n";
 
@@ -54,9 +54,14 @@ export default function DrinkManager() {
   return (
     <div className="space-y-4">
       {/* Existing drinks */}
-      {drinks?.map((d: DrinkOut) => (
+      {drinks?.map((d: DrinkOut) => {
+        const ICON_MAP: Record<string, React.ElementType> = { "☕": Coffee, "🍵": Coffee, "🥤": CupSoda, "🍺": Beer, "🍷": Wine, "🧃": CupSoda, "🥛": Milk, "💧": Droplets, "🧋": Coffee, "🍶": Wine };
+        const IconComp = ICON_MAP[d.icon] || GlassWater;
+        return (
         <div key={d.id} className="glass-card-sm p-3.5 flex items-center gap-3">
-          <span className="text-xl">{d.icon}</span>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: "var(--bg-input)" }}>
+            <IconComp size={16} style={{ color: "var(--theme-accent)" }} />
+          </div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm truncate" style={{ color: "var(--text-primary)" }}>
               {i18n.language === "he" && d.name_he ? d.name_he : d.name}
@@ -72,7 +77,8 @@ export default function DrinkManager() {
             <Trash2 size={15} />
           </button>
         </div>
-      ))}
+        );
+      })}
 
       {/* Smart add — just type what you drink */}
       {!parsed && (

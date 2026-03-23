@@ -137,7 +137,7 @@
     "newGroup": "New Group",
     "inviteFriends": "Invite Friends"
   },
-  "pet": { "unlocked": "You unlocked {{name}}!", "tapDismiss": "Tap to dismiss" },
+  "insight": { "title": "Daily Insight" },
   "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
   "weight": { "title": "Weight", "placeholder": "Today's weight (kg)", "log": "Log" },
   "onboarding": {
