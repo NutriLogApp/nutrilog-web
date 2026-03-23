@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
+import { getProfile } from "@/services/profileService";
 import { deleteEntry } from "@/services/entriesService";
 import CalorieRing from "@/components/CalorieRing";
 import MacroCard from "@/components/MacroCard";
@@ -15,10 +16,19 @@ function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function getGreeting(t: (k: string) => string) {
+  const h = new Date().getHours();
+  if (h < 12) return t("dashboard.goodMorning");
+  if (h < 18) return t("dashboard.goodAfternoon");
+  return t("dashboard.goodEvening");
+}
+
 export default function DashboardPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const qc = useQueryClient();
+
+  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
 
   const { data, isLoading } = useQuery({
     queryKey: ["dailyStats", todayStr()],
@@ -41,20 +51,27 @@ export default function DashboardPage() {
     );
   }
 
-  return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold text-slate-900 mb-4">
-        {t("dashboard.greeting")}
-      </h1>
+  const dayName = new Date().toLocaleDateString(undefined, { weekday: "long" });
+  const goalLabel = `${dayName} · ${t("dashboard.goal")}: ${(data.goal_calories ?? 2000).toLocaleString()} kcal`;
 
-      <div className="flex justify-center mb-4">
-        <CalorieRing
-          consumed={data.total_calories}
-          goal={data.goal_calories ?? 2000}
-        />
+  return (
+    <div className="p-4 max-w-lg mx-auto space-y-4">
+      {/* Header */}
+      <div>
+        <h1 className="text-xl font-bold text-slate-900">
+          {getGreeting(t)}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}
+        </h1>
+        <p className="text-xs text-slate-400 mt-0.5">{goalLabel}</p>
       </div>
 
-      <div className="flex gap-2 mb-6">
+      {/* Calorie card */}
+      <CalorieRing
+        consumed={data.total_calories}
+        goal={data.goal_calories ?? 2000}
+      />
+
+      {/* Macros */}
+      <div className="flex gap-2">
         <MacroCard
           label={t("macros.protein")}
           value={data.total_protein_g}
@@ -75,9 +92,14 @@ export default function DashboardPage() {
         />
       </div>
 
+      {/* Pet */}
+      <PetCat />
+
+      {/* Competition */}
       <CompetitionWidget />
 
-      <div className="flex items-center justify-between mb-3">
+      {/* Today's log */}
+      <div className="flex items-center justify-between">
         <h2 className="font-semibold text-slate-700">{t("dashboard.todayLog")}</h2>
         <button
           onClick={() => navigate("/log")}
@@ -90,7 +112,7 @@ export default function DashboardPage() {
 
       <div className="space-y-2">
         {data.entries.length === 0 && (
-          <p className="text-sm text-slate-400 text-center py-8">
+          <p className="text-sm text-slate-400 text-center py-6">
             {t("dashboard.noEntries")}
           </p>
         )}
@@ -103,7 +125,6 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <PetCat />
       <UnlockNotification />
     </div>
   );

@@ -43,12 +43,13 @@ export default function PetCat() {
   const message = bubbleMsg ?? pet.message;
 
   return (
-    <div className="fixed bottom-20 right-4 flex items-end gap-2 z-40">
-      {/* Speech bubble */}
-      <button
-        onClick={() => msgMut.mutate()}
-        className="max-w-48 bg-white rounded-xl rounded-br-none px-3 py-2 shadow-md text-xs text-slate-700 leading-relaxed cursor-pointer hover:bg-slate-50 transition-colors"
-        style={pet.message_type === "ai" ? { borderLeft: "3px solid var(--theme-start)" } : {}}
+    <button
+      onClick={() => msgMut.mutate()}
+      className="w-full flex items-center gap-3 bg-white rounded-xl p-3 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"
+    >
+      <div
+        className="flex-1 text-xs text-slate-600 leading-relaxed text-start rounded-lg bg-slate-50 px-3 py-2"
+        style={pet.message_type === "ai" ? { borderInlineStart: "3px solid var(--theme-start)" } : {}}
       >
         {loading ? (
           <span className="flex gap-1">
@@ -59,15 +60,8 @@ export default function PetCat() {
         ) : (
           message
         )}
-      </button>
-
-      {/* Cat */}
-      <button
-        onClick={() => msgMut.mutate()}
-        className={`text-4xl cursor-pointer ${anim}`}
-      >
-        {emoji}
-      </button>
-    </div>
+      </div>
+      <span className={`text-3xl shrink-0 ${anim}`}>{emoji}</span>
+    </button>
   );
 }

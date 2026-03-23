@@ -33,16 +33,41 @@ vi.mock("@/services/statsService", () => ({
   }),
 }));
 
+vi.mock("@/services/profileService", () => ({
+  getProfile: vi.fn().mockResolvedValue({ name: "Test User" }),
+}));
+
 vi.mock("@/services/entriesService", () => ({
   deleteEntry: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("@/services/petService", () => ({
+  getPetStatus: vi.fn().mockResolvedValue(null),
+  getCollection: vi.fn().mockResolvedValue({ cats: [], active_cat: "whiskers" }),
+  refreshMessage: vi.fn(),
+}));
+
+vi.mock("@/services/socialService", () => ({
+  listGroups: vi.fn().mockResolvedValue([]),
+  getLeaderboard: vi.fn(),
+  getFriendRequests: vi.fn().mockResolvedValue([]),
 }));
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const map: Record<string, string> = {
-        "dashboard.greeting": "Good morning",
+        "dashboard.goodMorning": "Good morning",
+        "dashboard.goodAfternoon": "Good afternoon",
+        "dashboard.goodEvening": "Good evening",
+        "dashboard.goal": "Goal",
+        "dashboard.kcalToday": "kcal today",
+        "dashboard.onTrack": "on track",
+        "dashboard.offTrack": "off track",
+        "dashboard.left": "left",
+        "dashboard.max": "max",
         "dashboard.todayLog": "Today's Log",
+        "dashboard.noEntries": "No entries yet",
         "macros.protein": "Protein",
         "macros.fat": "Fat",
         "macros.carbs": "Carbs",
@@ -70,7 +95,6 @@ describe("DashboardPage", () => {
     await waitFor(() => {
       expect(screen.getByText("850")).toBeInTheDocument();
     });
-    expect(screen.getByText("Good morning")).toBeInTheDocument();
     expect(screen.getByText("Today's Log")).toBeInTheDocument();
     expect(screen.getByText(/2 eggs, toast/)).toBeInTheDocument();
   });
