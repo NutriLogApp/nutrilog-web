@@ -16,7 +16,7 @@
     "todayLog": "יומן היום",
     "noEntries": "אין רשומות עדיין — לחץ + כדי להוסיף"
   },
-  "nav": { "home": "בית", "myday": "היום שלי", "friends": "חברים", "trends": "מגמות", "profile": "פרופיל" },
+  "nav": { "home": "בית", "myday": "היום שלי", "contest": "תחרות", "trends": "מגמות", "profile": "פרופיל" },
   "myday": {
     "title": "היום שלי",
     "food": "אוכל",
@@ -28,6 +28,7 @@
     "dailyLog": "יומן יומי",
     "glassOfWater": "כוס מים",
     "manageDrinks": "נהל משקאות בפרופיל",
+    "noDrinksYet": "אין משקאות מותאמים — הוסף בפרופיל",
     "entries": "רשומות"
   },
   "log": {
@@ -83,7 +84,13 @@
     "waterContent": "מים",
     "timeFormat": "פורמט שעה",
     "appSettings": "הגדרות אפליקציה",
-    "personalSettings": "הגדרות אישיות"
+    "personalSettings": "הגדרות אישיות",
+    "friends": "חברים",
+    "addFriend": "הוסף חבר",
+    "shareInvite": "שתף קישור הזמנה",
+    "shareDesc": "שתף את קוד ההזמנה שלך כדי שחברים ימצאו אותך",
+    "shareText": "הצטרפו אלי ב-NutriLog!",
+    "shareLink": "שתף קישור"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },
@@ -119,6 +126,16 @@
     "days": "ימים",
     "members": "חברים",
     "pts": "נק׳"
+  },
+  "contest": {
+    "title": "תחרות",
+    "emptyDesc": "הוסף חברים והתחל תחרות שבועית כדי להישאר במוטיבציה",
+    "addFriendsStart": "הוסף חברים והתחל",
+    "weeklyStandings": "השבוע",
+    "you": "את/ה",
+    "yourWeek": "השבוע שלך",
+    "newGroup": "קבוצה חדשה",
+    "inviteFriends": "הזמן חברים"
   },
   "pet": { "unlocked": "פתחת את {{name}}!", "tapDismiss": "לחץ לסגירה" },
   "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },

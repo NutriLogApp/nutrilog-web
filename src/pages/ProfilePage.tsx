@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog } from "lucide-react";
+import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, UserPlus, Share2, Copy } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
@@ -127,6 +127,18 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* Friends */}
+      <div className="animate-fade-up stagger-4">
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <Users size={14} style={{ color: "var(--text-muted)" }} />
+          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("profile.friends")}</h2>
+        </div>
+        <div className="glass-card overflow-hidden">
+          <SettingRow icon={UserPlus} label={t("profile.addFriend")} onClick={() => navigate("/friends/add")} lang={lang} isFirst />
+          <SettingRow icon={Share2} label={t("profile.shareInvite")} onClick={() => setModal("share")} lang={lang} />
+        </div>
+      </div>
+
       {/* Admin */}
       {profile?.role === "admin" && (
         <div className="animate-fade-up stagger-4">
@@ -221,6 +233,36 @@ export default function ProfilePage() {
       {/* Drinks */}
       <Modal open={modal === "drinks"} onClose={() => setModal(null)} title={t("profile.customDrinks")}>
         <DrinkManager />
+      </Modal>
+
+      {/* Share Invite */}
+      <Modal open={modal === "share"} onClose={() => setModal(null)} title={t("profile.shareInvite")}>
+        <div className="space-y-4">
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("profile.shareDesc")}</p>
+          {profile?.friend_code && (
+            <div className="flex items-center gap-2">
+              <div className="flex-1 rounded-xl px-4 py-3 text-sm font-mono tabular-nums" style={{ backgroundColor: "var(--bg-input)", color: "var(--text-primary)" }}>
+                {profile.friend_code}
+              </div>
+              <button onClick={() => { navigator.clipboard.writeText(profile.friend_code ?? ""); }}
+                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-90"
+                style={{ backgroundColor: "var(--bg-input)", color: "var(--theme-accent)" }}>
+                <Copy size={16} />
+              </button>
+            </div>
+          )}
+          {profile?.username && (
+            <button onClick={() => {
+              const url = `${window.location.origin}/friends/add?code=${profile.friend_code}`;
+              if (navigator.share) navigator.share({ title: "NutriLog", text: t("profile.shareText"), url });
+              else navigator.clipboard.writeText(url);
+            }}
+              className="w-full py-3 rounded-xl text-white font-semibold transition-all active:scale-[0.98]"
+              style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
+              {t("profile.shareLink")}
+            </button>
+          )}
+        </div>
       </Modal>
 
       {/* Retake Quiz */}

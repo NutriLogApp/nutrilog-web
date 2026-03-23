@@ -1,11 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Droplets, Settings } from "lucide-react";
+import { Droplets, GlassWater, Coffee, Beer, Wine, CupSoda, Milk, Settings } from "lucide-react";
 import { listDrinks, type DrinkOut } from "@/services/drinksService";
 import { addWater } from "@/services/waterService";
 import { createEntry } from "@/services/entriesService";
 import i18n from "@/i18n";
+
+const DRINK_ICONS: Record<string, React.ElementType> = {
+  "☕": Coffee, "🍵": Coffee, "🥤": CupSoda, "🍺": Beer,
+  "🍷": Wine, "🧃": CupSoda, "🥛": Milk, "💧": Droplets, "🧋": Coffee, "🍶": Wine,
+};
 
 interface Props {
   onDone: () => void;
@@ -44,49 +49,48 @@ export default function DrinkPickerModal({ onDone }: Props) {
   }
 
   return (
-    <div className="space-y-3">
-      {/* Water glass — always available */}
-      <button
-        onClick={() => waterMut.mutate(250)}
-        className="w-full glass-card-sm p-4 flex items-center gap-3 transition-all active:scale-[0.98]"
-      >
+    <div className="space-y-2">
+      {/* Water — always first */}
+      <button onClick={() => waterMut.mutate(250)}
+        className="w-full glass-card-sm p-4 flex items-center gap-3.5 transition-all active:scale-[0.98]">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(56, 189, 248, 0.12)" }}>
-          <Droplets size={18} color="#38bdf8" />
+          <GlassWater size={18} color="#38bdf8" />
         </div>
         <div className="flex-1 text-start">
-          <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{t("myday.glassOfWater")}</p>
-          <p className="text-[11px]" style={{ color: "var(--text-muted)" }}>250{t("water.ml")}</p>
+          <p className="font-semibold text-[13px]" style={{ color: "var(--text-primary)" }}>{t("myday.glassOfWater")}</p>
+          <p className="text-[11px] font-medium" style={{ color: "var(--text-muted)" }}>250{t("water.ml")}</p>
         </div>
       </button>
 
-      {/* User's custom drinks */}
-      {drinks?.map((d) => (
-        <button
-          key={d.id}
-          onClick={() => pickDrink(d)}
-          className="w-full glass-card-sm p-4 flex items-center gap-3 transition-all active:scale-[0.98]"
-        >
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style={{ backgroundColor: "var(--bg-input)" }}>
-            {d.icon}
-          </div>
-          <div className="flex-1 text-start">
-            <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
-              {i18n.language === "he" && d.name_he ? d.name_he : d.name}
-            </p>
-            <p className="text-[11px]" style={{ color: "var(--text-muted)" }}>
-              {d.volume_ml}{t("water.ml")} · {d.calories}{t("dashboard.kcal")}
-              {d.water_pct > 0 && d.water_pct < 100 && ` · 💧${d.water_pct}%`}
-            </p>
-          </div>
-        </button>
-      ))}
+      {/* Custom drinks */}
+      {drinks?.map((d) => {
+        const IconComp = DRINK_ICONS[d.icon] || CupSoda;
+        return (
+          <button key={d.id} onClick={() => pickDrink(d)}
+            className="w-full glass-card-sm p-4 flex items-center gap-3.5 transition-all active:scale-[0.98]">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "var(--bg-input)" }}>
+              <IconComp size={18} style={{ color: "var(--theme-accent)" }} />
+            </div>
+            <div className="flex-1 text-start">
+              <p className="font-semibold text-[13px]" style={{ color: "var(--text-primary)" }}>
+                {i18n.language === "he" && d.name_he ? d.name_he : d.name}
+              </p>
+              <p className="text-[11px] font-medium" style={{ color: "var(--text-muted)" }}>
+                {d.volume_ml}{t("water.ml")} · {d.calories}{t("dashboard.kcal")}
+                {d.water_pct > 0 && d.water_pct < 100 && ` · ${d.water_pct}% ${t("profile.waterContent")}`}
+              </p>
+            </div>
+          </button>
+        );
+      })}
 
-      {/* Manage drinks link */}
-      <button
-        onClick={() => { onDone(); navigate("/profile"); }}
+      {(!drinks || drinks.length === 0) && (
+        <p className="text-center text-xs py-3" style={{ color: "var(--text-muted)" }}>{t("myday.noDrinksYet")}</p>
+      )}
+
+      <button onClick={() => { onDone(); navigate("/profile"); }}
         className="w-full flex items-center justify-center gap-2 py-3 text-xs font-medium transition-all"
-        style={{ color: "var(--text-muted)" }}
-      >
+        style={{ color: "var(--text-muted)" }}>
         <Settings size={14} />
         {t("myday.manageDrinks")}
       </button>

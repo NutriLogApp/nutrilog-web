@@ -1,13 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, CalendarDays, BarChart3, User, Users } from "lucide-react";
+import { Home, CalendarDays, BarChart3, User, Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { getFriendRequests } from "@/services/socialService";
 
 const tabs = [
   { path: "/", icon: Home, labelKey: "nav.home" },
   { path: "/myday", icon: CalendarDays, labelKey: "nav.myday" },
-  { path: "/friends", icon: Users, labelKey: "nav.friends" },
+  { path: "/contest", icon: Trophy, labelKey: "nav.contest" },
   { path: "/trends", icon: BarChart3, labelKey: "nav.trends" },
   { path: "/profile", icon: User, labelKey: "nav.profile" },
 ] as const;
@@ -16,13 +14,6 @@ export default function NavBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const { data: requests } = useQuery({
-    queryKey: ["friendRequests"],
-    queryFn: getFriendRequests,
-    refetchInterval: 60_000,
-  });
-  const hasBadge = requests && requests.length > 0;
 
   return (
     <div className="fixed bottom-0 inset-x-0 z-50 px-4 pb-4 pointer-events-none">
@@ -50,12 +41,6 @@ export default function NavBar() {
               }}
             >
               <Icon size={20} strokeWidth={active ? 2.5 : 1.8} />
-              {path === "/friends" && hasBadge && (
-                <span
-                  className="absolute top-0 end-1 w-2 h-2 rounded-full"
-                  style={{ backgroundColor: "var(--theme-start)" }}
-                />
-              )}
               <span>{t(labelKey)}</span>
             </button>
           );

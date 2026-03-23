@@ -83,6 +83,7 @@ export interface ProfileOut {
   goal_weight_kg: number | null;
   onboarding_done: boolean;
   use_24h: boolean;
+  friend_code: string | null;
   current_streak: number;
   longest_streak: number;
 }
