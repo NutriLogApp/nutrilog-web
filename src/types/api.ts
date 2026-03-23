@@ -79,6 +79,9 @@ export interface ProfileOut {
   weight_kg: number | null;
   height_cm: number | null;
   activity_level: string | null;
+  daily_water_goal_ml: number;
+  current_streak: number;
+  longest_streak: number;
 }
 
 export interface ProfileUpdate {

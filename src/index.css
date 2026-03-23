@@ -5,6 +5,27 @@
   --theme-end: #0891b2;
 }
 
+/* Dark mode: auto-detect system preference */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #0f172a;
+    color: #e2e8f0;
+  }
+  .auto-dark .bg-slate-50 { background-color: #0f172a; }
+  .auto-dark .bg-white { background-color: #1e293b; }
+  .auto-dark .text-slate-900 { color: #f1f5f9; }
+  .auto-dark .text-slate-700 { color: #cbd5e1; }
+  .auto-dark .text-slate-500 { color: #94a3b8; }
+  .auto-dark .text-slate-400 { color: #64748b; }
+  .auto-dark .border-slate-200 { border-color: #334155; }
+  .auto-dark .border-slate-100 { border-color: #1e293b; }
+  .auto-dark .bg-slate-100 { background-color: #1e293b; }
+  .auto-dark .bg-slate-200 { background-color: #334155; }
+  .auto-dark .bg-slate-50 { background-color: #0f172a; }
+  .auto-dark .border-t { border-color: #1e293b; }
+  .auto-dark nav.bg-white { background-color: #0f172a; }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }

@@ -93,5 +93,15 @@
   "pet": {
     "unlocked": "You unlocked {{name}}!",
     "tapDismiss": "Tap to dismiss"
+  },
+  "water": {
+    "title": "Water",
+    "ml": "ml",
+    "glasses": "glasses"
+  },
+  "weight": {
+    "title": "Weight",
+    "placeholder": "Today's weight (kg)",
+    "log": "Log"
   }
 }
