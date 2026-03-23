@@ -82,6 +82,7 @@ export interface ProfileOut {
   daily_water_goal_ml: number;
   goal_weight_kg: number | null;
   onboarding_done: boolean;
+  use_24h: boolean;
   current_streak: number;
   longest_streak: number;
 }
@@ -97,6 +98,7 @@ export interface ProfileUpdate {
   weight_kg?: number;
   height_cm?: number;
   activity_level?: string;
+  use_24h?: boolean;
 }
 
 export interface RecentFoodItem {

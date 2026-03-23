@@ -155,6 +155,16 @@ export default function ProfilePage() {
             </button>
           ))}
         </div>
+        <h3 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("profile.timeFormat")}</h3>
+        <div className="flex gap-2 mb-4">
+          {[{ val: true, label: "24h" }, { val: false, label: "12h" }].map((opt) => (
+            <button key={String(opt.val)} onClick={() => updateMut.mutate({ use_24h: opt.val })}
+              className="flex-1 py-2 rounded-lg text-sm font-medium border-2 transition-all"
+              style={{ borderColor: (profile?.use_24h ?? true) === opt.val ? "var(--theme-accent)" : "var(--border)", backgroundColor: (profile?.use_24h ?? true) === opt.val ? "var(--bg-input)" : "transparent", color: "var(--text-primary)" }}>
+              {opt.label}
+            </button>
+          ))}
+        </div>
         <h3 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("profile.colorTheme")}</h3>
         <div className="grid grid-cols-3 gap-3">
           {(Object.entries(themes) as [ThemeName, (typeof themes)[ThemeName]][]).map(([name, theme]) => (

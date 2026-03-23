@@ -4,16 +4,14 @@ import { useTranslation } from "react-i18next";
 import { UtensilsCrossed, Droplets } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { getProfile } from "@/services/profileService";
-import { getTodayWater, addWater } from "@/services/waterService";
-import { listDrinks } from "@/services/drinksService";
-import { useMutation } from "@tanstack/react-query";
-import i18n from "@/i18n";
+import { getTodayWater } from "@/services/waterService";
 import PetCat from "@/components/PetCat";
 import CompetitionWidget from "@/components/CompetitionWidget";
 import UnlockNotification from "@/components/UnlockNotification";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
+import DrinkPickerModal from "@/components/DrinkPickerModal";
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -30,16 +28,11 @@ export default function DashboardPage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const [showAddFood, setShowAddFood] = useState(false);
+  const [showAddDrink, setShowAddDrink] = useState(false);
 
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const { data, isLoading } = useQuery({ queryKey: ["dailyStats", todayStr()], queryFn: () => getDailyStats(todayStr()) });
   const { data: water } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
-  const { data: drinks } = useQuery({ queryKey: ["drinks"], queryFn: listDrinks });
-
-  const waterMut = useMutation({
-    mutationFn: (ml: number) => addWater(ml),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["water"] }),
-  });
 
   if (profile && !profile.onboarding_done) {
     return <OnboardingQuiz onDone={() => qc.invalidateQueries({ queryKey: ["profile"] })} />;
@@ -75,24 +68,20 @@ export default function DashboardPage() {
 
   return (
     <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
-      {/* Header */}
       <div className="animate-fade-up">
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{getGreeting(t)}</h1>
       </div>
 
-      {/* Hero: Calorie ring centered */}
+      {/* Hero: Calorie ring */}
       <div className="glass-card p-6 flex flex-col items-center animate-fade-up stagger-1">
         <div className="relative" style={{ width: ringSize, height: ringSize }}>
           <svg width={ringSize} height={ringSize} className="-rotate-90">
             <circle cx={ringSize/2} cy={ringSize/2} r={radius} fill="none" strokeWidth={strokeWidth} style={{ stroke: "var(--bg-input)" }} />
             <circle cx={ringSize/2} cy={ringSize/2} r={radius} fill="none" strokeWidth={strokeWidth} strokeLinecap="round"
               strokeDasharray={circumference} strokeDashoffset={offset} stroke="url(#calGrad)" className="transition-all duration-700 ease-out" />
-            <defs>
-              <linearGradient id="calGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="var(--theme-start)" />
-                <stop offset="100%" stopColor="var(--theme-end)" />
-              </linearGradient>
-            </defs>
+            <defs><linearGradient id="calGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="var(--theme-start)" /><stop offset="100%" stopColor="var(--theme-end)" />
+            </linearGradient></defs>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{consumed.toLocaleString()}</span>
@@ -102,8 +91,7 @@ export default function DashboardPage() {
         <p className="text-sm font-medium mt-3" style={{ color: "var(--text-secondary)" }}>
           {remaining.toLocaleString()} {t("dashboard.kcal")} {t("dashboard.left")}
         </p>
-
-        {/* Macro bars inline */}
+        {/* Macro bars */}
         <div className="w-full mt-4 space-y-2.5">
           {macros.map((m) => {
             const p = m.goal ? Math.min(Math.round(m.value) / m.goal, 1) : 0;
@@ -122,7 +110,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Quick actions row */}
+      {/* Two equal action buttons — same design as My Day */}
       <div className="flex gap-3 animate-fade-up stagger-2">
         <button onClick={() => setShowAddFood(true)}
           className="flex-1 glass-card-sm p-4 flex flex-col items-center gap-2 transition-all active:scale-[0.97]">
@@ -132,7 +120,7 @@ export default function DashboardPage() {
           </div>
           <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>{t("myday.addFood")}</span>
         </button>
-        <button onClick={() => waterMut.mutate(250)}
+        <button onClick={() => setShowAddDrink(true)}
           className="flex-1 glass-card-sm p-4 flex flex-col items-center gap-2 transition-all active:scale-[0.97]">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #38bdf8, #0ea5e9)" }}>
             <Droplets size={18} color="white" />
@@ -144,40 +132,15 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Quick drink chips */}
-      {drinks && drinks.length > 0 && (
-        <div className="flex gap-2 flex-wrap animate-fade-up stagger-3">
-          {drinks.map((d) => (
-            <button key={d.id} onClick={() => {
-              if (d.counts_as_water) waterMut.mutate(d.volume_ml);
-              if (d.calories > 0) {
-                import("@/services/entriesService").then(({ createEntry }) => {
-                  const isHe = i18n.language === "he";
-                  createEntry({
-                    description: isHe && d.name_he ? d.name_he : d.name,
-                    source: "text", meal_type: "snack",
-                    items: [{ food_name: d.name, food_name_he: d.name_he, grams: d.volume_ml, calories: d.calories, protein_g: d.protein_g, fat_g: d.fat_g, carbs_g: d.carbs_g, confidence: "high" as const }],
-                  }).then(() => qc.invalidateQueries({ queryKey: ["dailyStats"] }));
-                });
-              }
-            }}
-              className="glass-card-sm px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all active:scale-95"
-              style={{ color: "var(--text-secondary)" }}>
-              {d.icon} {i18n.language === "he" && d.name_he ? d.name_he : d.name}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Pet */}
       <PetCat />
-
-      {/* Competition */}
       <CompetitionWidget />
 
-      {/* Add food modal */}
       <Modal open={showAddFood} onClose={() => setShowAddFood(false)} title={t("log.title")}>
         <LogFoodModal onDone={() => { setShowAddFood(false); qc.invalidateQueries({ queryKey: ["dailyStats"] }); }} />
+      </Modal>
+
+      <Modal open={showAddDrink} onClose={() => setShowAddDrink(false)} title={t("myday.addDrink")}>
+        <DrinkPickerModal onDone={() => setShowAddDrink(false)} />
       </Modal>
 
       <UnlockNotification />
