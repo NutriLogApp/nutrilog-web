@@ -23,19 +23,19 @@ export default function CreateGroupPage() {
 
   return (
     <div className="p-4 max-w-lg mx-auto">
-      <button onClick={() => navigate("/friends")} className="mb-4 text-slate-500"><ArrowLeft size={20} /></button>
-      <h1 className="text-xl font-bold text-slate-900 mb-4">{t("groups.newCompetition")}</h1>
+      <button onClick={() => navigate("/friends")} className="mb-4" style={{ color: "var(--text-muted)" }}><ArrowLeft size={20} /></button>
+      <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>{t("groups.newCompetition")}</h1>
 
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("groups.groupName")} maxLength={60} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-4" />
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("groups.groupName")} maxLength={60} className="w-full border rounded-lg px-3 py-2 text-sm mb-4" style={{ borderColor: "var(--border)" }} />
 
-      <h2 className="text-sm font-medium text-slate-500 mb-2">{t("groups.selectFriends")}</h2>
+      <h2 className="text-sm font-medium mb-2" style={{ color: "var(--text-muted)" }}>{t("groups.selectFriends")}</h2>
       <div className="space-y-2 mb-4">
         {friends?.map((f: Friend) => (
-          <button key={f.user_id} onClick={() => toggle(f.user_id)} className={`w-full bg-white rounded-xl p-3 shadow-sm flex items-center gap-3 border-2 transition-colors ${selected.has(f.user_id) ? "border-[var(--theme-start)]" : "border-transparent"}`}>
-            <div className="w-8 h-8 rounded-full bg-slate-200" />
+          <button key={f.user_id} onClick={() => toggle(f.user_id)} className={`w-full rounded-xl p-3 shadow-sm flex items-center gap-3 border-2 transition-colors ${selected.has(f.user_id) ? "border-[var(--theme-start)]" : "border-transparent"}`} style={{ backgroundColor: "var(--bg-card)" }}>
+            <div className="w-8 h-8 rounded-full" style={{ backgroundColor: "var(--bg-input)" }} />
             <div className="text-start">
-              <p className="font-medium text-slate-900">{f.name}</p>
-              <p className="text-xs text-slate-400">@{f.username}</p>
+              <p className="font-medium" style={{ color: "var(--text-primary)" }}>{f.name}</p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>@{f.username}</p>
             </div>
           </button>
         ))}

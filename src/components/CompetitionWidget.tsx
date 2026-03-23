@@ -21,11 +21,11 @@ export default function CompetitionWidget() {
   if (!me) return null;
 
   return (
-    <button onClick={() => navigate("/friends")} className="w-full bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
+    <button onClick={() => navigate("/friends")} className="w-full rounded-xl p-3 shadow-sm flex items-center gap-3" style={{ backgroundColor: "var(--bg-card)" }}>
       <Trophy size={18} className="text-amber-500" />
       <div className="flex-1 text-start">
-        <p className="font-medium text-sm text-slate-900">{firstGroup.name}</p>
-        <p className="text-xs text-slate-400">#{me.rank} · {me.total_points} {t("groups.pts")}</p>
+        <p className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>{firstGroup.name}</p>
+        <p className="text-xs" style={{ color: "var(--text-muted)" }}>#{me.rank} · {me.total_points} {t("groups.pts")}</p>
       </div>
     </button>
   );

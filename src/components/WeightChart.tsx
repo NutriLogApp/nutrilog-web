@@ -25,8 +25,8 @@ export default function WeightChart() {
   }));
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm mt-4">
-      <h2 className="text-sm font-medium text-slate-700 mb-3">{t("weight.title")}</h2>
+    <div className="rounded-xl p-4 shadow-sm mt-4" style={{ backgroundColor: "var(--bg-card)" }}>
+      <h2 className="text-sm font-medium mb-3" style={{ color: "var(--text-secondary)" }}>{t("weight.title")}</h2>
 
       {chartData.length > 1 && (
         <ResponsiveContainer width="100%" height={150}>
@@ -53,7 +53,8 @@ export default function WeightChart() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={t("weight.placeholder")}
-          className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
+          className="flex-1 border rounded-lg px-3 py-2 text-sm"
+          style={{ borderColor: "var(--border)" }}
         />
         <button
           onClick={() => logMut.mutate()}

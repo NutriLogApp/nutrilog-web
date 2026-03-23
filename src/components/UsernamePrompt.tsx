@@ -21,9 +21,9 @@ export default function UsernamePrompt({ onDone }: Props) {
 
   return (
     <div className="p-4 max-w-lg mx-auto">
-      <h2 className="text-lg font-bold text-slate-900 mb-2">{t("friends.setUsername")}</h2>
-      <p className="text-sm text-slate-500 mb-4">{t("friends.usernameHint")}</p>
-      <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("friends.username")} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-2" />
+      <h2 className="text-lg font-bold mb-2" style={{ color: "var(--text-primary)" }}>{t("friends.setUsername")}</h2>
+      <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>{t("friends.usernameHint")}</p>
+      <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("friends.username")} className="w-full border rounded-lg px-3 py-2 text-sm mb-2" style={{ borderColor: "var(--border)" }} />
       {error && <p className="text-red-500 text-xs mb-2">{error}</p>}
       <button onClick={() => mut.mutate()} disabled={!value.trim() || mut.isPending} className="w-full py-2.5 rounded-lg text-white font-medium text-sm disabled:opacity-50" style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
         {t("friends.saveUsername")}

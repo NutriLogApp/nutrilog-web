@@ -47,20 +47,22 @@ export default function EatingWindows({ onClose }: Props) {
     <div className="space-y-4">
       {local.map((w, i) => (
         <div key={w.meal_type}>
-          <p className="text-sm font-medium text-slate-700 mb-1">{labels[w.meal_type] ?? w.meal_type}</p>
+          <p className="text-sm font-medium mb-1" style={{ color: "var(--text-secondary)" }}>{labels[w.meal_type] ?? w.meal_type}</p>
           <div className="flex items-center gap-2">
             <input
               type="time"
               value={w.start_time}
               onChange={(e) => update(i, "start_time", e.target.value)}
-              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
+              className="flex-1 border rounded-lg px-3 py-2 text-sm"
+              style={{ borderColor: "var(--border)" }}
             />
-            <span className="text-slate-400">—</span>
+            <span style={{ color: "var(--text-muted)" }}>—</span>
             <input
               type="time"
               value={w.end_time}
               onChange={(e) => update(i, "end_time", e.target.value)}
-              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
+              className="flex-1 border rounded-lg px-3 py-2 text-sm"
+              style={{ borderColor: "var(--border)" }}
             />
           </div>
         </div>
