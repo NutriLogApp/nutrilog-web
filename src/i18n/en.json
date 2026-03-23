@@ -51,7 +51,9 @@
     "avgPerDay": "Avg / day",
     "week": "Week",
     "month": "Month",
-    "kcal": "kcal"
+    "kcal": "kcal",
+    "macroBreakdown": "Macro Breakdown",
+    "daysLogged": "Days logged"
   },
   "profile": {
     "title": "Profile",
@@ -138,7 +140,10 @@
     "you": "You",
     "yourWeek": "Your Week",
     "newGroup": "New Group",
-    "inviteFriends": "Invite Friends"
+    "inviteFriends": "Invite Friends",
+    "needUsername": "Set up your profile first",
+    "needUsernameDesc": "You need a public name before you can join contests",
+    "goToProfile": "Go to Profile"
   },
   "insight": { "title": "Daily Insight" },
   "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
