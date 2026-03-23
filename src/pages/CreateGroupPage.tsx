@@ -14,7 +14,7 @@ export default function CreateGroupPage() {
 
   const mut = useMutation({
     mutationFn: () => createGroup(name, [...selected]),
-    onSuccess: () => navigate("/friends"),
+    onSuccess: () => navigate("/contest"),
   });
 
   function toggle(id: string) {
@@ -23,7 +23,7 @@ export default function CreateGroupPage() {
 
   return (
     <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
-      <button onClick={() => navigate("/friends")} className="mb-0" style={{ color: "var(--text-muted)" }}><ArrowLeft size={20} /></button>
+      <button onClick={() => navigate("/contest")} className="mb-0" style={{ color: "var(--text-muted)" }}><ArrowLeft size={20} /></button>
       <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("groups.newCompetition")}</h1>
 
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("groups.groupName")} maxLength={60}

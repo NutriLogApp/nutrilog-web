@@ -42,7 +42,7 @@ export default function ContestPage() {
         <p className="text-sm text-center mb-8 max-w-xs" style={{ color: "var(--text-muted)" }}>
           {t("contest.emptyDesc")}
         </p>
-        <button onClick={() => navigate("/friends/add")}
+        <button onClick={() => navigate("/profile")}
           className="px-8 py-3.5 rounded-2xl text-white font-semibold transition-all active:scale-[0.97]"
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", boxShadow: "0 4px 16px color-mix(in srgb, var(--theme-start) 30%, transparent)" }}>
           {t("contest.addFriendsStart")}
@@ -125,13 +125,13 @@ export default function ContestPage() {
       {/* Actions */}
       <div className="flex gap-3 mt-5 animate-fade-up stagger-3">
         {groups.length < 2 && (
-          <button onClick={() => navigate("/friends/groups/new")}
+          <button onClick={() => navigate("/contest/groups/new")}
             className="flex-1 glass-card-sm py-3 flex items-center justify-center gap-2 transition-all active:scale-[0.97]"
             style={{ color: "var(--theme-accent)" }}>
             <Plus size={16} /> {t("contest.newGroup")}
           </button>
         )}
-        <button onClick={() => navigate("/friends/add")}
+        <button onClick={() => navigate("/profile")}
           className="flex-1 glass-card-sm py-3 flex items-center justify-center gap-2 transition-all active:scale-[0.97]"
           style={{ color: "var(--theme-accent)" }}>
           <Users size={16} /> {t("contest.inviteFriends")}

@@ -90,7 +90,10 @@
     "shareInvite": "שתף קישור הזמנה",
     "shareDesc": "שתף את קוד ההזמנה שלך כדי שחברים ימצאו אותך",
     "shareText": "הצטרפו אלי ב-NutriLog!",
-    "shareLink": "שתף קישור"
+    "shareLink": "שתף קישור",
+    "social": "חברתי",
+    "publicName": "שם ציבורי",
+    "publicNameDesc": "כך אחרים ימצאו אותך באפליקציה"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },
@@ -139,7 +142,7 @@
   },
   "insight": { "title": "תובנה יומית" },
   "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },
-  "weight": { "title": "משקל", "placeholder": "משקל היום (ק״ג)", "log": "שמור" },
+  "weight": { "title": "משקל", "placeholder": "משקל היום (ק״ג)", "log": "שמור", "recent": "אחרון" },
   "onboarding": {
     "sex": "מהו המין שלך?",
     "male": "זכר",

@@ -11,7 +11,6 @@ import ContestPage from "@/pages/ContestPage";
 import TrendsPage from "@/pages/TrendsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AdminPage from "@/pages/AdminPage";
-import AddFriendPage from "@/pages/AddFriendPage";
 import GroupLeaderboardPage from "@/pages/GroupLeaderboardPage";
 import CreateGroupPage from "@/pages/CreateGroupPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -46,9 +45,8 @@ export default function App() {
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/myday" element={<MyDayPage />} />
                 <Route path="/contest" element={<ContestPage />} />
-                <Route path="/friends/add" element={<AddFriendPage />} />
-                <Route path="/friends/groups/new" element={<CreateGroupPage />} />
-                <Route path="/friends/groups/:groupId" element={<GroupLeaderboardPage />} />
+                <Route path="/contest/groups/new" element={<CreateGroupPage />} />
+                <Route path="/contest/groups/:groupId" element={<GroupLeaderboardPage />} />
                 <Route path="/trends" element={<TrendsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/admin" element={<AdminPage />} />

@@ -90,7 +90,10 @@
     "shareInvite": "Share Invite Link",
     "shareDesc": "Share your invite code so friends can find you",
     "shareText": "Join me on NutriLog!",
-    "shareLink": "Share Link"
+    "shareLink": "Share Link",
+    "social": "Social",
+    "publicName": "Public Name",
+    "publicNameDesc": "This is how others will find you in the app"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },
@@ -139,7 +142,7 @@
   },
   "insight": { "title": "Daily Insight" },
   "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
-  "weight": { "title": "Weight", "placeholder": "Today's weight (kg)", "log": "Log" },
+  "weight": { "title": "Weight", "placeholder": "Today's weight (kg)", "log": "Log", "recent": "Recent" },
   "onboarding": {
     "sex": "What's your sex?",
     "male": "Male",
