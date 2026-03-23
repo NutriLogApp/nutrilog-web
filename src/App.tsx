@@ -7,10 +7,10 @@ import LoginPage from "@/pages/LoginPage";
 import PendingPage from "@/pages/PendingPage";
 import DashboardPage from "@/pages/DashboardPage";
 import MyDayPage from "@/pages/MyDayPage";
+import ContestPage from "@/pages/ContestPage";
 import TrendsPage from "@/pages/TrendsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AdminPage from "@/pages/AdminPage";
-import FriendsPage from "@/pages/FriendsPage";
 import AddFriendPage from "@/pages/AddFriendPage";
 import GroupLeaderboardPage from "@/pages/GroupLeaderboardPage";
 import CreateGroupPage from "@/pages/CreateGroupPage";
@@ -26,7 +26,6 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("nutrilog-theme") as ThemeName | null;
     applyTheme(saved ?? "ocean");
-    // Restore dark mode preference
     const dm = localStorage.getItem("nutrilog-dark-mode");
     if (dm === "dark") document.documentElement.classList.add("force-dark");
     else if (dm === "light") document.documentElement.classList.add("force-light");
@@ -43,16 +42,10 @@ export default function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/pending" element={<PendingPage />} />
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <AppLayout />
-                  </ProtectedRoute>
-                }
-              >
+              <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/myday" element={<MyDayPage />} />
-                <Route path="/friends" element={<FriendsPage />} />
+                <Route path="/contest" element={<ContestPage />} />
                 <Route path="/friends/add" element={<AddFriendPage />} />
                 <Route path="/friends/groups/new" element={<CreateGroupPage />} />
                 <Route path="/friends/groups/:groupId" element={<GroupLeaderboardPage />} />

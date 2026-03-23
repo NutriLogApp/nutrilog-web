@@ -16,7 +16,7 @@
     "todayLog": "Today's Log",
     "noEntries": "No entries yet — tap + to log food"
   },
-  "nav": { "home": "Home", "myday": "My Day", "friends": "Friends", "trends": "Trends", "profile": "Profile" },
+  "nav": { "home": "Home", "myday": "My Day", "contest": "Contest", "trends": "Trends", "profile": "Profile" },
   "myday": {
     "title": "My Day",
     "food": "Food",
@@ -28,6 +28,7 @@
     "dailyLog": "Daily Log",
     "glassOfWater": "Glass of Water",
     "manageDrinks": "Manage drinks in Profile",
+    "noDrinksYet": "No custom drinks yet — add in Profile",
     "entries": "entries"
   },
   "log": {
@@ -83,7 +84,13 @@
     "waterContent": "water",
     "timeFormat": "Time Format",
     "appSettings": "App Settings",
-    "personalSettings": "Personal Settings"
+    "personalSettings": "Personal Settings",
+    "friends": "Friends",
+    "addFriend": "Add Friend",
+    "shareInvite": "Share Invite Link",
+    "shareDesc": "Share your invite code so friends can find you",
+    "shareText": "Join me on NutriLog!",
+    "shareLink": "Share Link"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },
@@ -119,6 +126,16 @@
     "days": "days",
     "members": "members",
     "pts": "pts"
+  },
+  "contest": {
+    "title": "Contest",
+    "emptyDesc": "Add friends and start a weekly competition to stay motivated",
+    "addFriendsStart": "Add Friends & Start",
+    "weeklyStandings": "This week",
+    "you": "You",
+    "yourWeek": "Your Week",
+    "newGroup": "New Group",
+    "inviteFriends": "Invite Friends"
   },
   "pet": { "unlocked": "You unlocked {{name}}!", "tapDismiss": "Tap to dismiss" },
   "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },

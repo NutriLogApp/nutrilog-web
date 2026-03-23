@@ -84,7 +84,7 @@ export async function getTodayPoints(): Promise<{ total_points: number }> {
   return data;
 }
 
-export async function getWeekPoints(): Promise<{ week_start: string; total_points: number }> {
-  const { data } = await apiClient.get<{ week_start: string; total_points: number }>("/api/v1/points/week");
+export async function getWeekPoints(): Promise<{ week_start: string; total_points: number; days: { date: string; total_points: number }[] }> {
+  const { data } = await apiClient.get<{ week_start: string; total_points: number; days: { date: string; total_points: number }[] }>("/api/v1/points/week");
   return data;
 }
