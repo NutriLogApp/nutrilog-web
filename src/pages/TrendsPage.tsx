@@ -1,43 +1,62 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
 import { getRangeStats } from "@/services/statsService";
 import WeightChart from "@/components/WeightChart";
 
-function dateRange(days: number) {
+function getWeekRange() {
   const end = new Date();
   const start = new Date();
-  start.setDate(end.getDate() - days + 1);
-  return {
-    start: start.toISOString().slice(0, 10),
-    end: end.toISOString().slice(0, 10),
-  };
+  start.setDate(end.getDate() - 6);
+  return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
 }
 
-type Range = 7 | 30 | 365;
+function getMonthRange() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
+}
+
+type Range = "week" | "month";
+
+function formatDate(dateStr: string): string {
+  const [, m, d] = dateStr.split("-");
+  const isHe = i18n.language === "he";
+  return isHe ? `${d}/${m}` : `${d}/${m}`;
+}
 
 export default function TrendsPage() {
   const { t } = useTranslation();
-  const [range, setRange] = useState<Range>(7);
-  const { start, end } = dateRange(range);
+  const [range, setRange] = useState<Range>("week");
+
+  const { start, end } = range === "week" ? getWeekRange() : getMonthRange();
 
   const { data, isLoading } = useQuery({
     queryKey: ["rangeStats", start, end],
     queryFn: () => getRangeStats(start, end),
   });
 
+  const isWeek = range === "week";
+
   const chartData = (data?.days ?? []).map((d) => ({
-    date: d.date.slice(5),
-    calories: d.total_calories,
+    date: formatDate(d.date),
+    ...(isWeek
+      ? {
+          protein: Math.round(d.total_protein_g * 4),
+          fat: Math.round(d.total_fat_g * 9),
+          carbs: Math.round(d.total_carbs_g * 4),
+        }
+      : { calories: d.total_calories }),
   }));
 
   const ranges: { value: Range; labelKey: string }[] = [
-    { value: 7, labelKey: "trends.week" },
-    { value: 30, labelKey: "trends.month" },
-    { value: 365, labelKey: "trends.year" },
+    { value: "week", labelKey: "trends.week" },
+    { value: "month", labelKey: "trends.month" },
   ];
 
   return (
@@ -69,10 +88,19 @@ export default function TrendsPage() {
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+              <XAxis dataKey="date" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 11 }} width={40} />
               <Tooltip />
-              <Bar dataKey="calories" fill="var(--theme-start)" radius={[4, 4, 0, 0]} />
+              {isWeek ? (
+                <>
+                  <Legend />
+                  <Bar dataKey="protein" stackId="a" fill="#3b82f6" name={t("macros.protein")} radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[4, 4, 0, 0]} />
+                </>
+              ) : (
+                <Bar dataKey="calories" fill="var(--theme-start)" radius={[4, 4, 0, 0]} />
+              )}
             </BarChart>
           </ResponsiveContainer>
         </div>
