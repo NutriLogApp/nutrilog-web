@@ -9,7 +9,6 @@ export default function WaterTracker() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
-
   const addMut = useMutation({
     mutationFn: (ml: number) => addWater(ml),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["water"] }),
@@ -21,30 +20,32 @@ export default function WaterTracker() {
   const glasses = Math.round(data.amount_ml / GLASS_ML);
 
   return (
-    <div className="rounded-xl p-4" style={{ backgroundColor: "var(--bg-card)" }}>
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <Droplets size={18} className="text-blue-400" />
-          <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("water.title")}</span>
+    <div className="glass-card-sm p-4 animate-fade-up stagger-3">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(56, 189, 248, 0.12)" }}>
+            <Droplets size={16} color="#38bdf8" />
+          </div>
+          <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{t("water.title")}</span>
         </div>
-        <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+        <span className="text-xs font-medium tabular-nums" style={{ color: "var(--text-muted)" }}>
           {data.amount_ml} / {data.goal_ml} {t("water.ml")}
         </span>
       </div>
       <div className="h-2 rounded-full overflow-hidden mb-3" style={{ backgroundColor: "var(--bg-input)" }}>
-        <div className="h-full bg-blue-400 rounded-full transition-all duration-500" style={{ width: `${pct * 100}%` }} />
+        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct * 100}%`, background: "linear-gradient(90deg, #38bdf8, #0ea5e9)" }} />
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-xs" style={{ color: "var(--text-muted)" }}>{glasses} {t("water.glasses")}</span>
-        <div className="flex gap-2">
+        <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{glasses} {t("water.glasses")}</span>
+        <div className="flex gap-1.5">
           <button onClick={() => addMut.mutate(-GLASS_ML)} disabled={data.amount_ml <= 0}
-            className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-30"
+            className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-20 transition-all active:scale-90"
             style={{ backgroundColor: "var(--bg-input)", color: "var(--text-secondary)" }}>
             <Minus size={14} />
           </button>
           <button onClick={() => addMut.mutate(GLASS_ML)}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white"
-            style={{ background: "var(--theme-start)" }}>
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white transition-all active:scale-90"
+            style={{ background: "linear-gradient(135deg, #38bdf8, #0ea5e9)" }}>
             <Plus size={14} />
           </button>
         </div>
