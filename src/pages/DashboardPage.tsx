@@ -7,6 +7,8 @@ import { deleteEntry } from "@/services/entriesService";
 import CalorieRing from "@/components/CalorieRing";
 import MacroCard from "@/components/MacroCard";
 import EntryCard from "@/components/EntryCard";
+import PetCat from "@/components/PetCat";
+import UnlockNotification from "@/components/UnlockNotification";
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -97,6 +99,9 @@ export default function DashboardPage() {
           />
         ))}
       </div>
+
+      <PetCat />
+      <UnlockNotification />
     </div>
   );
 }
