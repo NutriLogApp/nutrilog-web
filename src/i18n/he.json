@@ -137,7 +137,7 @@
     "newGroup": "קבוצה חדשה",
     "inviteFriends": "הזמן חברים"
   },
-  "pet": { "unlocked": "פתחת את {{name}}!", "tapDismiss": "לחץ לסגירה" },
+  "insight": { "title": "תובנה יומית" },
   "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },
   "weight": { "title": "משקל", "placeholder": "משקל היום (ק״ג)", "log": "שמור" },
   "onboarding": {

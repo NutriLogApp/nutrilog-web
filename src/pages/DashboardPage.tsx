@@ -5,10 +5,9 @@ import { UtensilsCrossed, Droplets } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { getProfile } from "@/services/profileService";
 import { getTodayWater } from "@/services/waterService";
-import PetCat from "@/components/PetCat";
 import CompetitionWidget from "@/components/CompetitionWidget";
-import UnlockNotification from "@/components/UnlockNotification";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
+import DailyInsight from "@/components/DailyInsight";
 import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
 import DrinkPickerModal from "@/components/DrinkPickerModal";
@@ -155,9 +154,9 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Pet — natural placement */}
-      <div className="mb-4 animate-fade-up stagger-4">
-        <PetCat />
+      {/* Daily AI insight */}
+      <div className="animate-fade-up stagger-4">
+        <DailyInsight />
       </div>
 
       <CompetitionWidget />
@@ -169,7 +168,6 @@ export default function DashboardPage() {
       <Modal open={showAddDrink} onClose={() => setShowAddDrink(false)} title={t("myday.addDrink")}>
         <DrinkPickerModal onDone={() => setShowAddDrink(false)} />
       </Modal>
-      <UnlockNotification />
     </div>
   );
 }

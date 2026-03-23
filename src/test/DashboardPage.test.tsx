@@ -41,10 +41,8 @@ vi.mock("@/services/entriesService", () => ({
   deleteEntry: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("@/services/petService", () => ({
-  getPetStatus: vi.fn().mockResolvedValue(null),
-  getCollection: vi.fn().mockResolvedValue({ cats: [], active_cat: "whiskers" }),
-  refreshMessage: vi.fn(),
+vi.mock("@/services/insightService", () => ({
+  getDailyInsight: vi.fn().mockResolvedValue({ summary: "", suggestion: "Test tip", source: "static" }),
 }));
 
 vi.mock("@/services/socialService", () => ({

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEatingWindows, updateEatingWindows, type EatingWindowItem } from "@/services/petService";
+import { getEatingWindows, updateEatingWindows, type EatingWindowItem } from "@/services/eatingWindowsService";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
