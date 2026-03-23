@@ -1,13 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Shield } from "lucide-react";
+import { Shield, Palette, Clock, ChevronRight } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
 import { useState, useEffect } from "react";
 import CatCollection from "@/components/CatCollection";
 import EatingWindows from "@/components/EatingWindows";
+import Modal from "@/components/Modal";
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
@@ -31,6 +32,9 @@ export default function ProfilePage() {
     daily_fat_goal_g: 78,
     daily_carbs_goal_g: 180,
   });
+  const [showThemeModal, setShowThemeModal] = useState(false);
+  const [showWindowsModal, setShowWindowsModal] = useState(false);
+  const [activeTheme, setActiveTheme] = useState<ThemeName>("ocean");
 
   useEffect(() => {
     if (profile) {
@@ -40,6 +44,7 @@ export default function ProfilePage() {
         daily_fat_goal_g: profile.daily_fat_goal_g ?? 78,
         daily_carbs_goal_g: profile.daily_carbs_goal_g ?? 180,
       });
+      setActiveTheme((profile.theme ?? "ocean") as ThemeName);
     }
   }, [profile]);
 
@@ -49,10 +54,12 @@ export default function ProfilePage() {
 
   function switchLanguage(lang: string) {
     i18n.changeLanguage(lang);
+    document.documentElement.dir = lang === "he" ? "rtl" : "ltr";
     updateMut.mutate({ language: lang });
   }
 
   function switchTheme(name: ThemeName) {
+    setActiveTheme(name);
     applyTheme(name);
     localStorage.setItem("nutrilog-theme", name);
     updateMut.mutate({ theme: name });
@@ -69,29 +76,30 @@ export default function ProfilePage() {
     );
   }
 
+  const currentTheme = themes[activeTheme];
+
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold text-slate-900 mb-4">{t("profile.title")}</h1>
+    <div className="p-4 max-w-lg mx-auto space-y-4">
+      <h1 className="text-xl font-bold text-slate-900">{t("profile.title")}</h1>
 
       {/* User info */}
-      <div className="bg-white rounded-xl p-4 shadow-sm mb-4 flex items-center gap-3">
+      <div className="bg-white rounded-xl p-4 shadow-sm flex items-center gap-3">
         {profile?.avatar_url ? (
-          <img
-            src={profile.avatar_url}
-            alt=""
-            className="w-12 h-12 rounded-full"
-          />
+          <img src={profile.avatar_url} alt="" className="w-14 h-14 rounded-full" />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-slate-200" />
+          <div className="w-14 h-14 rounded-full bg-slate-200" />
         )}
-        <div>
-          <p className="font-medium text-slate-900">{profile?.name}</p>
-          <p className="text-xs text-slate-400">{profile?.email}</p>
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-slate-900 truncate">{profile?.name}</p>
+          <p className="text-xs text-slate-400 truncate">{profile?.email}</p>
+          {profile?.username && (
+            <p className="text-xs text-slate-500 mt-0.5">@{profile.username}</p>
+          )}
         </div>
       </div>
 
       {/* Goals */}
-      <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
+      <div className="bg-white rounded-xl p-4 shadow-sm">
         <h2 className="font-semibold text-slate-700 mb-3">{t("profile.goals")}</h2>
         <div className="grid grid-cols-2 gap-3">
           {(
@@ -103,15 +111,11 @@ export default function ProfilePage() {
             ] as const
           ).map(([key, label, unit]) => (
             <div key={key}>
-              <label className="text-xs text-slate-400">
-                {label} ({unit})
-              </label>
+              <label className="text-xs text-slate-400">{label} ({unit})</label>
               <input
                 type="number"
                 value={goals[key]}
-                onChange={(e) =>
-                  setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))
-                }
+                onChange={(e) => setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))}
                 className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mt-1"
               />
             </div>
@@ -120,54 +124,46 @@ export default function ProfilePage() {
         <button
           onClick={saveGoals}
           disabled={updateMut.isPending}
-          className="w-full mt-3 py-2 rounded-lg text-white text-sm font-medium"
-          style={{
-            background:
-              "linear-gradient(135deg, var(--theme-start), var(--theme-end))",
-          }}
+          className="w-full mt-3 py-2.5 rounded-lg text-white text-sm font-medium"
+          style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
         >
           {t("profile.save")}
         </button>
       </div>
 
-      <EatingWindows />
-
-      {/* Theme picker */}
-      <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-        <h2 className="font-semibold text-slate-700 mb-3">{t("profile.theme")}</h2>
-        <div className="grid grid-cols-3 gap-2">
-          {(Object.entries(themes) as [ThemeName, (typeof themes)[ThemeName]][]).map(
-            ([name, theme]) => {
-              const active =
-                (profile?.theme ?? "ocean") === name;
-              return (
-                <button
-                  key={name}
-                  onClick={() => switchTheme(name)}
-                  className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium border transition-colors ${
-                    active
-                      ? "border-slate-900 bg-slate-50"
-                      : "border-slate-100"
-                  }`}
-                >
-                  <span
-                    className="w-5 h-5 rounded-full shrink-0"
-                    style={{
-                      background: `linear-gradient(135deg, ${theme.start}, ${theme.end})`,
-                    }}
-                  />
-                  {theme.label}
-                </button>
-              );
-            },
-          )}
-        </div>
+      {/* Quick settings row */}
+      <div className="bg-white rounded-xl shadow-sm divide-y divide-slate-100">
+        <button
+          onClick={() => setShowThemeModal(true)}
+          className="w-full flex items-center gap-3 p-4"
+        >
+          <Palette size={18} style={{ color: "var(--theme-start)" }} />
+          <div className="flex-1 text-start">
+            <p className="text-sm font-medium text-slate-700">{t("profile.theme")}</p>
+          </div>
+          <span
+            className="w-6 h-6 rounded-full shrink-0"
+            style={{ background: `linear-gradient(135deg, ${currentTheme.start}, ${currentTheme.end})` }}
+          />
+          <ChevronRight size={16} className="text-slate-300" />
+        </button>
+        <button
+          onClick={() => setShowWindowsModal(true)}
+          className="w-full flex items-center gap-3 p-4"
+        >
+          <Clock size={18} style={{ color: "var(--theme-start)" }} />
+          <div className="flex-1 text-start">
+            <p className="text-sm font-medium text-slate-700">{t("profile.eatingWindows")}</p>
+          </div>
+          <ChevronRight size={16} className="text-slate-300" />
+        </button>
       </div>
 
+      {/* Cat collection */}
       <CatCollection />
 
       {/* Language */}
-      <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
+      <div className="bg-white rounded-xl p-4 shadow-sm">
         <h2 className="font-semibold text-slate-700 mb-3">{t("profile.language")}</h2>
         <div className="flex gap-2">
           {[
@@ -177,10 +173,10 @@ export default function ProfilePage() {
             <button
               key={lang.code}
               onClick={() => switchLanguage(lang.code)}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${
+              className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-all ${
                 i18n.language === lang.code
-                  ? "border-slate-900 bg-slate-50"
-                  : "border-slate-100"
+                  ? "border-[var(--theme-start)] bg-slate-50"
+                  : "border-slate-100 hover:border-slate-200"
               }`}
             >
               {lang.label}
@@ -193,20 +189,51 @@ export default function ProfilePage() {
       {profile?.role === "admin" && (
         <button
           onClick={() => navigate("/admin")}
-          className="w-full bg-white rounded-xl p-4 shadow-sm mb-4 flex items-center gap-3 text-slate-700 font-medium"
+          className="w-full bg-white rounded-xl p-4 shadow-sm flex items-center gap-3 text-slate-700 font-medium"
         >
           <Shield size={18} />
-          {t("admin.title")}
+          <span className="flex-1 text-start">{t("admin.title")}</span>
+          <ChevronRight size={16} className="text-slate-300" />
         </button>
       )}
 
       {/* Sign out */}
       <button
         onClick={() => signOut()}
-        className="w-full text-center text-sm text-slate-400 underline mt-4"
+        className="w-full text-center text-sm text-red-400 py-3"
       >
         {t("profile.signOut")}
       </button>
+
+      {/* Theme modal */}
+      <Modal open={showThemeModal} onClose={() => setShowThemeModal(false)} title={t("profile.theme")}>
+        <div className="grid grid-cols-3 gap-3">
+          {(Object.entries(themes) as [ThemeName, (typeof themes)[ThemeName]][]).map(
+            ([name, theme]) => (
+              <button
+                key={name}
+                onClick={() => switchTheme(name)}
+                className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
+                  activeTheme === name
+                    ? "border-[var(--theme-start)] bg-slate-50 scale-105"
+                    : "border-slate-100 hover:border-slate-200"
+                }`}
+              >
+                <span
+                  className="w-8 h-8 rounded-full"
+                  style={{ background: `linear-gradient(135deg, ${theme.start}, ${theme.end})` }}
+                />
+                <span className="text-xs font-medium text-slate-700">{theme.label}</span>
+              </button>
+            ),
+          )}
+        </div>
+      </Modal>
+
+      {/* Eating windows modal */}
+      <Modal open={showWindowsModal} onClose={() => setShowWindowsModal(false)} title={t("profile.eatingWindows")}>
+        <EatingWindows onClose={() => setShowWindowsModal(false)} />
+      </Modal>
     </div>
   );
 }

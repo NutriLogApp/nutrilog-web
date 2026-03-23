@@ -1,8 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getEatingWindows, updateEatingWindows, type EatingWindowItem } from "@/services/petService";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-export default function EatingWindows() {
+interface Props {
+  onClose: () => void;
+}
+
+export default function EatingWindows({ onClose }: Props) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const { data: windows } = useQuery({
     queryKey: ["eatingWindows"],
@@ -17,7 +23,10 @@ export default function EatingWindows() {
 
   const saveMut = useMutation({
     mutationFn: () => updateEatingWindows(local),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["eatingWindows"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["eatingWindows"] });
+      onClose();
+    },
   });
 
   function update(idx: number, field: "start_time" | "end_time", value: string) {
@@ -29,41 +38,40 @@ export default function EatingWindows() {
   if (!local.length) return null;
 
   const labels: Record<string, string> = {
-    breakfast: "Breakfast",
-    lunch: "Lunch",
-    dinner: "Dinner",
+    breakfast: t("profile.breakfast"),
+    lunch: t("profile.lunch"),
+    dinner: t("profile.dinner"),
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-      <h2 className="font-semibold text-slate-700 mb-3">Eating Windows</h2>
-      <div className="space-y-3">
-        {local.map((w, i) => (
-          <div key={w.meal_type} className="flex items-center gap-2">
-            <span className="text-sm text-slate-600 w-20">{labels[w.meal_type] ?? w.meal_type}</span>
+    <div className="space-y-4">
+      {local.map((w, i) => (
+        <div key={w.meal_type}>
+          <p className="text-sm font-medium text-slate-700 mb-1">{labels[w.meal_type] ?? w.meal_type}</p>
+          <div className="flex items-center gap-2">
             <input
               type="time"
               value={w.start_time}
               onChange={(e) => update(i, "start_time", e.target.value)}
-              className="border border-slate-200 rounded px-2 py-1 text-sm"
+              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
             />
             <span className="text-slate-400">—</span>
             <input
               type="time"
               value={w.end_time}
               onChange={(e) => update(i, "end_time", e.target.value)}
-              className="border border-slate-200 rounded px-2 py-1 text-sm"
+              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
             />
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
       <button
         onClick={() => saveMut.mutate()}
         disabled={saveMut.isPending}
-        className="w-full mt-3 py-2 rounded-lg text-white text-sm font-medium"
+        className="w-full py-2.5 rounded-lg text-white text-sm font-medium"
         style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
       >
-        Save
+        {t("profile.save")}
       </button>
     </div>
   );

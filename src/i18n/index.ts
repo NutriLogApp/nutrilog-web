@@ -14,4 +14,12 @@ i18n
     interpolation: { escapeValue: false },
   });
 
+// Set initial dir attribute
+document.documentElement.dir = i18n.language === "he" ? "rtl" : "ltr";
+
+// Update dir on language change
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.dir = lng === "he" ? "rtl" : "ltr";
+});
+
 export default i18n;
