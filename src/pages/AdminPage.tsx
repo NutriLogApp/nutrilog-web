@@ -38,8 +38,8 @@ export default function AdminPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div
-          className="w-8 h-8 rounded-full border-2 border-slate-200 border-t-transparent animate-spin"
-          style={{ borderTopColor: "var(--theme-start)" }}
+          className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+          style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }}
         />
       </div>
     );
@@ -47,17 +47,18 @@ export default function AdminPage() {
 
   return (
     <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold text-slate-900 mb-4">{t("admin.title")}</h1>
+      <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
 
       <div className="space-y-2">
         {users?.map((user) => (
           <div
             key={user.id}
-            className="bg-white rounded-xl p-4 shadow-sm flex items-center gap-3"
+            className="rounded-xl p-4 shadow-sm flex items-center gap-3"
+            style={{ backgroundColor: "var(--bg-card)" }}
           >
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-slate-900 truncate">{user.name}</p>
-              <p className="text-xs text-slate-400">{user.email}</p>
+              <p className="font-medium truncate" style={{ color: "var(--text-primary)" }}>{user.name}</p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{user.email}</p>
               <span
                 className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[user.status] ?? ""}`}
               >

@@ -34,7 +34,7 @@ export default function FriendsPage() {
   return (
     <div className="p-4 max-w-lg mx-auto">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-bold text-slate-900">{t("friends.title")}</h1>
+        <h1 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>{t("friends.title")}</h1>
         <button onClick={() => navigate("/friends/add")} className="p-2 rounded-lg" style={{ color: "var(--theme-start)" }}>
           <UserPlus size={20} />
         </button>
@@ -42,15 +42,15 @@ export default function FriendsPage() {
 
       {requests && requests.length > 0 && (
         <div className="mb-4">
-          <h2 className="text-sm font-medium text-slate-500 mb-2">{t("friends.pendingRequests")}</h2>
+          <h2 className="text-sm font-medium mb-2" style={{ color: "var(--text-muted)" }}>{t("friends.pendingRequests")}</h2>
           {requests.map((r) => (
-            <div key={r.friendship_id} className="bg-white rounded-xl p-3 shadow-sm mb-2 flex items-center gap-3">
+            <div key={r.friendship_id} className="rounded-xl p-3 shadow-sm mb-2 flex items-center gap-3" style={{ backgroundColor: "var(--bg-card)" }}>
               <div className="flex-1">
-                <p className="font-medium text-slate-900">{r.requester.name}</p>
-                <p className="text-xs text-slate-400">@{r.requester.username}</p>
+                <p className="font-medium" style={{ color: "var(--text-primary)" }}>{r.requester.name}</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>@{r.requester.username}</p>
               </div>
               <button onClick={() => respondMut.mutate({ id: r.friendship_id, action: "accept" })} className="text-xs px-3 py-1 rounded-lg bg-emerald-500 text-white">{t("friends.accept")}</button>
-              <button onClick={() => respondMut.mutate({ id: r.friendship_id, action: "decline" })} className="text-xs px-3 py-1 rounded-lg bg-slate-200 text-slate-600">{t("friends.decline")}</button>
+              <button onClick={() => respondMut.mutate({ id: r.friendship_id, action: "decline" })} className="text-xs px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--bg-input)", color: "var(--text-secondary)" }}>{t("friends.decline")}</button>
             </div>
           ))}
         </div>
@@ -59,31 +59,31 @@ export default function FriendsPage() {
       {groups && groups.length > 0 && (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-medium text-slate-500">{t("friends.competitions")}</h2>
+            <h2 className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>{t("friends.competitions")}</h2>
             <button onClick={() => navigate("/friends/groups/new")} className="text-xs font-medium" style={{ color: "var(--theme-start)" }}>{t("friends.new")}</button>
           </div>
           {groups.map((g) => (
-            <button key={g.group_id} onClick={() => navigate(`/friends/groups/${g.group_id}`)} className="w-full bg-white rounded-xl p-3 shadow-sm mb-2 flex items-center gap-3 text-start">
+            <button key={g.group_id} onClick={() => navigate(`/friends/groups/${g.group_id}`)} className="w-full rounded-xl p-3 shadow-sm mb-2 flex items-center gap-3 text-start" style={{ backgroundColor: "var(--bg-card)" }}>
               <Trophy size={18} className="text-amber-500" />
               <div className="flex-1">
-                <p className="font-medium text-slate-900">{g.name}</p>
-                <p className="text-xs text-slate-400">{g.member_count} {t("groups.members")}</p>
+                <p className="font-medium" style={{ color: "var(--text-primary)" }}>{g.name}</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>{g.member_count} {t("groups.members")}</p>
               </div>
             </button>
           ))}
         </div>
       )}
 
-      <h2 className="text-sm font-medium text-slate-500 mb-2">{t("friends.friendsCount")} ({friends?.length ?? 0})</h2>
+      <h2 className="text-sm font-medium mb-2" style={{ color: "var(--text-muted)" }}>{t("friends.friendsCount")} ({friends?.length ?? 0})</h2>
       {friends && friends.length === 0 && (
-        <p className="text-sm text-slate-400 text-center py-8">{t("friends.noFriends")}</p>
+        <p className="text-sm text-center py-8" style={{ color: "var(--text-muted)" }}>{t("friends.noFriends")}</p>
       )}
       {friends?.map((f) => (
-        <div key={f.user_id} className="bg-white rounded-xl p-3 shadow-sm mb-2 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-slate-200" />
+        <div key={f.user_id} className="rounded-xl p-3 shadow-sm mb-2 flex items-center gap-3" style={{ backgroundColor: "var(--bg-card)" }}>
+          <div className="w-8 h-8 rounded-full" style={{ backgroundColor: "var(--bg-input)" }} />
           <div>
-            <p className="font-medium text-slate-900">{f.name}</p>
-            <p className="text-xs text-slate-400">@{f.username}</p>
+            <p className="font-medium" style={{ color: "var(--text-primary)" }}>{f.name}</p>
+            <p className="text-xs" style={{ color: "var(--text-muted)" }}>@{f.username}</p>
           </div>
         </div>
       ))}

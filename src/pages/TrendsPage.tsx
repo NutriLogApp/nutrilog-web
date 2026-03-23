@@ -61,16 +61,17 @@ export default function TrendsPage() {
 
   return (
     <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold text-slate-900 mb-4">{t("trends.title")}</h1>
+      <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>{t("trends.title")}</h1>
 
-      <div className="flex gap-1 bg-slate-100 rounded-lg p-1 mb-4">
+      <div className="flex gap-1 rounded-lg p-1 mb-4" style={{ backgroundColor: "var(--bg-input)" }}>
         {ranges.map((r) => (
           <button
             key={r.value}
             onClick={() => setRange(r.value)}
             className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              range === r.value ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+              range === r.value ? "shadow-sm" : ""
             }`}
+            style={range === r.value ? { backgroundColor: "var(--bg-card)", color: "var(--text-primary)" } : { color: "var(--text-muted)" }}
           >
             {t(r.labelKey)}
           </button>
@@ -79,12 +80,12 @@ export default function TrendsPage() {
 
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
-          <div className="w-8 h-8 rounded-full border-2 border-slate-200 border-t-transparent animate-spin"
-               style={{ borderTopColor: "var(--theme-start)" }} />
+          <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+               style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }} />
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <h2 className="text-sm font-medium text-slate-700 mb-3">{t("trends.calories")}</h2>
+        <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: "var(--bg-card)" }}>
+          <h2 className="text-sm font-medium mb-3" style={{ color: "var(--text-secondary)" }}>{t("trends.calories")}</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -107,8 +108,8 @@ export default function TrendsPage() {
       )}
 
       {data && (
-        <div className="mt-4 bg-white rounded-xl p-4 shadow-sm">
-          <h2 className="text-sm font-medium text-slate-700 mb-2">{t("trends.avgPerDay")}</h2>
+        <div className="mt-4 rounded-xl p-4 shadow-sm" style={{ backgroundColor: "var(--bg-card)" }}>
+          <h2 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("trends.avgPerDay")}</h2>
           {(() => {
             const days = data.days.filter((d) => d.entry_count > 0);
             const n = days.length || 1;
@@ -121,20 +122,20 @@ export default function TrendsPage() {
             return (
               <div className="grid grid-cols-4 gap-2 text-center text-sm">
                 <div>
-                  <p className="font-bold text-slate-900">{avg.cal}</p>
-                  <p className="text-xs text-slate-400">{t("trends.kcal")}</p>
+                  <p className="font-bold" style={{ color: "var(--text-primary)" }}>{avg.cal}</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("trends.kcal")}</p>
                 </div>
                 <div>
                   <p className="font-bold text-blue-500">{avg.p}{t("log.g")}</p>
-                  <p className="text-xs text-slate-400">{t("macros.protein")}</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("macros.protein")}</p>
                 </div>
                 <div>
                   <p className="font-bold text-amber-500">{avg.f}{t("log.g")}</p>
-                  <p className="text-xs text-slate-400">{t("macros.fat")}</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("macros.fat")}</p>
                 </div>
                 <div>
                   <p className="font-bold text-emerald-500">{avg.c}{t("log.g")}</p>
-                  <p className="text-xs text-slate-400">{t("macros.carbs")}</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("macros.carbs")}</p>
                 </div>
               </div>
             );
