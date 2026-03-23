@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
+import { TrendingUp } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
@@ -25,14 +25,12 @@ type Range = "week" | "month";
 
 function formatDate(dateStr: string): string {
   const [, m, d] = dateStr.split("-");
-  const isHe = i18n.language === "he";
-  return isHe ? `${d}/${m}` : `${d}/${m}`;
+  return `${d}/${m}`;
 }
 
 export default function TrendsPage() {
   const { t } = useTranslation();
   const [range, setRange] = useState<Range>("week");
-
   const { start, end } = range === "week" ? getWeekRange() : getMonthRange();
 
   const { data, isLoading } = useQuery({
@@ -45,13 +43,19 @@ export default function TrendsPage() {
   const chartData = (data?.days ?? []).map((d) => ({
     date: formatDate(d.date),
     ...(isWeek
-      ? {
-          protein: Math.round(d.total_protein_g * 4),
-          fat: Math.round(d.total_fat_g * 9),
-          carbs: Math.round(d.total_carbs_g * 4),
-        }
+      ? { protein: Math.round(d.total_protein_g * 4), fat: Math.round(d.total_fat_g * 9), carbs: Math.round(d.total_carbs_g * 4) }
       : { calories: d.total_calories }),
   }));
+
+  // Calculate averages
+  const activeDays = data?.days.filter((d) => d.entry_count > 0) ?? [];
+  const n = activeDays.length || 1;
+  const avg = {
+    cal: Math.round(activeDays.reduce((s, d) => s + d.total_calories, 0) / n),
+    p: Math.round(activeDays.reduce((s, d) => s + d.total_protein_g, 0) / n),
+    f: Math.round(activeDays.reduce((s, d) => s + d.total_fat_g, 0) / n),
+    c: Math.round(activeDays.reduce((s, d) => s + d.total_carbs_g, 0) / n),
+  };
 
   const ranges: { value: Range; labelKey: string }[] = [
     { value: "week", labelKey: "trends.week" },
@@ -59,89 +63,87 @@ export default function TrendsPage() {
   ];
 
   return (
-    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
-      <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("trends.title")}</h1>
-
-      <div className="flex gap-1 rounded-lg p-1 animate-fade-up" style={{ backgroundColor: "var(--bg-input)" }}>
-        {ranges.map((r) => (
-          <button
-            key={r.value}
-            onClick={() => setRange(r.value)}
-            className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              range === r.value ? "shadow-sm" : ""
-            }`}
-            style={range === r.value ? { backgroundColor: "var(--bg-card)", color: "var(--text-primary)" } : { color: "var(--text-muted)" }}
-          >
-            {t(r.labelKey)}
-          </button>
-        ))}
+    <div className="px-5 pt-8 pb-4 max-w-lg mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 animate-fade-up">
+        <h1 className="text-[26px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{t("trends.title")}</h1>
+        <div className="flex rounded-xl overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
+          {ranges.map((r) => (
+            <button key={r.value} onClick={() => setRange(r.value)}
+              className="px-4 py-2 text-xs font-semibold transition-all"
+              style={range === r.value
+                ? { backgroundColor: "var(--bg-card-solid)", color: "var(--text-primary)", boxShadow: "var(--shadow-card)" }
+                : { color: "var(--text-muted)" }}>
+              {t(r.labelKey)}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* Average summary cards */}
+      {data && (
+        <div className="grid grid-cols-4 gap-2 mb-5 animate-fade-up stagger-1">
+          {[
+            { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
+            { label: t("macros.protein"), value: `${avg.p}${t("log.g")}`, color: "#6366f1" },
+            { label: t("macros.fat"), value: `${avg.f}${t("log.g")}`, color: "#f59e0b" },
+            { label: t("macros.carbs"), value: `${avg.c}${t("log.g")}`, color: "#10b981" },
+          ].map((item) => (
+            <div key={item.label} className="glass-card-sm p-3 text-center">
+              <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
+              <p className="text-[9px] font-semibold uppercase tracking-wider mt-0.5" style={{ color: "var(--text-muted)" }}>{item.label}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Chart */}
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
           <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
                style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
         </div>
       ) : (
-        <div className="glass-card p-4 animate-fade-up">
-          <h2 className="text-sm font-medium mb-3" style={{ color: "var(--text-secondary)" }}>{t("trends.calories")}</h2>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 11 }} width={40} />
-              <Tooltip />
+        <div className="glass-card p-4 animate-fade-up stagger-2">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp size={14} style={{ color: "var(--theme-accent)" }} />
+            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
+              {isWeek ? t("trends.macroBreakdown") : t("trends.calories")}
+            </h2>
+          </div>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={chartData} barCategoryGap="20%">
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} width={35} axisLine={false} tickLine={false} />
+              <Tooltip
+                contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12 }}
+                labelStyle={{ color: "var(--text-primary)" }}
+              />
               {isWeek ? (
                 <>
-                  <Legend />
-                  <Bar dataKey="protein" stackId="a" fill="#3b82f6" name={t("macros.protein")} radius={[0, 0, 0, 0]} />
-                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} radius={[0, 0, 0, 0]} />
-                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[4, 4, 0, 0]} />
+                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
+                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} />
+                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} />
+                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} />
                 </>
               ) : (
-                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} />
               )}
             </BarChart>
           </ResponsiveContainer>
         </div>
       )}
 
+      {/* Days logged stat */}
       {data && (
-        <div className="glass-card p-4 animate-fade-up">
-          <h2 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>{t("trends.avgPerDay")}</h2>
-          {(() => {
-            const days = data.days.filter((d) => d.entry_count > 0);
-            const n = days.length || 1;
-            const avg = {
-              cal: Math.round(days.reduce((s, d) => s + d.total_calories, 0) / n),
-              p: Math.round(days.reduce((s, d) => s + d.total_protein_g, 0) / n),
-              f: Math.round(days.reduce((s, d) => s + d.total_fat_g, 0) / n),
-              c: Math.round(days.reduce((s, d) => s + d.total_carbs_g, 0) / n),
-            };
-            return (
-              <div className="grid grid-cols-4 gap-2 text-center text-sm">
-                <div>
-                  <p className="font-bold" style={{ color: "var(--text-primary)" }}>{avg.cal}</p>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("trends.kcal")}</p>
-                </div>
-                <div>
-                  <p className="font-bold text-blue-500">{avg.p}{t("log.g")}</p>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("macros.protein")}</p>
-                </div>
-                <div>
-                  <p className="font-bold text-amber-500">{avg.f}{t("log.g")}</p>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("macros.fat")}</p>
-                </div>
-                <div>
-                  <p className="font-bold text-emerald-500">{avg.c}{t("log.g")}</p>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("macros.carbs")}</p>
-                </div>
-              </div>
-            );
-          })()}
+        <div className="glass-card-sm p-4 mt-4 flex items-center justify-between animate-fade-up stagger-3">
+          <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("trends.daysLogged")}</span>
+          <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
+            {activeDays.length} / {data.days.length}
+          </span>
         </div>
       )}
-
     </div>
   );
 }

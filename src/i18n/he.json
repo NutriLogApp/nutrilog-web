@@ -51,7 +51,9 @@
     "avgPerDay": "ממוצע / יום",
     "week": "שבוע",
     "month": "חודש",
-    "kcal": "קק״ל"
+    "kcal": "קק״ל",
+    "macroBreakdown": "פירוט מאקרו",
+    "daysLogged": "ימים מתועדים"
   },
   "profile": {
     "title": "פרופיל",
@@ -138,7 +140,10 @@
     "you": "את/ה",
     "yourWeek": "השבוע שלך",
     "newGroup": "קבוצה חדשה",
-    "inviteFriends": "הזמן חברים"
+    "inviteFriends": "הזמן חברים",
+    "needUsername": "הגדר את הפרופיל שלך קודם",
+    "needUsernameDesc": "צריך שם ציבורי כדי להצטרף לתחרויות",
+    "goToProfile": "עבור לפרופיל"
   },
   "insight": { "title": "תובנה יומית" },
   "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },
