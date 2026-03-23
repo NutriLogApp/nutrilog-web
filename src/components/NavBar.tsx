@@ -25,27 +25,42 @@ export default function NavBar() {
   const hasBadge = requests && requests.length > 0;
 
   return (
-    <nav
-      className="fixed bottom-0 inset-x-0 flex justify-around py-2 z-50"
-      style={{ backgroundColor: "var(--bg-primary)", borderTop: "1px solid var(--border)" }}
-    >
-      {tabs.map(({ path, icon: Icon, labelKey }) => {
-        const active = path === "/" ? pathname === "/" : pathname.startsWith(path);
-        return (
-          <button
-            key={path}
-            onClick={() => navigate(path)}
-            className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs transition-colors relative"
-            style={{ color: active ? "var(--theme-start)" : "var(--text-muted)" }}
-          >
-            <Icon size={22} />
-            {path === "/friends" && hasBadge && (
-              <span className="absolute top-0 end-2 w-2 h-2 rounded-full bg-red-500" />
-            )}
-            <span>{t(labelKey)}</span>
-          </button>
-        );
-      })}
-    </nav>
+    <div className="fixed bottom-0 inset-x-0 z-50 px-4 pb-4 pointer-events-none">
+      <nav
+        className="max-w-lg mx-auto flex justify-around py-2.5 pointer-events-auto"
+        style={{
+          background: "var(--bg-elevated)",
+          backdropFilter: "var(--blur)",
+          WebkitBackdropFilter: "var(--blur)",
+          borderRadius: "var(--radius)",
+          border: "1px solid var(--border)",
+          boxShadow: "var(--shadow-elevated)",
+        }}
+      >
+        {tabs.map(({ path, icon: Icon, labelKey }) => {
+          const active = path === "/" ? pathname === "/" : pathname.startsWith(path);
+          return (
+            <button
+              key={path}
+              onClick={() => navigate(path)}
+              className="flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-medium transition-all duration-200 relative"
+              style={{
+                color: active ? "var(--theme-start)" : "var(--text-muted)",
+                transform: active ? "scale(1.08)" : "scale(1)",
+              }}
+            >
+              <Icon size={20} strokeWidth={active ? 2.5 : 1.8} />
+              {path === "/friends" && hasBadge && (
+                <span
+                  className="absolute top-0 end-1 w-2 h-2 rounded-full"
+                  style={{ backgroundColor: "var(--theme-start)" }}
+                />
+              )}
+              <span>{t(labelKey)}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
