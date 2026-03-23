@@ -5,6 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { getRangeStats } from "@/services/statsService";
+import WeightChart from "@/components/WeightChart";
 
 function dateRange(days: number) {
   const end = new Date();
@@ -112,6 +113,8 @@ export default function TrendsPage() {
           })()}
         </div>
       )}
+
+      <WeightChart />
     </div>
   );
 }

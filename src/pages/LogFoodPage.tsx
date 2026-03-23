@@ -7,6 +7,7 @@ import i18n from "@/i18n";
 import { parseText, parseImage } from "@/services/foodService";
 import { createEntry } from "@/services/entriesService";
 import { getRecentFoods } from "@/services/recentFoodsService";
+import PetReactionToast from "@/components/PetReactionToast";
 import type { FoodItem, EntryCreate } from "@/types/api";
 
 type Tab = "text" | "photo";
@@ -16,12 +17,13 @@ export default function LogFoodPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  const [tab, setTab] = useState<Tab>("text");
+  const [tab, setTab] = useState<Tab>("photo");
   const [text, setText] = useState("");
   const [items, setItems] = useState<FoodItem[]>([]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [parsing, setParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [petReaction, setPetReaction] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const recentFoods = useQuery({
@@ -31,10 +33,17 @@ export default function LogFoodPage() {
 
   const saveMut = useMutation({
     mutationFn: (entry: EntryCreate) => createEntry(entry),
-    onSuccess: () => {
+    onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ["dailyStats"] });
       qc.invalidateQueries({ queryKey: ["recentFoods"] });
-      navigate("/");
+      qc.invalidateQueries({ queryKey: ["petStatus"] });
+      qc.invalidateQueries({ queryKey: ["water"] });
+      const reaction = (data as unknown as Record<string, unknown>).pet_reaction as string | undefined;
+      if (reaction) {
+        setPetReaction(reaction);
+      } else {
+        navigate("/");
+      }
     },
   });
 
@@ -103,8 +112,8 @@ export default function LogFoodPage() {
   }
 
   const tabButtons: { key: Tab; icon: typeof Type; label: string }[] = [
-    { key: "text", icon: Type, label: t("log.text") },
     { key: "photo", icon: Camera, label: t("log.photo") },
+    { key: "text", icon: Type, label: t("log.text") },
   ];
 
   return (
@@ -246,6 +255,8 @@ export default function LogFoodPage() {
           </div>
         </div>
       )}
+
+      <PetReactionToast message={petReaction} onDone={() => { setPetReaction(null); navigate("/"); }} />
     </div>
   );
 }

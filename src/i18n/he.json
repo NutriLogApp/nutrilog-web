@@ -93,5 +93,15 @@
   "pet": {
     "unlocked": "פתחת את {{name}}!",
     "tapDismiss": "לחץ לסגירה"
+  },
+  "water": {
+    "title": "מים",
+    "ml": "מ״ל",
+    "glasses": "כוסות"
+  },
+  "weight": {
+    "title": "משקל",
+    "placeholder": "משקל היום (ק״ג)",
+    "log": "שמור"
   }
 }
