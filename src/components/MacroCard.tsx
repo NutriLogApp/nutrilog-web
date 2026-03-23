@@ -4,11 +4,10 @@ interface Props {
   label: string;
   value: number;
   goal: number | null;
-  unit?: string;
   color: string;
 }
 
-export default function MacroCard({ label, value, goal, unit = "g", color }: Props) {
+export default function MacroCard({ label, value, goal, color }: Props) {
   const { t } = useTranslation();
   const pct = goal ? Math.min(value / goal, 1) : 0;
 
@@ -17,7 +16,7 @@ export default function MacroCard({ label, value, goal, unit = "g", color }: Pro
       <p className="text-[11px] uppercase tracking-wider text-slate-400 mb-1">{label}</p>
       <p className="text-xl font-bold" style={{ color }}>
         {Math.round(value)}
-        <span className="text-xs font-normal text-slate-400">{unit}</span>
+        <span className="text-xs font-normal text-slate-400">{t("log.g")}</span>
       </p>
       {goal != null && (
         <>
@@ -28,7 +27,7 @@ export default function MacroCard({ label, value, goal, unit = "g", color }: Pro
             />
           </div>
           <p className="text-[10px] text-slate-400 mt-1">
-            {t("dashboard.max")} {goal}{unit}
+            {t("dashboard.max")} {goal}{t("log.g")}
           </p>
         </>
       )}

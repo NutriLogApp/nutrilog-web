@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
-import { getProfile } from "@/services/profileService";
 import { deleteEntry } from "@/services/entriesService";
 import CalorieRing from "@/components/CalorieRing";
 import MacroCard from "@/components/MacroCard";
@@ -28,8 +27,6 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
-
   const { data, isLoading } = useQuery({
     queryKey: ["dailyStats", todayStr()],
     queryFn: () => getDailyStats(todayStr()),
@@ -51,45 +48,26 @@ export default function DashboardPage() {
     );
   }
 
-  const dayName = new Date().toLocaleDateString(undefined, { weekday: "long" });
-  const goalLabel = `${dayName} · ${t("dashboard.goal")}: ${(data.goal_calories ?? 2000).toLocaleString()} kcal`;
+  const goal = data.goal_calories ?? 2000;
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4">
-      {/* Header */}
+      {/* Header — no user name */}
       <div>
-        <h1 className="text-xl font-bold text-slate-900">
-          {getGreeting(t)}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}
-        </h1>
-        <p className="text-xs text-slate-400 mt-0.5">{goalLabel}</p>
+        <h1 className="text-xl font-bold text-slate-900">{getGreeting(t)}</h1>
+        <p className="text-xs text-slate-400 mt-0.5">
+          {t("dashboard.goal")}: {goal.toLocaleString()} {t("dashboard.kcal")}
+        </p>
       </div>
 
       {/* Calorie card */}
-      <CalorieRing
-        consumed={data.total_calories}
-        goal={data.goal_calories ?? 2000}
-      />
+      <CalorieRing consumed={data.total_calories} goal={goal} />
 
       {/* Macros */}
       <div className="flex gap-2">
-        <MacroCard
-          label={t("macros.protein")}
-          value={data.total_protein_g}
-          goal={data.goal_protein_g}
-          color="#3b82f6"
-        />
-        <MacroCard
-          label={t("macros.fat")}
-          value={data.total_fat_g}
-          goal={data.goal_fat_g}
-          color="#f59e0b"
-        />
-        <MacroCard
-          label={t("macros.carbs")}
-          value={data.total_carbs_g}
-          goal={data.goal_carbs_g}
-          color="#10b981"
-        />
+        <MacroCard label={t("macros.protein")} value={data.total_protein_g} goal={data.goal_protein_g} color="#3b82f6" />
+        <MacroCard label={t("macros.fat")} value={data.total_fat_g} goal={data.goal_fat_g} color="#f59e0b" />
+        <MacroCard label={t("macros.carbs")} value={data.total_carbs_g} goal={data.goal_carbs_g} color="#10b981" />
       </div>
 
       {/* Pet */}
@@ -112,16 +90,10 @@ export default function DashboardPage() {
 
       <div className="space-y-2">
         {data.entries.length === 0 && (
-          <p className="text-sm text-slate-400 text-center py-6">
-            {t("dashboard.noEntries")}
-          </p>
+          <p className="text-sm text-slate-400 text-center py-6">{t("dashboard.noEntries")}</p>
         )}
         {data.entries.map((entry) => (
-          <EntryCard
-            key={entry.id}
-            entry={entry}
-            onDelete={(id) => deleteMut.mutate(id)}
-          />
+          <EntryCard key={entry.id} entry={entry} onDelete={(id) => deleteMut.mutate(id)} />
         ))}
       </div>
 
