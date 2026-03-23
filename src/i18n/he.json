@@ -16,12 +16,17 @@
     "todayLog": "יומן היום",
     "noEntries": "אין רשומות עדיין — לחץ + כדי להוסיף"
   },
-  "nav": { "home": "בית", "log": "הוסף", "friends": "חברים", "trends": "מגמות", "profile": "פרופיל" },
+  "nav": { "home": "בית", "myday": "היום שלי", "friends": "חברים", "trends": "מגמות", "profile": "פרופיל" },
+  "myday": {
+    "title": "היום שלי",
+    "food": "אוכל",
+    "noFood": "לא תועד אוכל עדיין"
+  },
   "log": {
-    "title": "הוסף ארוחה",
+    "title": "הוסף אוכל",
     "text": "טקסט",
     "photo": "תמונה",
-    "save": "שמור ביומן",
+    "save": "שמור",
     "recent": "אחרונים",
     "aiResult": "תוצאת AI — ערוך אם צריך",
     "analyze": "נתח",
@@ -37,7 +42,6 @@
     "avgPerDay": "ממוצע / יום",
     "week": "שבוע",
     "month": "חודש",
-    "year": "שנה",
     "kcal": "קק״ל"
   },
   "profile": {
@@ -59,7 +63,9 @@
     "colorTheme": "ערכת צבעים",
     "auto": "אוטומטי",
     "light": "בהיר",
-    "dark": "כהה"
+    "dark": "כהה",
+    "customDrinks": "המשקאות שלי",
+    "retakeQuiz": "חשב מחדש יעדים"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },
@@ -96,18 +102,31 @@
     "members": "חברים",
     "pts": "נק׳"
   },
-  "pet": {
-    "unlocked": "פתחת את {{name}}!",
-    "tapDismiss": "לחץ לסגירה"
-  },
-  "water": {
-    "title": "מים",
-    "ml": "מ״ל",
-    "glasses": "כוסות"
-  },
-  "weight": {
-    "title": "משקל",
-    "placeholder": "משקל היום (ק״ג)",
-    "log": "שמור"
+  "pet": { "unlocked": "פתחת את {{name}}!", "tapDismiss": "לחץ לסגירה" },
+  "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },
+  "weight": { "title": "משקל", "placeholder": "משקל היום (ק״ג)", "log": "שמור" },
+  "onboarding": {
+    "sex": "מהו המין שלך?",
+    "male": "זכר",
+    "female": "נקבה",
+    "body": "קצת עליך",
+    "age": "גיל",
+    "height": "גובה",
+    "weight": "משקל",
+    "activity": "רמת פעילות",
+    "sedentary": "יושבני (עבודה משרדית)",
+    "light": "קל (1-2 פעמים בשבוע)",
+    "moderate": "בינוני (3-5 פעמים בשבוע)",
+    "active": "פעיל (6-7 פעמים בשבוע)",
+    "very_active": "מאוד פעיל (ספורטאי)",
+    "goalQuestion": "מה המטרה שלך?",
+    "lose": "לרדת במשקל",
+    "maintain": "לשמור על המשקל",
+    "gain": "לעלות במשקל",
+    "goalWeight": "משקל יעד (ק״ג)",
+    "next": "הבא",
+    "ready": "הכל מוכן!",
+    "readyDesc": "נחשב את היעדים היומיים המותאמים אישית שלך",
+    "calculate": "חשב את היעדים שלי"
   }
 }

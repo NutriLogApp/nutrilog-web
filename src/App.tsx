@@ -6,7 +6,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/LoginPage";
 import PendingPage from "@/pages/PendingPage";
 import DashboardPage from "@/pages/DashboardPage";
-import LogFoodPage from "@/pages/LogFoodPage";
+import MyDayPage from "@/pages/MyDayPage";
 import TrendsPage from "@/pages/TrendsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AdminPage from "@/pages/AdminPage";
@@ -26,6 +26,10 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("nutrilog-theme") as ThemeName | null;
     applyTheme(saved ?? "ocean");
+    // Restore dark mode preference
+    const dm = localStorage.getItem("nutrilog-dark-mode");
+    if (dm === "dark") document.documentElement.classList.add("force-dark");
+    else if (dm === "light") document.documentElement.classList.add("force-light");
   }, []);
   return <>{children}</>;
 }
@@ -47,7 +51,7 @@ export default function App() {
                 }
               >
                 <Route path="/" element={<DashboardPage />} />
-                <Route path="/log" element={<LogFoodPage />} />
+                <Route path="/myday" element={<MyDayPage />} />
                 <Route path="/friends" element={<FriendsPage />} />
                 <Route path="/friends/add" element={<AddFriendPage />} />
                 <Route path="/friends/groups/new" element={<CreateGroupPage />} />

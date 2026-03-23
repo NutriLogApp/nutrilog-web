@@ -16,12 +16,17 @@
     "todayLog": "Today's Log",
     "noEntries": "No entries yet — tap + to log food"
   },
-  "nav": { "home": "Home", "log": "Log", "friends": "Friends", "trends": "Trends", "profile": "Profile" },
+  "nav": { "home": "Home", "myday": "My Day", "friends": "Friends", "trends": "Trends", "profile": "Profile" },
+  "myday": {
+    "title": "My Day",
+    "food": "Food",
+    "noFood": "No food logged yet"
+  },
   "log": {
-    "title": "Log Food",
+    "title": "Add Food",
     "text": "Text",
     "photo": "Photo",
-    "save": "Save to Log",
+    "save": "Save",
     "recent": "Recent",
     "aiResult": "AI Result — edit if needed",
     "analyze": "Analyze",
@@ -37,7 +42,6 @@
     "avgPerDay": "Avg / day",
     "week": "Week",
     "month": "Month",
-    "year": "Year",
     "kcal": "kcal"
   },
   "profile": {
@@ -59,7 +63,9 @@
     "colorTheme": "Color Theme",
     "auto": "Auto",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "customDrinks": "My Drinks",
+    "retakeQuiz": "Retake Goals Quiz"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },
@@ -96,18 +102,31 @@
     "members": "members",
     "pts": "pts"
   },
-  "pet": {
-    "unlocked": "You unlocked {{name}}!",
-    "tapDismiss": "Tap to dismiss"
-  },
-  "water": {
-    "title": "Water",
-    "ml": "ml",
-    "glasses": "glasses"
-  },
-  "weight": {
-    "title": "Weight",
-    "placeholder": "Today's weight (kg)",
-    "log": "Log"
+  "pet": { "unlocked": "You unlocked {{name}}!", "tapDismiss": "Tap to dismiss" },
+  "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
+  "weight": { "title": "Weight", "placeholder": "Today's weight (kg)", "log": "Log" },
+  "onboarding": {
+    "sex": "What's your sex?",
+    "male": "Male",
+    "female": "Female",
+    "body": "About you",
+    "age": "Age",
+    "height": "Height",
+    "weight": "Weight",
+    "activity": "Activity level",
+    "sedentary": "Sedentary (desk job)",
+    "light": "Light (1-2x/week)",
+    "moderate": "Moderate (3-5x/week)",
+    "active": "Active (6-7x/week)",
+    "very_active": "Very active (athlete)",
+    "goalQuestion": "What's your goal?",
+    "lose": "Lose weight",
+    "maintain": "Maintain weight",
+    "gain": "Gain weight",
+    "goalWeight": "Goal weight (kg)",
+    "next": "Next",
+    "ready": "You're all set!",
+    "readyDesc": "We'll calculate your personalized daily targets",
+    "calculate": "Calculate my goals"
   }
 }
