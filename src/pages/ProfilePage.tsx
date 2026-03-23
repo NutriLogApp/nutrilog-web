@@ -111,18 +111,18 @@ export default function ProfilePage() {
         <button onClick={() => setShowGoalsModal(true)} className="w-full flex items-center gap-3 p-4">
           <Target size={18} style={{ color: "var(--theme-start)" }} />
           <span className="flex-1 text-start text-sm font-medium text-slate-700">{t("profile.goals")}</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300 rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300" style={{ transform: i18n.language === "he" ? "scaleX(-1)" : undefined }}><path d="m9 18 6-6-6-6"/></svg>
         </button>
         <button onClick={() => setShowAppearanceModal(true)} className="w-full flex items-center gap-3 p-4">
           <Palette size={18} style={{ color: "var(--theme-start)" }} />
           <span className="flex-1 text-start text-sm font-medium text-slate-700">{t("profile.appearance")}</span>
           <span className="w-6 h-6 rounded-full shrink-0" style={{ background: `linear-gradient(135deg, ${currentTheme.start}, ${currentTheme.end})` }} />
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300 rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300" style={{ transform: i18n.language === "he" ? "scaleX(-1)" : undefined }}><path d="m9 18 6-6-6-6"/></svg>
         </button>
         <button onClick={() => setShowWindowsModal(true)} className="w-full flex items-center gap-3 p-4">
           <Clock size={18} style={{ color: "var(--theme-start)" }} />
           <span className="flex-1 text-start text-sm font-medium text-slate-700">{t("profile.eatingWindows")}</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300 rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300" style={{ transform: i18n.language === "he" ? "scaleX(-1)" : undefined }}><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
 
@@ -147,7 +147,7 @@ export default function ProfilePage() {
         <button onClick={() => navigate("/admin")} className="w-full bg-white rounded-xl p-4 shadow-sm flex items-center gap-3 text-slate-700 font-medium">
           <Shield size={18} />
           <span className="flex-1 text-start">{t("admin.title")}</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300 rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-300" style={{ transform: i18n.language === "he" ? "scaleX(-1)" : undefined }}><path d="m9 18 6-6-6-6"/></svg>
         </button>
       )}
 

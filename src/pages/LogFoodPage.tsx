@@ -39,11 +39,9 @@ export default function LogFoodPage() {
       qc.invalidateQueries({ queryKey: ["petStatus"] });
       qc.invalidateQueries({ queryKey: ["water"] });
       const reaction = (data as unknown as Record<string, unknown>).pet_reaction as string | undefined;
-      if (reaction) {
-        setPetReaction(reaction);
-      } else {
-        navigate("/");
-      }
+      setPetReaction(reaction || null);
+      // Always navigate after short delay for toast
+      setTimeout(() => navigate("/"), reaction ? 2000 : 0);
     },
   });
 
@@ -256,7 +254,7 @@ export default function LogFoodPage() {
         </div>
       )}
 
-      <PetReactionToast message={petReaction} onDone={() => { setPetReaction(null); navigate("/"); }} />
+      <PetReactionToast message={petReaction} onDone={() => setPetReaction(null)} />
     </div>
   );
 }

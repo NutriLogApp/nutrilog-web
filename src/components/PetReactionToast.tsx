@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface Props {
   message: string | null;
@@ -8,27 +8,27 @@ interface Props {
 export default function PetReactionToast({ message, onDone }: Props) {
   const [visible, setVisible] = useState(false);
 
+  const stableOnDone = useCallback(onDone, []);
+
   useEffect(() => {
     if (message) {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-        setTimeout(onDone, 300);
-      }, 2500);
+        setTimeout(stableOnDone, 300);
+      }, 1800);
       return () => clearTimeout(timer);
     }
-  }, [message, onDone]);
+  }, [message, stableOnDone]);
 
   if (!message) return null;
 
   return (
-    <div
-      className={`fixed top-16 inset-x-0 z-50 flex justify-center transition-all duration-300 ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-      }`}
-    >
+    <div className={`fixed inset-0 z-50 flex items-center justify-center pointer-events-none transition-all duration-300 ${
+      visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+    }`}>
       <div
-        className="px-4 py-2.5 rounded-full text-white text-sm font-medium shadow-lg"
+        className="px-6 py-3 rounded-2xl text-white text-base font-medium shadow-2xl pointer-events-auto"
         style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
       >
         {message}
