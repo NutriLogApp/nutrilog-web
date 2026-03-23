@@ -20,7 +20,9 @@
   "myday": {
     "title": "היום שלי",
     "food": "אוכל",
-    "noFood": "לא תועד אוכל עדיין"
+    "noFood": "לא תועד אוכל עדיין",
+    "addFood": "הוסף אוכל",
+    "addDrink": "הוסף משקה"
   },
   "log": {
     "title": "הוסף אוכל",
@@ -65,7 +67,12 @@
     "light": "בהיר",
     "dark": "כהה",
     "customDrinks": "המשקאות שלי",
-    "retakeQuiz": "חשב מחדש יעדים"
+    "retakeQuiz": "חשב מחדש יעדים",
+    "addDrink": "הוסף משקה",
+    "noDrinks": "אין משקאות מותאמים אישית",
+    "sugar": "סוכר (גרם)",
+    "countsAsWater": "נספר כצריכת מים",
+    "cancel": "ביטול"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },

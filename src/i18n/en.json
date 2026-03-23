@@ -20,7 +20,9 @@
   "myday": {
     "title": "My Day",
     "food": "Food",
-    "noFood": "No food logged yet"
+    "noFood": "No food logged yet",
+    "addFood": "Add Food",
+    "addDrink": "Add Drink"
   },
   "log": {
     "title": "Add Food",
@@ -65,7 +67,12 @@
     "light": "Light",
     "dark": "Dark",
     "customDrinks": "My Drinks",
-    "retakeQuiz": "Retake Goals Quiz"
+    "retakeQuiz": "Retake Goals Quiz",
+    "addDrink": "Add Drink",
+    "noDrinks": "No custom drinks yet",
+    "sugar": "Sugar (g)",
+    "countsAsWater": "Counts toward water goal",
+    "cancel": "Cancel"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },
