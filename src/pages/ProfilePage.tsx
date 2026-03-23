@@ -1,13 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Shield, Palette, Clock, Target } from "lucide-react";
+import { Shield, Palette, Clock, Target, Coffee, RefreshCw } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
 import { useState, useEffect } from "react";
 import CatCollection from "@/components/CatCollection";
 import EatingWindows from "@/components/EatingWindows";
+import DrinkManager from "@/components/DrinkManager";
+import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
 
 function Chevron({ lang }: { lang: string }) {
@@ -32,6 +34,8 @@ export default function ProfilePage() {
   const [showGoalsModal, setShowGoalsModal] = useState(false);
   const [showAppearanceModal, setShowAppearanceModal] = useState(false);
   const [showWindowsModal, setShowWindowsModal] = useState(false);
+  const [showDrinksModal, setShowDrinksModal] = useState(false);
+  const [showRetakeQuiz, setShowRetakeQuiz] = useState(false);
   const [activeTheme, setActiveTheme] = useState<ThemeName>("ocean");
   const [darkMode, setDarkMode] = useState<"auto" | "light" | "dark">("auto");
 
@@ -82,6 +86,8 @@ export default function ProfilePage() {
           { icon: Target, label: t("profile.goals"), onClick: () => setShowGoalsModal(true), extra: null },
           { icon: Palette, label: t("profile.appearance"), onClick: () => setShowAppearanceModal(true), extra: <span className="w-6 h-6 rounded-full shrink-0" style={{ background: `linear-gradient(135deg, ${currentTheme.start}, ${currentTheme.end})` }} /> },
           { icon: Clock, label: t("profile.eatingWindows"), onClick: () => setShowWindowsModal(true), extra: null },
+          { icon: Coffee, label: t("profile.customDrinks"), onClick: () => setShowDrinksModal(true), extra: null },
+          { icon: RefreshCw, label: t("profile.retakeQuiz"), onClick: () => setShowRetakeQuiz(true), extra: null },
         ].map(({ icon: Icon, label, onClick, extra }, idx) => (
           <button key={idx} onClick={onClick} className="w-full flex items-center gap-3 p-4 active:scale-[0.98] transition-transform" style={{ borderTop: idx > 0 ? `1px solid var(--border)` : undefined }}>
             <Icon size={18} style={{ color: "var(--theme-accent)" }} />
@@ -165,6 +171,16 @@ export default function ProfilePage() {
       <Modal open={showWindowsModal} onClose={() => setShowWindowsModal(false)} title={t("profile.eatingWindows")}>
         <EatingWindows onClose={() => setShowWindowsModal(false)} />
       </Modal>
+
+      <Modal open={showDrinksModal} onClose={() => setShowDrinksModal(false)} title={t("profile.customDrinks")}>
+        <DrinkManager onClose={() => setShowDrinksModal(false)} />
+      </Modal>
+
+      {showRetakeQuiz && (
+        <div className="fixed inset-0 z-50" style={{ backgroundColor: "var(--bg-page)" }}>
+          <OnboardingQuiz onDone={() => { setShowRetakeQuiz(false); qc.invalidateQueries({ queryKey: ["profile"] }); }} />
+        </div>
+      )}
     </div>
   );
 }
