@@ -126,18 +126,19 @@ export default function TrendsPage() {
               <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} width={35} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12 }}
+                contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12, color: "var(--text-primary)" }}
                 labelStyle={{ color: "var(--text-primary)" }}
+                itemStyle={{ color: "var(--text-secondary)" }}
               />
               {isWeek ? (
                 <>
                   <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
-                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} />
-                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} />
-                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} cursor={{ fill: "var(--bg-card)" }} />
+                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} cursor={{ fill: "var(--bg-card)" }} />
+                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" }} />
                 </>
               ) : (
-                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" }} />
               )}
             </BarChart>
           </ResponsiveContainer>
@@ -184,7 +185,11 @@ function WeightTrend() {
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
           <XAxis dataKey="date" tick={{ fontSize: 9, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fontSize: 9, fill: "var(--text-muted)" }} width={30} axisLine={false} tickLine={false} domain={["dataMin - 1", "dataMax + 1"]} />
-          <Tooltip contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 11 }} />
+          <Tooltip
+            contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12, color: "var(--text-primary)" }}
+            labelStyle={{ color: "var(--text-primary)" }}
+            itemStyle={{ color: "var(--text-secondary)" }}
+          />
           <Line type="monotone" dataKey="weight" stroke="var(--theme-accent)" strokeWidth={2} dot={{ r: 2.5, fill: "var(--theme-accent)" }} />
         </LineChart>
       </ResponsiveContainer>
