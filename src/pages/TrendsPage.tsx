@@ -149,7 +149,7 @@ export default function TrendsPage() {
         <div className="glass-card-sm p-4 mt-4 flex items-center justify-between animate-fade-up stagger-3">
           <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("trends.daysLogged")}</span>
           <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
-            {activeDays.length} / {data.days.length}
+            {activeDays.length} / {range === "week" ? 7 : new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()}
           </span>
         </div>
       )}
