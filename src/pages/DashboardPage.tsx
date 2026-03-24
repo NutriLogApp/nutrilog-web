@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { UtensilsCrossed, Droplets } from "lucide-react";
+import { UtensilsCrossed, Droplets, Zap } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
@@ -74,10 +74,11 @@ export default function DashboardPage() {
           {getGreeting(t)}
         </h1>
         {profile && profile.current_streak > 0 && (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-            style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}>
-            <span className="text-sm">🔥</span>
-            <span className="text-xs font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>{profile.current_streak}</span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: "var(--bg-card)" }}>
+            <Zap size={14} fill="#f59e0b" stroke="#f59e0b" />
+            <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
+              {profile?.current_streak || 0} {t("dashboard.dayStreak")}
+            </span>
           </div>
         )}
       </div>
