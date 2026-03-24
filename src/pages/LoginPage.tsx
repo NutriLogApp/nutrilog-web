@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const IS_DEV = import.meta.env.DEV;
 
 export default function LoginPage() {
   const { t } = useTranslation();
-  const { signInWithGoogle, devLogin } = useAuth();
+  const { session, signInWithGoogle, devLogin } = useAuth();
   const navigate = useNavigate();
   const [devEmail, setDevEmail] = useState("test@nutrilog.dev");
   const [devLoading, setDevLoading] = useState(false);
+
+  // Redirect if already authenticated
+  if (session) return <Navigate to="/" replace />;
 
   async function handleDevLogin() {
     setDevLoading(true);

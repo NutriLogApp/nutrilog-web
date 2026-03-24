@@ -207,5 +207,9 @@
     "calculationExplanation": "Your base metabolic rate (BMR) is {{bmr}} kcal. With your activity level, you burn approximately {{tdee}} kcal daily (TDEE). Your target is set to {{goal}} kcal to match your goal.",
     "looksGood": "Looks good — let's start!",
     "adjust": "Adjust my answers"
+  },
+  "common": {
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this?"
   }
 }

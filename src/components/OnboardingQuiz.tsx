@@ -260,7 +260,7 @@ export default function OnboardingQuiz({ onDone }: Props) {
   return (
     <div className="fixed inset-0 flex flex-col" style={{ backgroundColor: "var(--bg-page)", zIndex: 70 }}>
       {/* Header: back + close + progress */}
-      <div className="px-5 pt-4 pb-2 max-w-lg mx-auto w-full">
+      <div className="px-5 pb-2 max-w-lg mx-auto w-full" style={{ paddingTop: "calc(16px + env(safe-area-inset-top, 0px))" }}>
         <div className="flex items-center justify-between mb-4">
           {step > 0 ? (
             <button onClick={goBack} className="p-2 -ms-2 rounded-full transition-all active:scale-90" style={{ color: "var(--text-muted)" }}>
@@ -272,12 +272,15 @@ export default function OnboardingQuiz({ onDone }: Props) {
           </button>
         </div>
         {/* Progress — clickable dots */}
-        <div className="flex gap-1 justify-center mb-2">
+        <div className="flex gap-0 justify-center mb-2">
           {Array.from({ length: TOTAL_STEPS }, (_, i) => (
             <button key={i} onClick={() => i < step && setStep(i)}
               disabled={i >= step}
-              className="h-1.5 rounded-full transition-all duration-300"
-              style={{ width: i === step ? 24 : i < step ? 12 : 6, backgroundColor: i <= step ? "var(--theme-accent)" : "var(--bg-input)", cursor: i < step ? "pointer" : "default" }} />
+              className="py-3 px-1 flex items-center justify-center"
+              style={{ cursor: i < step ? "pointer" : "default", minWidth: 24, minHeight: 44 }}>
+              <div className="h-2 rounded-full transition-all duration-300"
+                style={{ width: i === step ? 24 : i < step ? 14 : 8, backgroundColor: i <= step ? "var(--theme-accent)" : "var(--bg-input)" }} />
+            </button>
           ))}
         </div>
       </div>
