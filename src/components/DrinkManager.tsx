@@ -120,16 +120,24 @@ export default function DrinkManager() {
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-center">
-            {[
-              { label: t("water.ml"), value: parsed.volume_ml },
-              { label: t("dashboard.kcal"), value: parsed.calories },
-              { label: `💧 ${t("profile.waterContent")}`, value: `${parsed.water_pct}%` },
-            ].map((item) => (
-              <div key={item.label} className="rounded-lg p-2" style={{ backgroundColor: "var(--bg-input)" }}>
-                <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{item.value}</p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{item.label}</p>
+            <div className="rounded-lg p-2" style={{ backgroundColor: "var(--bg-input)" }}>
+              <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{parsed.volume_ml}</p>
+              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{t("water.ml")}</p>
+            </div>
+            <div className="rounded-lg p-2" style={{ backgroundColor: "var(--bg-input)" }}>
+              <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{parsed.calories}</p>
+              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{t("dashboard.kcal")}</p>
+            </div>
+            <div className="rounded-lg p-2" style={{ backgroundColor: "var(--bg-input)" }}>
+              <div className="flex items-center justify-center gap-1">
+                <input type="number" min={0} max={100} value={parsed.water_pct}
+                  onChange={(e) => setParsed((p) => p ? { ...p, water_pct: Math.min(100, Math.max(0, +e.target.value || 0)) } : p)}
+                  className="w-12 text-center text-lg font-bold bg-transparent outline-none"
+                  style={{ color: "var(--text-primary)" }} />
+                <span className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>%</span>
               </div>
-            ))}
+              <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>💧 {t("profile.waterContent")}</p>
+            </div>
           </div>
 
           <div className="flex gap-3 text-[11px] justify-center" style={{ color: "var(--text-muted)" }}>
