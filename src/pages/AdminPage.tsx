@@ -4,84 +4,59 @@ import { Navigate } from "react-router-dom";
 import { getProfile } from "@/services/profileService";
 import { listUsers, updateUserStatus } from "@/services/adminService";
 
-const STATUS_COLORS: Record<string, string> = {
-  active: "bg-emerald-100 text-emerald-700",
-  pending: "bg-amber-100 text-amber-700",
-  suspended: "bg-red-100 text-red-700",
-};
-
 export default function AdminPage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
 
-  const { data: profile, isLoading: profileLoading } = useQuery({
-    queryKey: ["profile"],
-    queryFn: getProfile,
-  });
-
-  const { data: users, isLoading } = useQuery({
-    queryKey: ["adminUsers"],
-    queryFn: listUsers,
-  });
+  const { data: profile, isLoading: profileLoading } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
+  const { data: users, isLoading } = useQuery({ queryKey: ["adminUsers"], queryFn: listUsers });
 
   const statusMut = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) =>
-      updateUserStatus(id, status),
+    mutationFn: ({ id, status }: { id: string; status: string }) => updateUserStatus(id, status),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["adminUsers"] }),
   });
 
-  if (!profileLoading && profile?.role !== "admin") {
-    return <Navigate to="/" replace />;
-  }
+  if (!profileLoading && profile?.role !== "admin") return <Navigate to="/" replace />;
 
   if (isLoading || profileLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div
-          className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-          style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }}
-        />
+        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+          style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
       </div>
     );
   }
 
   return (
-    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
-      <h1 className="text-xl font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
+    <div className="px-5 pt-8 pb-8 max-w-lg mx-auto">
+      <h1 className="text-[26px] font-bold tracking-tight mb-6 animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
 
-      <div className="space-y-2 animate-fade-up">
+      <div className="space-y-3 animate-fade-up stagger-1">
         {users?.map((user) => (
-          <div
-            key={user.id}
-            className="glass-card p-4 flex items-center gap-3"
-          >
+          <div key={user.id} className="glass-card p-4 flex items-center gap-3">
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate" style={{ color: "var(--text-primary)" }}>{user.name}</p>
+              <p className="font-semibold text-sm truncate" style={{ color: "var(--text-primary)" }}>{user.name}</p>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>{user.email}</p>
-              <span
-                className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[user.status] ?? ""}`}
-              >
+              <span className="inline-block mt-1.5 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                style={{
+                  backgroundColor: user.status === "active" ? "rgba(16,185,129,0.12)" : user.status === "pending" ? "rgba(245,158,11,0.12)" : "rgba(239,68,68,0.12)",
+                  color: user.status === "active" ? "#10b981" : user.status === "pending" ? "#f59e0b" : "#ef4444",
+                }}>
                 {t(`admin.${user.status}`)}
               </span>
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               {user.status !== "active" && (
-                <button
-                  onClick={() =>
-                    statusMut.mutate({ id: user.id, status: "active" })
-                  }
-                  className="text-xs px-3 py-1 rounded-lg bg-emerald-500 text-white active:scale-[0.98] transition-transform"
-                >
+                <button onClick={() => statusMut.mutate({ id: user.id, status: "active" })}
+                  className="text-xs font-semibold px-4 py-2.5 rounded-xl text-white transition-all active:scale-[0.97]"
+                  style={{ backgroundColor: "#10b981", minHeight: 44 }}>
                   {t("admin.approve")}
                 </button>
               )}
               {user.status !== "suspended" && (
-                <button
-                  onClick={() =>
-                    statusMut.mutate({ id: user.id, status: "suspended" })
-                  }
-                  className="text-xs px-3 py-1 rounded-lg bg-red-500 text-white active:scale-[0.98] transition-transform"
-                >
+                <button onClick={() => statusMut.mutate({ id: user.id, status: "suspended" })}
+                  className="text-xs font-semibold px-4 py-2.5 rounded-xl text-white transition-all active:scale-[0.97]"
+                  style={{ backgroundColor: "#ef4444", minHeight: 44 }}>
                   {t("admin.suspend")}
                 </button>
               )}

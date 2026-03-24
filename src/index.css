@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Heebo:wght@100..900&display=swap');
 @import "tailwindcss";
 
 /* ========== Design System ========== */
@@ -79,7 +79,7 @@ html.force-light {
 }
 
 /* ========== Base ========== */
-* { font-family: 'DM Sans', system-ui, -apple-system, sans-serif; }
+* { font-family: 'DM Sans', 'Heebo', system-ui, -apple-system, sans-serif; }
 
 /* ========== Glass Card Utility ========== */
 .glass-card {

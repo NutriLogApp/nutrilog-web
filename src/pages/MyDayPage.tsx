@@ -12,6 +12,7 @@ import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
 import DrinkPickerModal from "@/components/DrinkPickerModal";
 import EntryEditModal from "@/components/EntryEditModal";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import type { EntryOut } from "@/types/api";
 
 
@@ -21,6 +22,7 @@ export default function MyDayPage() {
   const [showAddFood, setShowAddFood] = useState(false);
   const [showAddDrink, setShowAddDrink] = useState(false);
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const { data: stats } = useQuery({ queryKey: ["dailyStats", todayLocal()], queryFn: () => getDailyStats(todayLocal()) });
@@ -114,16 +116,16 @@ export default function MyDayPage() {
                 </button>
 
                 {/* Actions */}
-                <div className="flex items-center pe-2 gap-0.5 shrink-0">
+                <div className="flex items-center pe-1 shrink-0">
                   <button onClick={() => setEditEntry(entry)}
-                    className="p-2.5 rounded-full transition-all active:scale-90"
-                    style={{ color: "var(--text-muted)" }}>
-                    <Pencil size={13} />
+                    className="p-3 rounded-full transition-all active:scale-90"
+                    style={{ color: "var(--text-muted)", minWidth: 44, minHeight: 44 }}>
+                    <Pencil size={16} />
                   </button>
-                  <button onClick={() => deleteMut.mutate(entry.id)}
-                    className="p-2.5 rounded-full transition-all active:scale-90 hover:bg-red-500/10"
-                    style={{ color: "var(--text-muted)" }}>
-                    <Trash2 size={13} />
+                  <button onClick={() => setDeleteId(entry.id)}
+                    className="p-3 rounded-full transition-all active:scale-90 hover:bg-red-500/10"
+                    style={{ color: "var(--text-muted)", minWidth: 44, minHeight: 44 }}>
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
@@ -144,6 +146,13 @@ export default function MyDayPage() {
           <EntryEditModal entry={editEntry} onClose={() => setEditEntry(null)} />
         </Modal>
       )}
+
+      <ConfirmDialog
+        open={!!deleteId}
+        message={t("common.deleteConfirm")}
+        onConfirm={() => { if (deleteId) deleteMut.mutate(deleteId); setDeleteId(null); }}
+        onCancel={() => setDeleteId(null)}
+      />
     </div>
   );
 }
