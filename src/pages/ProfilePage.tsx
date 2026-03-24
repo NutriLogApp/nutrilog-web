@@ -101,7 +101,7 @@ export default function ProfilePage() {
   const latestWeight = weightHistory?.[weightHistory.length - 1];
 
   return (
-    <div className="px-5 pt-8 pb-4 max-w-lg mx-auto space-y-5">
+    <div className="px-5 pt-8 pb-8 max-w-lg mx-auto space-y-5">
       <h1 className="text-[26px] font-bold tracking-tight animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("profile.title")}</h1>
 
       {/* User card */}
@@ -367,7 +367,7 @@ export default function ProfilePage() {
 
       {/* Retake Quiz */}
       {modal === "quiz" && (
-        <div className="fixed inset-0 z-50" style={{ backgroundColor: "var(--bg-page)" }}>
+        <div className="fixed inset-0" style={{ zIndex: 70, backgroundColor: "var(--bg-page)" }}>
           <OnboardingQuiz onDone={() => { setModal(null); qc.invalidateQueries({ queryKey: ["profile"] }); }} />
         </div>
       )}
