@@ -98,18 +98,17 @@ export default function DashboardPage() {
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: "var(--bg-card)" }}>
             <Zap size={14} fill="#f59e0b" stroke="#f59e0b" />
             <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
-              {profile?.current_streak || 0} {t("dashboard.dayStreak")}
+              {profile.current_streak} {t("dashboard.dayStreak")}
             </span>
           </div>
         )}
       </div>
 
       {/* Ring + Macros side-by-side */}
-      <style>{`@keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0) } 50% { box-shadow: 0 0 20px 4px rgba(239,68,68,0.3) } }`}</style>
       <div className="flex gap-4 items-center mb-6 animate-fade-up stagger-1">
         {/* Left: Segmented ring */}
         <div className="flex-1 flex justify-center">
-          <div className="relative" style={{ width: 160, height: 160, borderRadius: "50%", animation: isOver ? "pulse-red 2s ease-in-out infinite" : undefined }}>
+          <div className="relative" style={{ width: 160, height: 160, borderRadius: "50%", animation: isOver ? "pulseRed 2s ease-in-out infinite" : undefined }}>
             <svg viewBox="0 0 160 160" width={160} height={160} className="-rotate-90 relative z-10">
               {/* Background ring */}
               <circle cx={80} cy={80} r={ringR} fill="none" strokeWidth={ringStroke}
