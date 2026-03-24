@@ -37,7 +37,7 @@ export default function GroupLeaderboardPage() {
               {s.rank === 1 ? <Crown size={14} /> : s.rank}
             </div>
             <div className="flex-1">
-              <p className="font-medium" style={{ color: "var(--text-primary)" }}>{s.name}</p>
+              <p className="font-medium" style={{ color: "var(--text-primary)" }}>{s.username || s.name}</p>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>{s.days_logged}/{s.days_in_week} {t("groups.days")}</p>
             </div>
             <span className="text-lg font-bold" style={{ color: "var(--theme-accent)" }}>{s.total_points}</span>

@@ -100,7 +100,7 @@ export default function ContestPage() {
                   {isFirst ? <Crown size={20} color="white" /> : <span className="font-bold text-sm" style={{ color: "var(--text-secondary)" }}>{s.rank}</span>}
                 </div>
                 <p className="text-[11px] font-semibold truncate max-w-16 text-center" style={{ color: s.is_current_user ? "var(--theme-accent)" : "var(--text-primary)" }}>
-                  {s.is_current_user ? t("contest.you") : s.name.split(" ")[0]}
+                  {s.is_current_user ? t("contest.you") : (s.username || s.name.split(" ")[0])}
                 </p>
                 <p className="text-lg font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>{s.total_points}</p>
               </div>
@@ -117,7 +117,7 @@ export default function ContestPage() {
             <span className="w-6 text-center text-xs font-bold tabular-nums" style={{ color: "var(--text-muted)" }}>{s.rank}</span>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-[13px] truncate" style={{ color: "var(--text-primary)" }}>
-                {s.name} {s.is_current_user && <span style={{ color: "var(--theme-accent)" }}>({t("contest.you")})</span>}
+                {s.username || s.name} {s.is_current_user && <span style={{ color: "var(--theme-accent)" }}>({t("contest.you")})</span>}
               </p>
               <p className="text-[10px] font-medium" style={{ color: "var(--text-muted)" }}>{s.days_logged}/{s.days_in_week} {t("groups.days")}</p>
             </div>

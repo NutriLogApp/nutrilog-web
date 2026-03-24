@@ -217,6 +217,7 @@
     "looksGood": "Looks good — let's start!",
     "adjust": "Adjust my answers"
   },
+  "themes": { "ocean": "Ocean", "forest": "Forest", "midnight": "Midnight", "ember": "Ember", "gold": "Gold", "iris": "Iris", "obsidian": "Obsidian", "rose": "Rose", "arctic": "Arctic" },
   "common": {
     "delete": "Delete",
     "deleteConfirm": "Are you sure you want to delete this?"

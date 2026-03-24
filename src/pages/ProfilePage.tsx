@@ -1,17 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, UserPlus, Share2, Copy, Scale, Search } from "lucide-react";
+import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, Share2, Copy, Scale, Search, Flame, Beef, Droplets, Wheat, CircleDot, Trash2 } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { logWeight, getWeightHistory } from "@/services/weightService";
-import { searchUser, sendFriendRequest, suggestUsers } from "@/services/socialService";
+import { logWeight, getWeightHistory, deleteWeight } from "@/services/weightService";
+import { searchUser, sendFriendRequest, setUsername as setUsernameApi, suggestUsers } from "@/services/socialService";
 import EatingWindows from "@/components/EatingWindows";
 import DrinkManager from "@/components/DrinkManager";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 function Chevron({ lang }: { lang: string }) {
   return (
@@ -60,10 +61,17 @@ export default function ProfilePage() {
   const [activeTheme, setActiveTheme] = useState<ThemeName>("ocean");
   const [darkMode, setDarkMode] = useState<"auto" | "light" | "dark">("auto");
   const [weightInput, setWeightInput] = useState("");
-  const [publicName, setPublicName] = useState("");
   const [friendSearch, setFriendSearch] = useState("");
   const [friendResult, setFriendResult] = useState<{ user_id: string; name: string; username: string | null } | null | undefined>(undefined);
   const [friendSent, setFriendSent] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [editUsername, setEditUsername] = useState("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [deleteWeightDate, setDeleteWeightDate] = useState<string | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const usernameInputRef = useRef<HTMLInputElement>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -108,7 +116,6 @@ export default function ProfilePage() {
     if (profile) {
       setGoals({ daily_cal_goal: profile.daily_cal_goal ?? 2000, daily_protein_goal_g: profile.daily_protein_goal_g ?? 120, daily_fat_goal_g: profile.daily_fat_goal_g ?? 78, daily_carbs_goal_g: profile.daily_carbs_goal_g ?? 180, daily_water_goal_ml: profile.daily_water_goal_ml ?? 2000 });
       setActiveTheme((profile.theme ?? "ocean") as ThemeName);
-      setPublicName(profile.username ?? "");
     }
     const saved = localStorage.getItem("nutrilog-dark-mode");
     if (saved) setDarkMode(saved as "auto" | "light" | "dark");
@@ -129,6 +136,11 @@ export default function ProfilePage() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["weightHistory"] }); setWeightInput(""); setModal(null); },
   });
 
+  const deleteWeightMut = useMutation({
+    mutationFn: (date: string) => deleteWeight(date),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["weightHistory"] }); setDeleteWeightDate(null); },
+  });
+
   if (isLoading) return (
     <div className="flex items-center justify-center h-64">
       <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
@@ -147,9 +159,40 @@ export default function ProfilePage() {
       <div className="glass-card p-4 flex items-center gap-3 animate-fade-up stagger-1">
         {profile?.avatar_url ? <img src={profile.avatar_url} alt="" className="w-14 h-14 rounded-full" /> : <div className="w-14 h-14 rounded-full" style={{ backgroundColor: "var(--bg-input)" }} />}
         <div className="flex-1 min-w-0">
-          <p className="font-bold truncate" style={{ color: "var(--text-primary)" }}>{profile?.name}</p>
+          {editingName ? (
+            <input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.currentTarget.blur(); } }}
+              onBlur={() => { if (editName.trim() && editName !== profile?.name) { updateMut.mutate({ name: editName.trim() }); } setEditingName(false); }}
+              className="font-bold w-full bg-transparent outline-none border-b-2 py-0.5 text-sm"
+              style={{ color: "var(--text-primary)", borderColor: "var(--theme-accent)" }} />
+          ) : (
+            <p className="font-bold truncate cursor-pointer hover:opacity-70 transition-opacity" style={{ color: "var(--text-primary)" }}
+              onClick={() => { setEditName(profile?.name ?? ""); setEditingName(true); setTimeout(() => nameInputRef.current?.focus(), 0); }}>
+              {profile?.name}
+            </p>
+          )}
           <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>{profile?.email}</p>
-          {profile?.username && <p className="text-xs mt-0.5 font-medium" style={{ color: "var(--theme-accent)" }}>@{profile.username}</p>}
+          {editingUsername ? (
+            <div>
+              <input ref={usernameInputRef} value={editUsername} onChange={(e) => { setEditUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setUsernameError(null); }}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.currentTarget.blur(); } }}
+                onBlur={() => {
+                  const val = editUsername.trim();
+                  if (!val || val === profile?.username) { setEditingUsername(false); return; }
+                  if (val.length < 3 || val.length > 30) { setUsernameError(t("friends.usernameInvalid")); return; }
+                  setUsernameApi(val).then(() => { qc.invalidateQueries({ queryKey: ["profile"] }); setEditingUsername(false); setUsernameError(null); })
+                    .catch(() => setUsernameError(t("friends.usernameTaken")));
+                }}
+                className="text-xs mt-0.5 font-medium w-full bg-transparent outline-none border-b-2 py-0.5"
+                style={{ color: "var(--theme-accent)", borderColor: "var(--theme-accent)" }} />
+              {usernameError && <p className="text-[10px] mt-0.5 text-red-500">{usernameError}</p>}
+            </div>
+          ) : (
+            <p className="text-xs mt-0.5 font-medium cursor-pointer hover:opacity-70 transition-opacity" style={{ color: "var(--theme-accent)" }}
+              onClick={() => { setEditUsername(profile?.username ?? ""); setEditingUsername(true); setUsernameError(null); setTimeout(() => usernameInputRef.current?.focus(), 0); }}>
+              {profile?.username ? `@${profile.username}` : `@${t("friends.username")}`}
+            </p>
+          )}
         </div>
       </div>
 
@@ -205,16 +248,26 @@ export default function ProfilePage() {
       <Modal open={modal === "goals"} onClose={() => setModal(null)} title={t("profile.goals")}>
         <div className="space-y-3">
           {([
-            ["daily_cal_goal", t("profile.calories"), t("dashboard.kcal")],
-            ["daily_protein_goal_g", t("macros.protein"), t("log.g")],
-            ["daily_fat_goal_g", t("macros.fat"), t("log.g")],
-            ["daily_carbs_goal_g", t("macros.carbs"), t("log.g")],
-            ["daily_water_goal_ml", t("water.title"), t("water.ml")],
-          ] as const).map(([key, label, unit]) => (
-            <div key={key}>
-              <label className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{label} ({unit})</label>
-              <input type="number" value={goals[key]} onChange={(e) => setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))}
-                className="w-full rounded-xl px-4 py-3 text-sm mt-1" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
+            ["daily_cal_goal", t("profile.calories"), t("dashboard.kcal"), Flame],
+            ["daily_protein_goal_g", t("macros.protein"), t("log.g"), Beef],
+            ["daily_fat_goal_g", t("macros.fat"), t("log.g"), CircleDot],
+            ["daily_carbs_goal_g", t("macros.carbs"), t("log.g"), Wheat],
+            ["daily_water_goal_ml", t("water.title"), t("water.ml"), Droplets],
+          ] as const).map(([key, label, unit, Icon]) => (
+            <div key={key} className="glass-card p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
+                <Icon size={18} color="white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
+                <div className="flex items-center gap-2">
+                  <input type="number" value={goals[key]} onChange={(e) => setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))}
+                    className="w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
+                    style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
+                  <span className="text-xs font-medium shrink-0" style={{ color: "var(--text-muted)" }}>{unit}</span>
+                </div>
+              </div>
             </div>
           ))}
           <button onClick={saveGoals} disabled={updateMut.isPending} className="w-full py-3 rounded-xl text-white text-sm font-semibold active:scale-[0.98] transition-transform"
@@ -244,9 +297,16 @@ export default function ProfilePage() {
             <div className="space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.recent")}</h3>
               {weightHistory.slice(-5).reverse().map((w) => (
-                <div key={w.date} className="flex justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div key={w.date} className="flex items-center justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
                   <span>{w.date}</span>
-                  <span className="font-semibold tabular-nums">{w.weight_kg} kg</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold tabular-nums">{w.weight_kg} kg</span>
+                    <button onClick={() => setDeleteWeightDate(w.date)}
+                      className="p-1.5 rounded-full transition-all hover:bg-red-500/10 active:scale-90"
+                      style={{ color: "var(--text-muted)" }}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -354,7 +414,7 @@ export default function ProfilePage() {
               className="flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all"
               style={{ borderColor: activeTheme === name ? "var(--theme-accent)" : "var(--border)", backgroundColor: activeTheme === name ? "var(--bg-input)" : "transparent", transform: activeTheme === name ? "scale(1.05)" : undefined }}>
               <span className="w-8 h-8 rounded-full" style={{ background: `linear-gradient(135deg, ${theme.start}, ${theme.end})` }} />
-              <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{theme.label}</span>
+              <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{t("themes." + name)}</span>
             </button>
           ))}
         </div>
@@ -404,6 +464,13 @@ export default function ProfilePage() {
           <OnboardingQuiz onDone={() => { setModal(null); qc.invalidateQueries({ queryKey: ["profile"] }); }} />
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteWeightDate}
+        message={t("common.deleteConfirm")}
+        onConfirm={() => { if (deleteWeightDate) deleteWeightMut.mutate(deleteWeightDate); }}
+        onCancel={() => setDeleteWeightDate(null)}
+      />
     </div>
   );
 }

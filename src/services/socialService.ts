@@ -22,6 +22,7 @@ export interface Standing {
   rank: number;
   user_id: string;
   name: string;
+  username: string | null;
   total_points: number;
   days_logged: number;
   days_in_week: number;
