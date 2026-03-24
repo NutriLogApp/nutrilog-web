@@ -30,19 +30,18 @@ export default function DrinkPickerModal({ onDone }: Props) {
   async function pickDrink(d: DrinkOut) {
     const waterAmount = Math.round(d.volume_ml * d.water_pct / 100);
     if (waterAmount > 0) await addWater(waterAmount);
-    if (d.calories > 0) {
-      const isHe = i18n.language === "he";
-      await createEntry({
-        description: isHe && d.name_he ? d.name_he : d.name,
-        source: "text", meal_type: "snack",
-        items: [{
-          food_name: d.name, food_name_he: d.name_he,
-          grams: d.volume_ml, calories: d.calories,
-          protein_g: d.protein_g, fat_g: d.fat_g,
-          carbs_g: d.carbs_g, confidence: "high" as const,
-        }],
-      });
-    }
+    const isHe = i18n.language === "he";
+    await createEntry({
+      description: isHe && d.name_he ? d.name_he : d.name,
+      source: "text", meal_type: "snack",
+      items: [{
+        food_name: d.name, food_name_he: d.name_he,
+        grams: d.volume_ml, calories: d.calories,
+        protein_g: d.protein_g, fat_g: d.fat_g,
+        carbs_g: d.carbs_g, confidence: "high" as const,
+        water_ml_added: waterAmount,
+      }],
+    });
     qc.invalidateQueries({ queryKey: ["water"] });
     qc.invalidateQueries({ queryKey: ["dailyStats"] });
     onDone();
