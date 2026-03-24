@@ -17,8 +17,9 @@ export default function Modal({ open, onClose, title, children }: Props) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg p-6 max-h-[85vh] overflow-y-auto"
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto"
         style={{
+          padding: "24px 24px calc(24px + env(safe-area-inset-bottom, 16px)) 24px",
           background: "var(--bg-elevated)",
           backdropFilter: "var(--blur)",
           WebkitBackdropFilter: "var(--blur)",
