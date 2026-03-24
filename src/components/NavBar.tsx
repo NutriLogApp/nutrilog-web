@@ -16,7 +16,7 @@ export default function NavBar() {
   const { t } = useTranslation();
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 px-4 pb-4 pointer-events-none">
+    <div className="fixed bottom-0 inset-x-0 z-50 px-4 pointer-events-none" style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))" }}>
       <nav
         className="max-w-lg mx-auto flex justify-around py-2.5 pointer-events-auto"
         style={{
