@@ -36,6 +36,9 @@ export default function OnboardingQuiz({ onDone }: Props) {
 
   function finish() {
     qc.invalidateQueries({ queryKey: ["profile"] });
+    qc.invalidateQueries({ queryKey: ["dailyStats"] });
+    qc.invalidateQueries({ queryKey: ["water"] });
+    qc.invalidateQueries({ queryKey: ["insight"] });
     onDone();
   }
 
