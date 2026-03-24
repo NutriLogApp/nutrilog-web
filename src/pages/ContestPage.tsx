@@ -25,18 +25,18 @@ export default function ContestPage() {
   if (!profile?.username) {
     return (
       <div className="px-5 pt-8 pb-4 max-w-lg mx-auto flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
-        <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-6"
-          style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", boxShadow: "0 8px 24px color-mix(in srgb, var(--theme-start) 25%, transparent)" }}>
-          <Users size={36} color="white" />
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
+          style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}>
+          <Users size={24} style={{ color: "var(--theme-accent)" }} />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-center mb-2" style={{ color: "var(--text-primary)" }}>
+        <h1 className="text-xl font-bold tracking-tight text-center mb-1.5" style={{ color: "var(--text-primary)" }}>
           {t("contest.needUsername")}
         </h1>
-        <p className="text-sm text-center mb-8 max-w-xs" style={{ color: "var(--text-muted)" }}>
+        <p className="text-[13px] text-center mb-6 max-w-[260px] leading-relaxed" style={{ color: "var(--text-muted)" }}>
           {t("contest.needUsernameDesc")}
         </p>
         <button onClick={() => navigate("/profile")}
-          className="px-8 py-3.5 rounded-2xl text-white font-semibold transition-all active:scale-[0.97]"
+          className="px-7 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-[0.97]"
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
           {t("contest.goToProfile")}
         </button>
@@ -48,20 +48,17 @@ export default function ContestPage() {
   if (!firstGroup) {
     return (
       <div className="px-5 pt-8 pb-4 max-w-lg mx-auto flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
-        <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-6"
-          style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", boxShadow: "0 8px 24px color-mix(in srgb, var(--theme-start) 25%, transparent)" }}>
-          <Trophy size={36} color="white" />
-        </div>
-        <h1 className="text-2xl font-bold tracking-tight text-center mb-2" style={{ color: "var(--text-primary)" }}>
-          {t("contest.title")}
+        <Trophy size={40} strokeWidth={1.2} style={{ color: "var(--text-muted)", opacity: 0.5, marginBottom: 20 }} />
+        <h1 className="text-xl font-bold tracking-tight text-center mb-1.5" style={{ color: "var(--text-primary)" }}>
+          {t("contest.noCompetitions", "No competitions yet")}
         </h1>
-        <p className="text-sm text-center mb-8 max-w-xs" style={{ color: "var(--text-muted)" }}>
-          {t("contest.emptyDesc")}
+        <p className="text-[13px] text-center mb-6 max-w-[240px] leading-relaxed" style={{ color: "var(--text-muted)" }}>
+          {t("contest.addFriendsToStart", "Add friends to start competing")}
         </p>
         <button onClick={() => navigate("/profile")}
-          className="px-8 py-3.5 rounded-2xl text-white font-semibold transition-all active:scale-[0.97]"
+          className="px-7 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-[0.97]"
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-          {t("contest.addFriendsStart")}
+          {t("contest.findFriends", "Find Friends")}
         </button>
       </div>
     );

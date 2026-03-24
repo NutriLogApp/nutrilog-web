@@ -127,6 +127,7 @@
     "usernameHint": "בחר שם משתמש כדי להשתמש בתכונות חברתיות",
     "saveUsername": "שמור שם משתמש",
     "usernameTaken": "שם משתמש תפוס או לא תקין",
+    "usernameInvalid": "שם משתמש חייב להיות 3-30 תווים (אותיות, מספרים, קו תחתון)",
     "username": "שם משתמש",
     "friendsCount": "חברים"
   },
@@ -152,7 +153,10 @@
     "inviteFriends": "הזמן חברים",
     "needUsername": "הגדר את הפרופיל שלך קודם",
     "needUsernameDesc": "צריך שם ציבורי כדי להצטרף לתחרויות",
-    "goToProfile": "עבור לפרופיל"
+    "goToProfile": "עבור לפרופיל",
+    "noCompetitions": "אין תחרויות עדיין",
+    "addFriendsToStart": "הוסף חברים כדי להתחיל להתחרות",
+    "findFriends": "מצא חברים"
   },
   "insight": { "title": "תובנה יומית" },
   "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },
