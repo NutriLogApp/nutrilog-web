@@ -191,8 +191,21 @@
     "keto": "Keto",
     "ketoDesc": "70% fat, minimal carbs (under 20g)",
     "next": "Next",
-    "ready": "You're all set!",
-    "readyDesc": "We'll calculate your personalized daily targets based on science",
-    "calculate": "Calculate my goals"
+    "sexWhy": "Metabolism differs between sexes — this helps us be accurate",
+    "bodyWhy": "Your body measurements determine your base metabolic rate",
+    "activityWhy": "We'll adjust your calorie target based on how active you are",
+    "goalWhy": "Choose the pace that fits your lifestyle",
+    "goalWeightWhy": "Helps us track your progress over time",
+    "macroWhy": "Different nutrition styles work for different people",
+    "calculating": "Calculating...",
+    "calculatingDesc": "Building your personalized nutrition plan",
+    "yourPlan": "Your Plan",
+    "planDesc": "Calculated using the {{formula}} formula based on your profile",
+    "dailyCalories": "daily calories",
+    "dailyWater": "Daily water target",
+    "howCalculated": "How we calculated this",
+    "calculationExplanation": "Your base metabolic rate (BMR) is {{bmr}} kcal. With your activity level, you burn approximately {{tdee}} kcal daily (TDEE). Your target is set to {{goal}} kcal to match your goal.",
+    "looksGood": "Looks good — let's start!",
+    "adjust": "Adjust my answers"
   }
 }
