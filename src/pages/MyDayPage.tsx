@@ -31,11 +31,10 @@ export default function MyDayPage() {
   const deleteMut = useMutation({
     mutationFn: async (entryId: string) => {
       const entry = stats?.entries.find((e) => e.id === entryId);
-      if (entry) {
-        const waterToSubtract = entry.items.reduce((sum, item) => sum + (item.water_ml_added ?? 0), 0);
-        if (waterToSubtract > 0) await addWater(-waterToSubtract);
-      }
-      return deleteEntry(entryId);
+      if (!entry) console.warn(`[deleteMut] entry ${entryId} not found in cache — water not adjusted`);
+      const waterToSubtract = entry?.items.reduce((sum, item) => sum + (item.water_ml_added ?? 0), 0) ?? 0;
+      await deleteEntry(entryId);
+      if (waterToSubtract > 0) await addWater(-waterToSubtract);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["dailyStats"] });

@@ -29,22 +29,34 @@ export default function DrinkPickerModal({ onDone }: Props) {
 
   async function pickDrink(d: DrinkOut) {
     const waterAmount = Math.round(d.volume_ml * d.water_pct / 100);
-    if (waterAmount > 0) await addWater(waterAmount);
-    const isHe = i18n.language === "he";
-    await createEntry({
-      description: isHe && d.name_he ? d.name_he : d.name,
-      source: "text", meal_type: "snack",
-      items: [{
-        food_name: d.name, food_name_he: d.name_he,
-        grams: d.volume_ml, calories: d.calories,
-        protein_g: d.protein_g, fat_g: d.fat_g,
-        carbs_g: d.carbs_g, confidence: "high" as const,
-        water_ml_added: waterAmount,
-      }],
-    });
-    qc.invalidateQueries({ queryKey: ["water"] });
-    qc.invalidateQueries({ queryKey: ["dailyStats"] });
-    onDone();
+    try {
+      if (waterAmount > 0) await addWater(waterAmount);
+      const isHe = i18n.language === "he";
+      try {
+        await createEntry({
+          description: isHe && d.name_he ? d.name_he : d.name,
+          source: "text", meal_type: "snack",
+          items: [{
+            food_name: d.name, food_name_he: d.name_he,
+            grams: d.volume_ml, calories: d.calories,
+            protein_g: d.protein_g, fat_g: d.fat_g,
+            carbs_g: d.carbs_g, confidence: "high" as const,
+            ...(waterAmount > 0 && { water_ml_added: waterAmount }),
+          }],
+        });
+      } catch (entryErr) {
+        // createEntry failed — compensate by subtracting the water already added
+        if (waterAmount > 0) {
+          try { await addWater(-waterAmount); } catch { /* best-effort rollback */ }
+        }
+        throw entryErr;
+      }
+      qc.invalidateQueries({ queryKey: ["water"] });
+      qc.invalidateQueries({ queryKey: ["dailyStats"] });
+      onDone();
+    } catch (err) {
+      console.error("[pickDrink] failed:", err);
+    }
   }
 
   return (
