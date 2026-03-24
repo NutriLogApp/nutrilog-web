@@ -321,7 +321,7 @@ export default function ProfilePage() {
               className="flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all"
               style={{ borderColor: activeTheme === name ? "var(--theme-accent)" : "var(--border)", backgroundColor: activeTheme === name ? "var(--bg-input)" : "transparent", transform: activeTheme === name ? "scale(1.05)" : undefined }}>
               <span className="w-8 h-8 rounded-full" style={{ background: `linear-gradient(135deg, ${theme.start}, ${theme.end})` }} />
-              <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{theme.label}</span>
+              <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{t("themes." + name)}</span>
             </button>
           ))}
         </div>

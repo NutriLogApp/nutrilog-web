@@ -208,6 +208,7 @@
     "looksGood": "נראה מעולה — בואו נתחיל!",
     "adjust": "שנה את התשובות"
   },
+  "themes": { "ocean": "אוקיינוס", "forest": "יער", "midnight": "חצות", "ember": "גחלים", "gold": "זהב", "iris": "אירוס", "obsidian": "אובסידיאן", "rose": "ורד", "arctic": "ארקטי" },
   "common": {
     "delete": "מחק",
     "deleteConfirm": "בטוח שברצונך למחוק?"
