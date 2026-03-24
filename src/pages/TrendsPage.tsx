@@ -89,31 +89,14 @@ export default function TrendsPage() {
         </div>
       </div>
 
-      {/* Average summary cards */}
-      {data && (
-        <div className="grid grid-cols-4 gap-2 mb-5 animate-fade-up stagger-1">
-          {[
-            { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
-            { label: t("macros.protein"), value: `${avg.p}${t("log.g")}`, color: "#6366f1" },
-            { label: t("macros.fat"), value: `${avg.f}${t("log.g")}`, color: "#f59e0b" },
-            { label: t("macros.carbs"), value: `${avg.c}${t("log.g")}`, color: "#10b981" },
-          ].map((item) => (
-            <div key={item.label} className="glass-card-sm p-3 text-center">
-              <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
-              <p className="text-[9px] font-semibold uppercase tracking-wider mt-0.5" style={{ color: "var(--text-muted)" }}>{item.label}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Chart */}
+      {/* Calorie / Macro Chart — Primary Section */}
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
           <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
                style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
         </div>
       ) : (
-        <div className="glass-card p-4 animate-fade-up stagger-2">
+        <div className="glass-card p-4 animate-fade-up stagger-1">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={14} style={{ color: "var(--theme-accent)" }} />
             <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
@@ -145,16 +128,35 @@ export default function TrendsPage() {
         </div>
       )}
 
-      {/* Days logged stat */}
+      {/* Summary Section — Averages & Days Logged */}
       {data && (
-        <div className="glass-card-sm p-4 mt-4 flex items-center justify-between animate-fade-up stagger-3">
-          <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("trends.daysLogged")}</span>
-          <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
-            {activeDays.length} / {range === "week" ? 7 : new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()}
-          </span>
+        <div className="mt-6 animate-fade-up stagger-2">
+          <h2 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
+            {t("trends.averages")}
+          </h2>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
+              { label: t("macros.protein"), value: `${avg.p}${t("log.g")}`, color: "#6366f1" },
+              { label: t("macros.fat"), value: `${avg.f}${t("log.g")}`, color: "#f59e0b" },
+              { label: t("macros.carbs"), value: `${avg.c}${t("log.g")}`, color: "#10b981" },
+            ].map((item) => (
+              <div key={item.label} className="glass-card-sm p-3 text-center">
+                <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
+                <p className="text-[9px] font-semibold uppercase tracking-wider mt-0.5" style={{ color: "var(--text-muted)" }}>{item.label}</p>
+              </div>
+            ))}
+          </div>
+          <div className="glass-card-sm p-4 mt-3 flex items-center justify-between">
+            <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("trends.daysLogged")}</span>
+            <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
+              {activeDays.length} / {range === "week" ? 7 : new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()}
+            </span>
+          </div>
         </div>
       )}
-      {/* Weight trend */}
+
+      {/* Weight Trend — Secondary Section */}
       <WeightTrend />
     </div>
   );
@@ -172,14 +174,15 @@ function WeightTrend() {
   }));
 
   return (
-    <div className="glass-card p-4 mt-4 animate-fade-up stagger-4">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="mt-6 animate-fade-up stagger-3">
+      <div className="flex items-center gap-2 mb-3">
         <Scale size={14} style={{ color: "var(--theme-accent)" }} />
         <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.title")}</h2>
         <span className="text-xs font-bold tabular-nums ms-auto" style={{ color: "var(--theme-accent)" }}>
           {history[history.length - 1].weight_kg} kg
         </span>
       </div>
+      <div className="glass-card p-4">
       <ResponsiveContainer width="100%" height={120}>
         <LineChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
@@ -193,6 +196,7 @@ function WeightTrend() {
           <Line type="monotone" dataKey="weight" stroke="var(--theme-accent)" strokeWidth={2} dot={{ r: 2.5, fill: "var(--theme-accent)" }} />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }

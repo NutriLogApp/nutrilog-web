@@ -53,7 +53,8 @@
     "month": "Month",
     "kcal": "kcal",
     "macroBreakdown": "Macro Breakdown",
-    "daysLogged": "Days logged"
+    "daysLogged": "Days logged",
+    "averages": "Daily Averages"
   },
   "profile": {
     "title": "Profile",
