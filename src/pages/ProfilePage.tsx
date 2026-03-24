@@ -6,12 +6,13 @@ import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
 import { useState, useEffect, useRef } from "react";
-import { logWeight, getWeightHistory } from "@/services/weightService";
+import { logWeight, getWeightHistory, deleteWeight } from "@/services/weightService";
 import { searchUser, sendFriendRequest, setUsername as setUsernameApi } from "@/services/socialService";
 import EatingWindows from "@/components/EatingWindows";
 import DrinkManager from "@/components/DrinkManager";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 function Chevron({ lang }: { lang: string }) {
   return (
@@ -69,6 +70,7 @@ export default function ProfilePage() {
   const [editingUsername, setEditingUsername] = useState(false);
   const [editUsername, setEditUsername] = useState("");
   const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [deleteWeightDate, setDeleteWeightDate] = useState<string | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const usernameInputRef = useRef<HTMLInputElement>(null);
 
@@ -95,6 +97,11 @@ export default function ProfilePage() {
   const logWeightMut = useMutation({
     mutationFn: () => logWeight(parseFloat(weightInput)),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["weightHistory"] }); setWeightInput(""); setModal(null); },
+  });
+
+  const deleteWeightMut = useMutation({
+    mutationFn: (date: string) => deleteWeight(date),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["weightHistory"] }); setDeleteWeightDate(null); },
   });
 
   if (isLoading) return (
@@ -255,9 +262,16 @@ export default function ProfilePage() {
             <div className="space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.recent")}</h3>
               {weightHistory.slice(-5).reverse().map((w) => (
-                <div key={w.date} className="flex justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div key={w.date} className="flex items-center justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
                   <span>{w.date}</span>
-                  <span className="font-semibold tabular-nums">{w.weight_kg} kg</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold tabular-nums">{w.weight_kg} kg</span>
+                    <button onClick={() => setDeleteWeightDate(w.date)}
+                      className="p-1.5 rounded-full transition-all hover:bg-red-500/10 active:scale-90"
+                      style={{ color: "var(--text-muted)" }}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -419,6 +433,13 @@ export default function ProfilePage() {
           <OnboardingQuiz onDone={() => { setModal(null); qc.invalidateQueries({ queryKey: ["profile"] }); }} />
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteWeightDate}
+        message={t("common.deleteConfirm")}
+        onConfirm={() => { if (deleteWeightDate) deleteWeightMut.mutate(deleteWeightDate); }}
+        onCancel={() => setDeleteWeightDate(null)}
+      />
     </div>
   );
 }

@@ -14,3 +14,7 @@ export async function getWeightHistory(): Promise<WeightEntry[]> {
   const { data } = await apiClient.get<{ entries: WeightEntry[] }>("/api/v1/weight/history");
   return data.entries;
 }
+
+export async function deleteWeight(date: string) {
+  await apiClient.delete(`/api/v1/weight/${date}`);
+}
