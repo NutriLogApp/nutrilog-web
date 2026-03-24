@@ -14,7 +14,11 @@
     "offTrack": "off track",
     "max": "max",
     "todayLog": "Today's Log",
-    "noEntries": "No entries yet — tap + to log food"
+    "noEntries": "No entries yet — tap + to log food",
+    "dayStreak": "day streak",
+    "over": "over",
+    "overBudget": "Over budget",
+    "ofXKcal": "of {{x}} kcal"
   },
   "nav": { "home": "Home", "myday": "My Day", "contest": "Contest", "trends": "Trends", "profile": "Profile" },
   "myday": {

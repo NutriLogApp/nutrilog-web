@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { UtensilsCrossed, Droplets } from "lucide-react";
+import { UtensilsCrossed, Droplets, Zap } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
@@ -46,15 +46,36 @@ export default function DashboardPage() {
 
   const goal = data.goal_calories ?? 2000;
   const consumed = data.total_calories;
-  const remaining = Math.max(goal - consumed, 0);
-  const pct = Math.min(consumed / (goal || 1), 1);
+  const isOver = consumed > goal;
 
-  // Ring geometry
-  const ringSize = 200;
-  const stroke = 14;
-  const r = (ringSize - stroke) / 2;
-  const circ = 2 * Math.PI * r;
-  const offset = circ * (1 - pct);
+  // Macro calorie contributions
+  const proteinCal = data.total_protein_g * 4;
+  const fatCal = data.total_fat_g * 9;
+  const carbsCal = data.total_carbs_g * 4;
+  const totalMacroCal = proteinCal + fatCal + carbsCal;
+
+  // Segmented ring geometry
+  const ringR = 68;
+  const ringStroke = 12;
+  const circ = 2 * Math.PI * ringR;
+  const segmentBase = isOver ? totalMacroCal : goal;
+
+  const macroSegments = [
+    { cal: proteinCal, color: "#6366f1" },
+    { cal: fatCal, color: "#f59e0b" },
+    { cal: carbsCal, color: "#10b981" },
+  ].filter((s) => s.cal > 0);
+
+  // Build dash offsets for each segment
+  let segmentOffset = 0;
+  const segments = macroSegments.map((s) => {
+    const len = (s.cal / (segmentBase || 1)) * circ;
+    const o = segmentOffset;
+    segmentOffset += len;
+    return { ...s, dashLen: len, offset: o };
+  });
+
+  const remainingArc = isOver ? 0 : circ - segmentOffset;
 
   const macros = [
     { label: t("macros.protein"), val: data.total_protein_g, goal: data.goal_protein_g, color: "#6366f1" },
@@ -74,65 +95,81 @@ export default function DashboardPage() {
           {getGreeting(t)}
         </h1>
         {profile && profile.current_streak > 0 && (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-            style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}>
-            <span className="text-sm">🔥</span>
-            <span className="text-xs font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>{profile.current_streak}</span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: "var(--bg-card)" }}>
+            <Zap size={14} fill="#f59e0b" stroke="#f59e0b" />
+            <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
+              {profile.current_streak} {t("dashboard.dayStreak")}
+            </span>
           </div>
         )}
       </div>
 
-      {/* Hero ring — floating, with glow */}
-      <div className="flex flex-col items-center mb-6 animate-fade-up stagger-1">
-        <div className="relative" style={{ width: ringSize, height: ringSize }}>
-          {/* Glow effect behind the ring */}
-          <div className="absolute inset-4 rounded-full opacity-20 blur-2xl"
-            style={{ background: `radial-gradient(circle, var(--theme-start), transparent)` }} />
-          <svg width={ringSize} height={ringSize} className="-rotate-90 relative z-10">
-            <circle cx={ringSize/2} cy={ringSize/2} r={r} fill="none" strokeWidth={stroke}
-              style={{ stroke: "var(--bg-input)" }} />
-            <circle cx={ringSize/2} cy={ringSize/2} r={r} fill="none" strokeWidth={stroke}
-              strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset}
-              stroke="url(#ringGrad)" className="transition-all duration-1000 ease-out" />
-            <defs>
-              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="var(--theme-start)" />
-                <stop offset="100%" stopColor="var(--theme-end)" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-            <span className="text-4xl font-bold tracking-tighter" style={{ color: "var(--text-primary)" }}>
-              {consumed.toLocaleString()}
-            </span>
-            <span className="text-[13px] font-medium mt-0.5" style={{ color: "var(--text-muted)" }}>
-              {t("dashboard.kcal")}
-            </span>
+      {/* Ring + Macros side-by-side */}
+      <div className="flex gap-4 items-center mb-6 animate-fade-up stagger-1">
+        {/* Left: Segmented ring */}
+        <div className="flex-1 flex justify-center">
+          <div className="relative" style={{ width: 160, height: 160, borderRadius: "50%", animation: isOver ? "pulseRed 2s ease-in-out infinite" : undefined }}>
+            <svg viewBox="0 0 160 160" width={160} height={160} className="-rotate-90 relative z-10">
+              {/* Background ring */}
+              <circle cx={80} cy={80} r={ringR} fill="none" strokeWidth={ringStroke}
+                style={{ stroke: "var(--bg-input)" }} />
+              {/* Macro segments */}
+              {segments.map((s, i) => (
+                <circle key={i} cx={80} cy={80} r={ringR} fill="none"
+                  strokeWidth={ringStroke}
+                  stroke={s.color}
+                  strokeDasharray={`${s.dashLen} ${circ - s.dashLen}`}
+                  strokeDashoffset={-s.offset}
+                  className="transition-all duration-1000 ease-out" />
+              ))}
+              {/* Remaining gray arc (only if under budget and there's space) */}
+              {!isOver && remainingArc > 0 && totalMacroCal > 0 && (
+                <circle cx={80} cy={80} r={ringR} fill="none"
+                  strokeWidth={ringStroke}
+                  style={{ stroke: "var(--bg-input)" }}
+                  strokeDasharray={`${remainingArc} ${circ - remainingArc}`}
+                  strokeDashoffset={-segmentOffset} />
+              )}
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+              <span className="text-4xl font-bold tracking-tighter" style={{ color: isOver ? "#ef4444" : "var(--text-primary)" }}>
+                {consumed.toLocaleString()}
+              </span>
+              {isOver ? (
+                <>
+                  <span className="text-[13px] font-medium mt-0.5" style={{ color: "#ef4444" }}>
+                    +{(consumed - goal).toLocaleString()} {t("dashboard.over")}
+                  </span>
+                  <span className="sr-only">{t("dashboard.overBudget")}</span>
+                </>
+              ) : (
+                <span className="text-[13px] font-medium mt-0.5" style={{ color: "var(--text-muted)" }}>
+                  {t("dashboard.ofXKcal", { x: goal.toLocaleString() })}
+                </span>
+              )}
+            </div>
           </div>
         </div>
-        <p className="text-sm font-medium mt-2 tabular-nums" style={{ color: "var(--text-secondary)" }}>
-          {remaining.toLocaleString()} {t("dashboard.left")} · {Math.round(pct * 100)}%
-        </p>
-      </div>
 
-      {/* Macro pills — compact horizontal row */}
-      <div className="flex gap-2 mb-6 animate-fade-up stagger-2">
-        {macros.map((m) => {
-          const p = m.goal ? Math.min(Math.round(m.val) / m.goal, 1) : 0;
-          return (
-            <div key={m.label} className="flex-1 glass-card-sm p-3">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: m.color }}>{m.label}</span>
-                <span className="text-[10px] font-medium tabular-nums" style={{ color: "var(--text-muted)" }}>
-                  {Math.round(m.val)}/{m.goal ?? "–"}
-                </span>
+        {/* Right: Macro cards stacked */}
+        <div className="flex-1 flex flex-col gap-3">
+          {macros.map((m) => {
+            const p = m.goal ? Math.min(Math.round(m.val) / m.goal, 1) : 0;
+            return (
+              <div key={m.label} className="glass-card-sm p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: m.color }}>{m.label}</span>
+                  <span className="text-[11px] font-medium tabular-nums" style={{ color: "var(--text-muted)" }}>
+                    {Math.round(m.val)}/{m.goal ?? "–"}
+                  </span>
+                </div>
+                <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
+                  <div className="h-full rounded-full transition-all duration-700 ease-out" style={{ width: `${p * 100}%`, backgroundColor: m.color }} />
+                </div>
               </div>
-              <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
-                <div className="h-full rounded-full transition-all duration-700 ease-out" style={{ width: `${p * 100}%`, backgroundColor: m.color }} />
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Quick actions — pill buttons side by side */}
