@@ -122,6 +122,7 @@
     "usernameHint": "Choose a username to start using social features",
     "saveUsername": "Save username",
     "usernameTaken": "Username taken or invalid",
+    "usernameInvalid": "Username must be 3-30 characters (letters, numbers, underscores)",
     "username": "username",
     "friendsCount": "Friends"
   },

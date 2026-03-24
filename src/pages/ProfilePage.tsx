@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, UserPlus, Share2, Copy, Scale, Search, Flame, Beef, Droplets, Wheat, CircleDot, Trash2 } from "lucide-react";
+import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, Share2, Copy, Scale, Search, Flame, Beef, Droplets, Wheat, CircleDot, Trash2 } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
@@ -61,7 +61,6 @@ export default function ProfilePage() {
   const [activeTheme, setActiveTheme] = useState<ThemeName>("ocean");
   const [darkMode, setDarkMode] = useState<"auto" | "light" | "dark">("auto");
   const [weightInput, setWeightInput] = useState("");
-  const [publicName, setPublicName] = useState("");
   const [friendSearch, setFriendSearch] = useState("");
   const [friendResult, setFriendResult] = useState<{ user_id: string; name: string; username: string | null } | null | undefined>(undefined);
   const [friendSent, setFriendSent] = useState(false);
@@ -78,7 +77,6 @@ export default function ProfilePage() {
     if (profile) {
       setGoals({ daily_cal_goal: profile.daily_cal_goal ?? 2000, daily_protein_goal_g: profile.daily_protein_goal_g ?? 120, daily_fat_goal_g: profile.daily_fat_goal_g ?? 78, daily_carbs_goal_g: profile.daily_carbs_goal_g ?? 180, daily_water_goal_ml: profile.daily_water_goal_ml ?? 2000 });
       setActiveTheme((profile.theme ?? "ocean") as ThemeName);
-      setPublicName(profile.username ?? "");
     }
     const saved = localStorage.getItem("nutrilog-dark-mode");
     if (saved) setDarkMode(saved as "auto" | "light" | "dark");
@@ -142,7 +140,7 @@ export default function ProfilePage() {
                 onBlur={() => {
                   const val = editUsername.trim();
                   if (!val || val === profile?.username) { setEditingUsername(false); return; }
-                  if (val.length < 3 || val.length > 30) { setUsernameError(t("friends.usernameTaken")); return; }
+                  if (val.length < 3 || val.length > 30) { setUsernameError(t("friends.usernameInvalid")); return; }
                   setUsernameApi(val).then(() => { qc.invalidateQueries({ queryKey: ["profile"] }); setEditingUsername(false); setUsernameError(null); })
                     .catch(() => setUsernameError(t("friends.usernameTaken")));
                 }}
@@ -176,9 +174,7 @@ export default function ProfilePage() {
       <div className="animate-fade-up stagger-3">
         <SectionHeader icon={Users} label={t("profile.social")} />
         <div className="glass-card overflow-hidden">
-          <SettingRow icon={UserPlus} label={t("profile.publicName")} onClick={() => setModal("publicName")} lang={lang} isFirst
-            extra={profile?.username && <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>@{profile.username}</span>} />
-          <SettingRow icon={Search} label={t("profile.addFriend")} onClick={() => setModal("addFriend")} lang={lang} />
+          <SettingRow icon={Search} label={t("profile.addFriend")} onClick={() => setModal("addFriend")} lang={lang} isFirst />
           <SettingRow icon={Share2} label={t("profile.shareInvite")} onClick={() => setModal("share")} lang={lang} />
         </div>
       </div>
@@ -282,24 +278,6 @@ export default function ProfilePage() {
       {/* Eating Windows */}
       <Modal open={modal === "windows"} onClose={() => setModal(null)} title={t("profile.eatingWindows")}>
         <EatingWindows onClose={() => setModal(null)} />
-      </Modal>
-
-      {/* Public Name */}
-      <Modal open={modal === "publicName"} onClose={() => setModal(null)} title={t("profile.publicName")}>
-        <div className="space-y-3">
-          <p className="text-sm" style={{ color: "var(--text-muted)" }}>{t("profile.publicNameDesc")}</p>
-          <input value={publicName} onChange={(e) => setPublicName(e.target.value)} placeholder={t("friends.username")}
-            className="w-full rounded-xl px-4 py-3 text-sm" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
-          <button onClick={() => {
-            import("@/services/socialService").then(({ setUsername }) => {
-              setUsername(publicName).then(() => { qc.invalidateQueries({ queryKey: ["profile"] }); setModal(null); });
-            });
-          }} disabled={!publicName.trim()}
-            className="w-full py-3 rounded-xl text-white text-sm font-semibold disabled:opacity-50 active:scale-[0.98]"
-            style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-            {t("profile.save")}
-          </button>
-        </div>
       </Modal>
 
       {/* Add Friend (popup) */}
