@@ -67,6 +67,17 @@ export default function ProfilePage() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleFriendSearchChange = useCallback((value: string) => {
     setFriendSearch(value);
@@ -78,7 +89,7 @@ export default function ProfilePage() {
         suggestUsers(value).then((results) => {
           setSuggestions(results);
           setShowSuggestions(results.length > 0);
-        });
+        }).catch(() => setSuggestions([]));
       }, 300);
     } else {
       setSuggestions([]);
@@ -159,9 +170,7 @@ export default function ProfilePage() {
       <div className="animate-fade-up stagger-3">
         <SectionHeader icon={Users} label={t("profile.social")} />
         <div className="glass-card overflow-hidden">
-          <SettingRow icon={UserPlus} label={t("profile.publicName")} onClick={() => setModal("publicName")} lang={lang} isFirst
-            extra={profile?.username && <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>@{profile.username}</span>} />
-          <SettingRow icon={Search} label={t("profile.addFriend")} onClick={() => setModal("addFriend")} lang={lang} />
+          <SettingRow icon={Search} label={t("profile.addFriend")} onClick={() => setModal("addFriend")} lang={lang} isFirst />
           <SettingRow icon={Share2} label={t("profile.shareInvite")} onClick={() => setModal("share")} lang={lang} />
         </div>
       </div>
@@ -250,26 +259,8 @@ export default function ProfilePage() {
         <EatingWindows onClose={() => setModal(null)} />
       </Modal>
 
-      {/* Public Name */}
-      <Modal open={modal === "publicName"} onClose={() => setModal(null)} title={t("profile.publicName")}>
-        <div className="space-y-3">
-          <p className="text-sm" style={{ color: "var(--text-muted)" }}>{t("profile.publicNameDesc")}</p>
-          <input value={publicName} onChange={(e) => setPublicName(e.target.value)} placeholder={t("friends.username")}
-            className="w-full rounded-xl px-4 py-3 text-sm" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
-          <button onClick={() => {
-            import("@/services/socialService").then(({ setUsername }) => {
-              setUsername(publicName).then(() => { qc.invalidateQueries({ queryKey: ["profile"] }); setModal(null); });
-            });
-          }} disabled={!publicName.trim()}
-            className="w-full py-3 rounded-xl text-white text-sm font-semibold disabled:opacity-50 active:scale-[0.98]"
-            style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-            {t("profile.save")}
-          </button>
-        </div>
-      </Modal>
-
       {/* Add Friend (popup) */}
-      <Modal open={modal === "addFriend"} onClose={() => { setModal(null); setFriendResult(undefined); setFriendSent(false); setFriendSearch(""); setSuggestions([]); setShowSuggestions(false); }} title={t("profile.addFriend")}>
+      <Modal open={modal === "addFriend"} onClose={() => { if (debounceRef.current) clearTimeout(debounceRef.current); setModal(null); setFriendResult(undefined); setFriendSent(false); setFriendSearch(""); setSuggestions([]); setShowSuggestions(false); }} title={t("profile.addFriend")}>
         <div className="space-y-3">
           <div className="relative">
             <div className="flex gap-2">
@@ -284,7 +275,7 @@ export default function ProfilePage() {
               </button>
             </div>
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute left-0 right-12 mt-1 rounded-xl overflow-hidden shadow-lg z-10"
+              <div ref={suggestionsRef} className="absolute left-0 right-12 mt-1 rounded-xl overflow-hidden shadow-lg z-10"
                 style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
                 {suggestions.map((username) => (
                   <button key={username} onClick={() => selectSuggestion(username)}

@@ -122,6 +122,7 @@
     "usernameHint": "Choose a username to start using social features",
     "saveUsername": "Save username",
     "usernameTaken": "Username taken or invalid",
+    "usernameInvalid": "Username must be 3-30 characters (letters, numbers, underscores)",
     "username": "username",
     "friendsCount": "Friends"
   },
@@ -147,7 +148,10 @@
     "inviteFriends": "Invite Friends",
     "needUsername": "Set up your profile first",
     "needUsernameDesc": "You need a public name before you can join contests",
-    "goToProfile": "Go to Profile"
+    "goToProfile": "Go to Profile",
+    "noCompetitions": "No competitions yet",
+    "addFriendsToStart": "Add friends to start competing",
+    "findFriends": "Find Friends"
   },
   "insight": { "title": "Daily Insight" },
   "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
