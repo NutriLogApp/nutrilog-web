@@ -7,6 +7,7 @@ export interface FoodItem {
   fat_g: number;
   carbs_g: number;
   confidence: "high" | "medium" | "low";
+  water_ml_added?: number;
 }
 
 export interface EntryOut {

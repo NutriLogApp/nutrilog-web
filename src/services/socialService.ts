@@ -57,6 +57,11 @@ export async function searchUser(username: string): Promise<Friend | null> {
   return data.result;
 }
 
+export async function suggestUsers(query: string): Promise<string[]> {
+  const { data } = await apiClient.get<{ results: string[] }>(`/api/v1/friends/suggest?q=${encodeURIComponent(query)}`);
+  return data.results;
+}
+
 export async function setUsername(username: string): Promise<{ username: string; friend_code: string }> {
   const { data } = await apiClient.post<{ username: string; friend_code: string }>("/api/v1/friends/username", { username });
   return data;

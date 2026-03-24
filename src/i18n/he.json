@@ -14,7 +14,11 @@
     "offTrack": "מחוץ ליעד",
     "max": "מקסימום",
     "todayLog": "יומן היום",
-    "noEntries": "אין רשומות עדיין — לחץ + כדי להוסיף"
+    "noEntries": "אין רשומות עדיין — לחץ + כדי להוסיף",
+    "dayStreak": "ימי רצף",
+    "over": "מעל",
+    "overBudget": "חריגה מהתקציב",
+    "ofXKcal": "מתוך {{x}} קק״ל"
   },
   "nav": { "home": "בית", "myday": "היום שלי", "contest": "תחרות", "trends": "מגמות", "profile": "פרופיל" },
   "myday": {
@@ -53,7 +57,8 @@
     "month": "חודש",
     "kcal": "קק״ל",
     "macroBreakdown": "פירוט מאקרו",
-    "daysLogged": "ימים מתועדים"
+    "daysLogged": "ימים מתועדים",
+    "averages": "ממוצעים יומיים"
   },
   "profile": {
     "title": "פרופיל",
@@ -148,7 +153,10 @@
     "inviteFriends": "הזמן חברים",
     "needUsername": "הגדר את הפרופיל שלך קודם",
     "needUsernameDesc": "צריך שם ציבורי כדי להצטרף לתחרויות",
-    "goToProfile": "עבור לפרופיל"
+    "goToProfile": "עבור לפרופיל",
+    "noCompetitions": "אין תחרויות עדיין",
+    "addFriendsToStart": "הוסף חברים כדי להתחיל להתחרות",
+    "findFriends": "מצא חברים"
   },
   "insight": { "title": "תובנה יומית" },
   "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },

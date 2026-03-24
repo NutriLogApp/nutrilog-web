@@ -6,7 +6,7 @@ import { getDailyStats } from "@/services/statsService";
 import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
 import { deleteEntry } from "@/services/entriesService";
-import { getTodayWater } from "@/services/waterService";
+import { getTodayWater, addWater } from "@/services/waterService";
 import { formatTime } from "@/lib/formatTime";
 import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
@@ -29,8 +29,17 @@ export default function MyDayPage() {
   const { data: water } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
 
   const deleteMut = useMutation({
-    mutationFn: deleteEntry,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["dailyStats"] }),
+    mutationFn: async (entryId: string) => {
+      const entry = stats?.entries.find((e) => e.id === entryId);
+      if (!entry) console.warn(`[deleteMut] entry ${entryId} not found in cache — water not adjusted`);
+      const waterToSubtract = entry?.items.reduce((sum, item) => sum + (item.water_ml_added ?? 0), 0) ?? 0;
+      await deleteEntry(entryId);
+      if (waterToSubtract > 0) await addWater(-waterToSubtract);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["dailyStats"] });
+      qc.invalidateQueries({ queryKey: ["water"] });
+    },
   });
 
   const use24h = profile?.use_24h ?? true;
