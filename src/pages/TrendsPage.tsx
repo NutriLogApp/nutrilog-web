@@ -18,9 +18,6 @@ function getWeekRange(firstDay: number = 0) {
   start.setDate(now.getDate() - diff);
   const end = new Date(start);
   end.setDate(start.getDate() + 6);
-  // Don't go past today
-  const today = new Date();
-  if (end > today) end.setTime(today.getTime());
   return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
 }
 
@@ -92,31 +89,14 @@ export default function TrendsPage() {
         </div>
       </div>
 
-      {/* Average summary cards */}
-      {data && (
-        <div className="grid grid-cols-4 gap-2 mb-5 animate-fade-up stagger-1">
-          {[
-            { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
-            { label: t("macros.protein"), value: `${avg.p}${t("log.g")}`, color: "#6366f1" },
-            { label: t("macros.fat"), value: `${avg.f}${t("log.g")}`, color: "#f59e0b" },
-            { label: t("macros.carbs"), value: `${avg.c}${t("log.g")}`, color: "#10b981" },
-          ].map((item) => (
-            <div key={item.label} className="glass-card-sm p-3 text-center">
-              <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
-              <p className="text-[9px] font-semibold uppercase tracking-wider mt-0.5" style={{ color: "var(--text-muted)" }}>{item.label}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Chart */}
+      {/* Calorie / Macro Chart — Primary Section */}
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
           <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
                style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
         </div>
       ) : (
-        <div className="glass-card p-4 animate-fade-up stagger-2">
+        <div className="glass-card p-4 animate-fade-up stagger-1">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={14} style={{ color: "var(--theme-accent)" }} />
             <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
@@ -129,34 +109,54 @@ export default function TrendsPage() {
               <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} width={35} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12 }}
+                contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12, color: "var(--text-primary)" }}
                 labelStyle={{ color: "var(--text-primary)" }}
+                itemStyle={{ color: "var(--text-secondary)" }}
               />
               {isWeek ? (
                 <>
                   <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
-                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} />
-                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} />
-                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} cursor={{ fill: "var(--bg-card)" }} />
+                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} cursor={{ fill: "var(--bg-card)" }} />
+                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" }} />
                 </>
               ) : (
-                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" }} />
               )}
             </BarChart>
           </ResponsiveContainer>
         </div>
       )}
 
-      {/* Days logged stat */}
+      {/* Summary Section — Averages & Days Logged */}
       {data && (
-        <div className="glass-card-sm p-4 mt-4 flex items-center justify-between animate-fade-up stagger-3">
-          <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("trends.daysLogged")}</span>
-          <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
-            {activeDays.length} / {data.days.length}
-          </span>
+        <div className="mt-6 animate-fade-up stagger-2">
+          <h2 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
+            {t("trends.averages")}
+          </h2>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
+              { label: t("macros.protein"), value: `${avg.p}${t("log.g")}`, color: "#6366f1" },
+              { label: t("macros.fat"), value: `${avg.f}${t("log.g")}`, color: "#f59e0b" },
+              { label: t("macros.carbs"), value: `${avg.c}${t("log.g")}`, color: "#10b981" },
+            ].map((item) => (
+              <div key={item.label} className="glass-card-sm p-3 text-center">
+                <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
+                <p className="text-[9px] font-semibold uppercase tracking-wider mt-0.5" style={{ color: "var(--text-muted)" }}>{item.label}</p>
+              </div>
+            ))}
+          </div>
+          <div className="glass-card-sm p-4 mt-3 flex items-center justify-between">
+            <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("trends.daysLogged")}</span>
+            <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
+              {activeDays.length} / {range === "week" ? 7 : new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()}
+            </span>
+          </div>
         </div>
       )}
-      {/* Weight trend */}
+
+      {/* Weight Trend — Secondary Section */}
       <WeightTrend />
     </div>
   );
@@ -174,23 +174,29 @@ function WeightTrend() {
   }));
 
   return (
-    <div className="glass-card p-4 mt-4 animate-fade-up stagger-4">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="mt-6 animate-fade-up stagger-3">
+      <div className="flex items-center gap-2 mb-3">
         <Scale size={14} style={{ color: "var(--theme-accent)" }} />
         <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.title")}</h2>
         <span className="text-xs font-bold tabular-nums ms-auto" style={{ color: "var(--theme-accent)" }}>
           {history[history.length - 1].weight_kg} kg
         </span>
       </div>
+      <div className="glass-card p-4">
       <ResponsiveContainer width="100%" height={120}>
         <LineChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
           <XAxis dataKey="date" tick={{ fontSize: 9, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fontSize: 9, fill: "var(--text-muted)" }} width={30} axisLine={false} tickLine={false} domain={["dataMin - 1", "dataMax + 1"]} />
-          <Tooltip contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 11 }} />
+          <Tooltip
+            contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12, color: "var(--text-primary)" }}
+            labelStyle={{ color: "var(--text-primary)" }}
+            itemStyle={{ color: "var(--text-secondary)" }}
+          />
           <Line type="monotone" dataKey="weight" stroke="var(--theme-accent)" strokeWidth={2} dot={{ r: 2.5, fill: "var(--theme-accent)" }} />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }
