@@ -8,6 +8,8 @@ export interface GoalCalculateRequest {
   activity_level: string;
   goal: string;
   goal_weight_kg?: number;
+  body_fat_pct?: number;
+  macro_preset?: string;
 }
 
 export interface GoalCalculateResponse {
@@ -18,6 +20,7 @@ export interface GoalCalculateResponse {
   daily_water_goal_ml: number;
   bmr: number;
   tdee: number;
+  formula_used: string;
 }
 
 export async function calculateGoals(req: GoalCalculateRequest): Promise<GoalCalculateResponse> {

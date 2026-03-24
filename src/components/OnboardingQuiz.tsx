@@ -7,13 +7,17 @@ interface Props {
   onDone: () => void;
 }
 
+const TOTAL_STEPS = 7;
+
 export default function OnboardingQuiz({ onDone }: Props) {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const [step, setStep] = useState(0);
   const [data, setData] = useState<GoalCalculateRequest>({
     weight_kg: 70, height_cm: 170, age: 30, sex: "male",
-    activity_level: "moderate", goal: "maintain", goal_weight_kg: undefined,
+    activity_level: "moderate", goal: "maintain",
+    goal_weight_kg: undefined, body_fat_pct: undefined,
+    macro_preset: "balanced",
   });
 
   const calcMut = useMutation({
@@ -21,84 +25,125 @@ export default function OnboardingQuiz({ onDone }: Props) {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["profile"] }); onDone(); },
   });
 
+  function Option({ label, desc, selected, onClick }: { value?: string; label: string; desc?: string; selected: boolean; onClick: () => void }) {
+    return (
+      <button onClick={onClick}
+        className="w-full glass-card-sm p-4 text-start transition-all active:scale-[0.98]"
+        style={{ border: selected ? "2px solid var(--theme-accent)" : "1px solid var(--border)", color: "var(--text-primary)" }}>
+        <span className="font-semibold text-sm">{label}</span>
+        {desc && <p className="text-[11px] mt-0.5" style={{ color: "var(--text-muted)" }}>{desc}</p>}
+      </button>
+    );
+  }
+
+  function NextBtn({ onClick, disabled }: { onClick: () => void; disabled?: boolean }) {
+    return (
+      <button onClick={onClick} disabled={disabled}
+        className="w-full py-3 rounded-xl text-white font-semibold transition-all active:scale-[0.98] disabled:opacity-50"
+        style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
+        {t("onboarding.next")}
+      </button>
+    );
+  }
+
   const steps = [
-    // Step 0: Sex
+    // 0: Sex
     <div key="sex" className="space-y-3">
-      <h3 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.sex")}</h3>
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.sex")}</h3>
       {[{ v: "male", l: t("onboarding.male") }, { v: "female", l: t("onboarding.female") }].map((o) => (
-        <button key={o.v} onClick={() => { setData((d) => ({ ...d, sex: o.v })); setStep(1); }}
-          className="w-full glass-card-sm p-4 text-start font-medium transition-all active:scale-[0.98]"
-          style={{ color: "var(--text-primary)", borderColor: data.sex === o.v ? "var(--theme-accent)" : "var(--border)" }}>
-          {o.l}
-        </button>
+        <Option key={o.v} value={o.v} label={o.l} selected={data.sex === o.v}
+          onClick={() => { setData((d) => ({ ...d, sex: o.v })); setStep(1); }} />
       ))}
     </div>,
-    // Step 1: Body
+
+    // 1: Body measurements
     <div key="body" className="space-y-4">
-      <h3 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.body")}</h3>
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.body")}</h3>
       {[
-        { key: "age", label: t("onboarding.age"), unit: "", min: 10, max: 100 },
-        { key: "height_cm", label: t("onboarding.height"), unit: "cm", min: 100, max: 250 },
-        { key: "weight_kg", label: t("onboarding.weight"), unit: "kg", min: 30, max: 300 },
+        { key: "age", label: t("onboarding.age"), unit: "" },
+        { key: "height_cm", label: t("onboarding.height"), unit: "cm" },
+        { key: "weight_kg", label: t("onboarding.weight"), unit: "kg" },
       ].map((f) => (
         <div key={f.key}>
           <label className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{f.label} {f.unit && `(${f.unit})`}</label>
           <input type="number" value={(data as unknown as Record<string, number>)[f.key]}
             onChange={(e) => setData((d: GoalCalculateRequest) => ({ ...d, [f.key]: +e.target.value || 0 }))}
             className="w-full rounded-xl px-4 py-3 text-sm mt-1"
-            style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }}
-          />
+            style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
         </div>
       ))}
-      <button onClick={() => setStep(2)}
-        className="w-full py-3 rounded-xl text-white font-semibold transition-all active:scale-[0.98]"
-        style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-        {t("onboarding.next")}
-      </button>
+      {/* Optional body fat */}
+      <div>
+        <label className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>
+          {t("onboarding.bodyFat")} <span style={{ color: "var(--text-muted)" }}>({t("onboarding.optional")})</span>
+        </label>
+        <input type="number" step="0.1" value={data.body_fat_pct ?? ""}
+          onChange={(e) => setData((d) => ({ ...d, body_fat_pct: e.target.value ? +e.target.value : undefined }))}
+          placeholder="%"
+          className="w-full rounded-xl px-4 py-3 text-sm mt-1"
+          style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
+        <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>{t("onboarding.bodyFatHint")}</p>
+      </div>
+      <NextBtn onClick={() => setStep(2)} />
     </div>,
-    // Step 2: Activity
+
+    // 2: Activity
     <div key="activity" className="space-y-3">
-      <h3 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.activity")}</h3>
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.activity")}</h3>
       {["sedentary", "light", "moderate", "active", "very_active"].map((l) => (
-        <button key={l} onClick={() => { setData((d) => ({ ...d, activity_level: l })); setStep(3); }}
-          className="w-full glass-card-sm p-4 text-start transition-all active:scale-[0.98]"
-          style={{ color: "var(--text-primary)" }}>
-          <span className="font-medium">{t(`onboarding.${l}`)}</span>
-        </button>
+        <Option key={l} value={l} label={t(`onboarding.${l}`)} selected={data.activity_level === l}
+          onClick={() => { setData((d) => ({ ...d, activity_level: l })); setStep(3); }} />
       ))}
     </div>,
-    // Step 3: Goal
+
+    // 3: Goal (6 options)
     <div key="goal" className="space-y-3">
-      <h3 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.goalQuestion")}</h3>
-      {["lose", "maintain", "gain"].map((g) => (
-        <button key={g} onClick={() => { setData((d) => ({ ...d, goal: g })); setStep(g === "maintain" ? 5 : 4); }}
-          className="w-full glass-card-sm p-4 text-start font-medium transition-all active:scale-[0.98]"
-          style={{ color: "var(--text-primary)" }}>
-          {t(`onboarding.${g}`)}
-        </button>
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.goalQuestion")}</h3>
+      {[
+        { v: "aggressive_loss", l: t("onboarding.aggressiveLoss"), d: t("onboarding.aggressiveLossDesc") },
+        { v: "moderate_loss", l: t("onboarding.moderateLoss"), d: t("onboarding.moderateLossDesc") },
+        { v: "mild_loss", l: t("onboarding.mildLoss"), d: t("onboarding.mildLossDesc") },
+        { v: "maintain", l: t("onboarding.maintain"), d: "" },
+        { v: "mild_gain", l: t("onboarding.mildGain"), d: t("onboarding.mildGainDesc") },
+        { v: "moderate_gain", l: t("onboarding.moderateGain"), d: t("onboarding.moderateGainDesc") },
+      ].map((g) => (
+        <Option key={g.v} value={g.v} label={g.l} desc={g.d} selected={data.goal === g.v}
+          onClick={() => { setData((d) => ({ ...d, goal: g.v })); setStep(g.v === "maintain" ? 5 : 4); }} />
       ))}
     </div>,
-    // Step 4: Goal weight
+
+    // 4: Goal weight
     <div key="goalWeight" className="space-y-4">
-      <h3 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.goalWeight")}</h3>
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.goalWeight")}</h3>
       <input type="number" step="0.1" value={data.goal_weight_kg ?? ""}
         onChange={(e) => setData((d) => ({ ...d, goal_weight_kg: +e.target.value || undefined }))}
         placeholder="kg"
         className="w-full rounded-xl px-4 py-3 text-sm"
         style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
-      <button onClick={() => setStep(5)}
-        className="w-full py-3 rounded-xl text-white font-semibold transition-all active:scale-[0.98]"
-        style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-        {t("onboarding.next")}
-      </button>
+      <NextBtn onClick={() => setStep(5)} />
     </div>,
-    // Step 5: Calculate
+
+    // 5: Macro preset
+    <div key="macro" className="space-y-3">
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.macroPreset")}</h3>
+      <p className="text-sm" style={{ color: "var(--text-muted)" }}>{t("onboarding.macroPresetDesc")}</p>
+      {[
+        { v: "balanced", l: t("onboarding.balanced"), d: t("onboarding.balancedDesc") },
+        { v: "high_protein", l: t("onboarding.highProtein"), d: t("onboarding.highProteinDesc") },
+        { v: "keto", l: t("onboarding.keto"), d: t("onboarding.ketoDesc") },
+      ].map((m) => (
+        <Option key={m.v} value={m.v} label={m.l} desc={m.d} selected={data.macro_preset === m.v}
+          onClick={() => { setData((d) => ({ ...d, macro_preset: m.v })); setStep(6); }} />
+      ))}
+    </div>,
+
+    // 6: Calculate
     <div key="done" className="text-center space-y-4">
-      <div className="text-4xl mb-2">🐱</div>
-      <h3 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.ready")}</h3>
+      <div className="text-4xl mb-2">✨</div>
+      <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{t("onboarding.ready")}</h3>
       <p className="text-sm" style={{ color: "var(--text-muted)" }}>{t("onboarding.readyDesc")}</p>
       <button onClick={() => calcMut.mutate()} disabled={calcMut.isPending}
-        className="w-full py-3 rounded-xl text-white font-semibold transition-all active:scale-[0.98]"
+        className="w-full py-3.5 rounded-xl text-white font-semibold transition-all active:scale-[0.98]"
         style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
         {calcMut.isPending ? "..." : t("onboarding.calculate")}
       </button>
@@ -107,11 +152,10 @@ export default function OnboardingQuiz({ onDone }: Props) {
 
   return (
     <div className="px-5 pt-10 pb-4 max-w-lg mx-auto" style={{ minHeight: "100vh", backgroundColor: "var(--bg-page)" }}>
-      {/* Progress dots */}
-      <div className="flex gap-1.5 mb-8 justify-center">
-        {[0, 1, 2, 3, 4, 5].map((i) => (
+      <div className="flex gap-1 mb-8 justify-center">
+        {Array.from({ length: TOTAL_STEPS }, (_, i) => (
           <div key={i} className="h-1.5 rounded-full transition-all duration-300"
-            style={{ width: i <= step ? 24 : 8, backgroundColor: i <= step ? "var(--theme-accent)" : "var(--bg-input)" }} />
+            style={{ width: i <= step ? 20 : 6, backgroundColor: i <= step ? "var(--theme-accent)" : "var(--bg-input)" }} />
         ))}
       </div>
       {steps[step]}
