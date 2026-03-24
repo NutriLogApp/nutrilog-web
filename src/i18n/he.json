@@ -15,7 +15,10 @@
     "max": "מקסימום",
     "todayLog": "יומן היום",
     "noEntries": "אין רשומות עדיין — לחץ + כדי להוסיף",
-    "dayStreak": "ימי רצף"
+    "dayStreak": "ימי רצף",
+    "over": "מעל",
+    "overBudget": "חריגה מהתקציב",
+    "ofXKcal": "מתוך {{x}} קק״ל"
   },
   "nav": { "home": "בית", "myday": "היום שלי", "contest": "תחרות", "trends": "מגמות", "profile": "פרופיל" },
   "myday": {
