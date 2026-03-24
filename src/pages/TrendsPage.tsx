@@ -18,9 +18,6 @@ function getWeekRange(firstDay: number = 0) {
   start.setDate(now.getDate() - diff);
   const end = new Date(start);
   end.setDate(start.getDate() + 6);
-  // Don't go past today
-  const today = new Date();
-  if (end > today) end.setTime(today.getTime());
   return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
 }
 
