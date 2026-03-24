@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, UserPlus, Share2, Copy, Scale, Search } from "lucide-react";
+import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Users, UserPlus, Share2, Copy, Scale, Search, Flame, Beef, Droplets, Wheat, CircleDot, Trash2 } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
@@ -206,16 +206,26 @@ export default function ProfilePage() {
       <Modal open={modal === "goals"} onClose={() => setModal(null)} title={t("profile.goals")}>
         <div className="space-y-3">
           {([
-            ["daily_cal_goal", t("profile.calories"), t("dashboard.kcal")],
-            ["daily_protein_goal_g", t("macros.protein"), t("log.g")],
-            ["daily_fat_goal_g", t("macros.fat"), t("log.g")],
-            ["daily_carbs_goal_g", t("macros.carbs"), t("log.g")],
-            ["daily_water_goal_ml", t("water.title"), t("water.ml")],
-          ] as const).map(([key, label, unit]) => (
-            <div key={key}>
-              <label className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{label} ({unit})</label>
-              <input type="number" value={goals[key]} onChange={(e) => setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))}
-                className="w-full rounded-xl px-4 py-3 text-sm mt-1" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
+            ["daily_cal_goal", t("profile.calories"), t("dashboard.kcal"), Flame],
+            ["daily_protein_goal_g", t("macros.protein"), t("log.g"), Beef],
+            ["daily_fat_goal_g", t("macros.fat"), t("log.g"), CircleDot],
+            ["daily_carbs_goal_g", t("macros.carbs"), t("log.g"), Wheat],
+            ["daily_water_goal_ml", t("water.title"), t("water.ml"), Droplets],
+          ] as const).map(([key, label, unit, Icon]) => (
+            <div key={key} className="glass-card p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
+                <Icon size={18} color="white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
+                <div className="flex items-center gap-2">
+                  <input type="number" value={goals[key]} onChange={(e) => setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))}
+                    className="w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
+                    style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
+                  <span className="text-xs font-medium shrink-0" style={{ color: "var(--text-muted)" }}>{unit}</span>
+                </div>
+              </div>
             </div>
           ))}
           <button onClick={saveGoals} disabled={updateMut.isPending} className="w-full py-3 rounded-xl text-white text-sm font-semibold active:scale-[0.98] transition-transform"
