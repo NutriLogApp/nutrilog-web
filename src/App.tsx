@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { applyTheme, type ThemeName } from "@/themes/themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -20,9 +20,7 @@ const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const GroupLeaderboardPage = lazy(() => import("@/pages/GroupLeaderboardPage"));
 const CreateGroupPage = lazy(() => import("@/pages/CreateGroupPage"));
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },
-});
+import { queryClient } from "@/lib/queryConfig";
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
