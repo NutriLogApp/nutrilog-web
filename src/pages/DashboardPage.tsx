@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { UtensilsCrossed, Droplets } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
+import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
 import { getTodayWater } from "@/services/waterService";
 import CompetitionWidget from "@/components/CompetitionWidget";
@@ -12,9 +13,6 @@ import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
 import DrinkPickerModal from "@/components/DrinkPickerModal";
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
 
 function getGreeting(t: (k: string) => string) {
   const h = new Date().getHours();
@@ -30,7 +28,7 @@ export default function DashboardPage() {
   const [showAddDrink, setShowAddDrink] = useState(false);
 
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
-  const { data, isLoading } = useQuery({ queryKey: ["dailyStats", todayStr()], queryFn: () => getDailyStats(todayStr()) });
+  const { data, isLoading } = useQuery({ queryKey: ["dailyStats", todayLocal()], queryFn: () => getDailyStats(todayLocal()) });
   const { data: water } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
 
   if (profile && !profile.onboarding_done) {

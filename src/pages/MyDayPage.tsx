@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { UtensilsCrossed, Droplets, Trash2, Pencil } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
+import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
 import { deleteEntry } from "@/services/entriesService";
 import { getTodayWater } from "@/services/waterService";
@@ -13,9 +14,6 @@ import DrinkPickerModal from "@/components/DrinkPickerModal";
 import EntryEditModal from "@/components/EntryEditModal";
 import type { EntryOut } from "@/types/api";
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
 
 export default function MyDayPage() {
   const { t } = useTranslation();
@@ -25,7 +23,7 @@ export default function MyDayPage() {
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
 
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
-  const { data: stats } = useQuery({ queryKey: ["dailyStats", todayStr()], queryFn: () => getDailyStats(todayStr()) });
+  const { data: stats } = useQuery({ queryKey: ["dailyStats", todayLocal()], queryFn: () => getDailyStats(todayLocal()) });
   const { data: water } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
 
   const deleteMut = useMutation({
