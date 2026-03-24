@@ -5,9 +5,9 @@ import { Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settin
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { logWeight, getWeightHistory } from "@/services/weightService";
-import { searchUser, sendFriendRequest } from "@/services/socialService";
+import { searchUser, sendFriendRequest, setUsername as setUsernameApi } from "@/services/socialService";
 import EatingWindows from "@/components/EatingWindows";
 import DrinkManager from "@/components/DrinkManager";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
@@ -64,6 +64,13 @@ export default function ProfilePage() {
   const [friendSearch, setFriendSearch] = useState("");
   const [friendResult, setFriendResult] = useState<{ user_id: string; name: string; username: string | null } | null | undefined>(undefined);
   const [friendSent, setFriendSent] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [editUsername, setEditUsername] = useState("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const usernameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (profile) {
@@ -108,9 +115,40 @@ export default function ProfilePage() {
       <div className="glass-card p-4 flex items-center gap-3 animate-fade-up stagger-1">
         {profile?.avatar_url ? <img src={profile.avatar_url} alt="" className="w-14 h-14 rounded-full" /> : <div className="w-14 h-14 rounded-full" style={{ backgroundColor: "var(--bg-input)" }} />}
         <div className="flex-1 min-w-0">
-          <p className="font-bold truncate" style={{ color: "var(--text-primary)" }}>{profile?.name}</p>
+          {editingName ? (
+            <input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.currentTarget.blur(); } }}
+              onBlur={() => { if (editName.trim() && editName !== profile?.name) { updateMut.mutate({ name: editName.trim() }); } setEditingName(false); }}
+              className="font-bold w-full bg-transparent outline-none border-b-2 py-0.5 text-sm"
+              style={{ color: "var(--text-primary)", borderColor: "var(--theme-accent)" }} />
+          ) : (
+            <p className="font-bold truncate cursor-pointer hover:opacity-70 transition-opacity" style={{ color: "var(--text-primary)" }}
+              onClick={() => { setEditName(profile?.name ?? ""); setEditingName(true); setTimeout(() => nameInputRef.current?.focus(), 0); }}>
+              {profile?.name}
+            </p>
+          )}
           <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>{profile?.email}</p>
-          {profile?.username && <p className="text-xs mt-0.5 font-medium" style={{ color: "var(--theme-accent)" }}>@{profile.username}</p>}
+          {editingUsername ? (
+            <div>
+              <input ref={usernameInputRef} value={editUsername} onChange={(e) => { setEditUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setUsernameError(null); }}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.currentTarget.blur(); } }}
+                onBlur={() => {
+                  const val = editUsername.trim();
+                  if (!val || val === profile?.username) { setEditingUsername(false); return; }
+                  if (val.length < 3 || val.length > 30) { setUsernameError(t("friends.usernameTaken")); return; }
+                  setUsernameApi(val).then(() => { qc.invalidateQueries({ queryKey: ["profile"] }); setEditingUsername(false); setUsernameError(null); })
+                    .catch(() => setUsernameError(t("friends.usernameTaken")));
+                }}
+                className="text-xs mt-0.5 font-medium w-full bg-transparent outline-none border-b-2 py-0.5"
+                style={{ color: "var(--theme-accent)", borderColor: "var(--theme-accent)" }} />
+              {usernameError && <p className="text-[10px] mt-0.5 text-red-500">{usernameError}</p>}
+            </div>
+          ) : (
+            <p className="text-xs mt-0.5 font-medium cursor-pointer hover:opacity-70 transition-opacity" style={{ color: "var(--theme-accent)" }}
+              onClick={() => { setEditUsername(profile?.username ?? ""); setEditingUsername(true); setUsernameError(null); setTimeout(() => usernameInputRef.current?.focus(), 0); }}>
+              {profile?.username ? `@${profile.username}` : `@${t("friends.username")}`}
+            </p>
+          )}
         </div>
       </div>
 
