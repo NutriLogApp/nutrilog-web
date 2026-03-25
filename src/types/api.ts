@@ -91,6 +91,7 @@ export interface ProfileOut {
 }
 
 export interface ProfileUpdate {
+  name?: string;
   language?: string;
   theme?: string;
   daily_cal_goal?: number;

@@ -116,12 +116,12 @@ export default function TrendsPage() {
               {isWeek ? (
                 <>
                   <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
-                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} cursor={{ fill: "var(--bg-card)" }} />
-                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} cursor={{ fill: "var(--bg-card)" }} />
-                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" }} />
+                  <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} cursor={{ fill: "var(--bg-card)" } as any} />
+                  <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} cursor={{ fill: "var(--bg-card)" } as any} />
+                  <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" } as any} />
                 </>
               ) : (
-                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" }} />
+                <Bar dataKey="calories" fill="var(--theme-accent)" radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" } as any} />
               )}
             </BarChart>
           </ResponsiveContainer>
