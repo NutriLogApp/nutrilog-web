@@ -7,7 +7,6 @@ export interface FoodItem {
   fat_g: number;
   carbs_g: number;
   confidence: "high" | "medium" | "low";
-  water_ml_added?: number;
 }
 
 export interface EntryOut {
@@ -16,6 +15,7 @@ export interface EntryOut {
   source: string;
   image_url: string | null;
   meal_type: string;
+  drink_id: string | null;
   items: FoodItem[];
   total_calories: number;
   total_protein_g: number;
@@ -26,7 +26,7 @@ export interface EntryOut {
 
 export interface EntryCreate {
   description: string;
-  source: "text" | "image" | "barcode";
+  source: "text" | "image" | "barcode" | "drink";
   image_url?: string | null;
   meal_type: "breakfast" | "lunch" | "dinner" | "snack";
   items: FoodItem[];

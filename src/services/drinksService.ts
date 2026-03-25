@@ -13,6 +13,8 @@ export interface DrinkOut {
   carbs_g: number;
   counts_as_water: boolean;
   water_pct: number;
+  is_default: boolean;
+  use_count: number;
 }
 
 export interface DrinkCreate {
@@ -59,4 +61,8 @@ export async function createDrink(drink: DrinkCreate): Promise<DrinkOut> {
 
 export async function deleteDrink(id: string): Promise<void> {
   await apiClient.delete(`/api/v1/drinks/${id}`);
+}
+
+export async function logDrink(drinkId: string): Promise<void> {
+  await apiClient.post(`/api/v1/drinks/${drinkId}/log`);
 }
