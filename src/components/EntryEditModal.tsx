@@ -58,7 +58,7 @@ export default function EntryEditModal({ entry, onClose }: Props) {
       {items.map((item, idx) => {
         const isHe = i18n.language === "he";
         const name = isHe && item.food_name_he ? item.food_name_he : item.food_name;
-        const isDrink = !!item.is_drink;
+        const isDrink = !!item.is_drink || entry.source === "drink";
         return (
           <div key={idx} className="glass-card-sm p-4 space-y-3"
             style={isDrink ? { borderLeft: "3px solid rgba(56, 189, 248, 0.5)" } : undefined}>
