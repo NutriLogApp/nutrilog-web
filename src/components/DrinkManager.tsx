@@ -71,11 +71,13 @@ export default function DrinkManager() {
               {d.water_pct > 0 && ` · 💧${d.water_pct}%`}
             </p>
           </div>
-          <button onClick={() => delMut.mutate(d.id)}
-            className="p-2 rounded-full transition-all hover:bg-red-500/10 active:scale-90"
-            style={{ color: "var(--text-muted)" }}>
-            <Trash2 size={15} />
-          </button>
+          {!d.is_default && (
+            <button onClick={() => delMut.mutate(d.id)}
+              className="p-2 rounded-full transition-all hover:bg-red-500/10 active:scale-90"
+              style={{ color: "var(--text-muted)" }}>
+              <Trash2 size={15} />
+            </button>
+          )}
         </div>
         );
       })}
