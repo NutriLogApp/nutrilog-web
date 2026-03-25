@@ -48,6 +48,10 @@
     "failedText": "Failed to parse text",
     "failedImage": "Failed to parse image",
     "g": "g",
+    "grams": "Grams",
+    "milliliters": "Milliliters",
+    "addToFavorites": "Add to my drinks",
+    "alreadyInFavorites": "Already in your drinks",
     "drinkDetected": "Drink detected — add to favorites?"
   },
   "trends": {
