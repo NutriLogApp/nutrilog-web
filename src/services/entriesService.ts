@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import type { EntryCreate, EntryOut, FoodItem } from "@/types/api";
+import type { EntryCreate, EntryCreateResponse, EntryOut, FoodItem } from "@/types/api";
 
 export async function listEntries(date: string): Promise<EntryOut[]> {
   const { data } = await apiClient.get<{ entries: EntryOut[] }>(
@@ -9,8 +9,8 @@ export async function listEntries(date: string): Promise<EntryOut[]> {
   return data.entries;
 }
 
-export async function createEntry(entry: EntryCreate): Promise<EntryOut> {
-  const { data } = await apiClient.post<EntryOut>("/api/v1/entries", entry);
+export async function createEntry(entry: EntryCreate): Promise<EntryCreateResponse> {
+  const { data } = await apiClient.post<EntryCreateResponse>("/api/v1/entries", entry);
   return data;
 }
 

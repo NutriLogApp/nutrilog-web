@@ -7,6 +7,9 @@ export interface FoodItem {
   fat_g: number;
   carbs_g: number;
   confidence: "high" | "medium" | "low";
+  is_drink?: boolean;
+  volume_ml?: number;
+  water_pct?: number;
 }
 
 export interface EntryOut {
@@ -31,6 +34,25 @@ export interface EntryCreate {
   meal_type: "breakfast" | "lunch" | "dinner" | "snack";
   items: FoodItem[];
   logged_at?: string | null;
+}
+
+export interface DrinkSuggestion {
+  name: string;
+  name_he: string | null;
+  icon: string;
+  volume_ml: number;
+  calories: number;
+  sugar_g: number;
+  protein_g: number;
+  fat_g: number;
+  carbs_g: number;
+  water_pct: number;
+}
+
+export interface EntryCreateResponse {
+  entries: EntryOut[];
+  drink_suggestions: DrinkSuggestion[];
+  reaction: string;
 }
 
 export interface DailyStatsResponse {

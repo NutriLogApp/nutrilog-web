@@ -47,7 +47,8 @@
     "takePhoto": "Tap to take a photo",
     "failedText": "Failed to parse text",
     "failedImage": "Failed to parse image",
-    "g": "g"
+    "g": "g",
+    "drinkDetected": "Drink detected — add to favorites?"
   },
   "trends": {
     "title": "Trends",
