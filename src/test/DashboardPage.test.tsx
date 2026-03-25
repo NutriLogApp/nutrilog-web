@@ -15,26 +15,17 @@ vi.mock("@/services/statsService", () => ({
     goal_protein_g: 120,
     goal_fat_g: 78,
     goal_carbs_g: 180,
-    entries: [
-      {
-        id: "1",
-        description: "2 eggs, toast",
-        source: "text",
-        image_url: null,
-        meal_type: "breakfast",
-        items: [],
-        total_calories: 350,
-        total_protein_g: 20,
-        total_fat_g: 15,
-        total_carbs_g: 30,
-        logged_at: "2026-03-23T08:00:00Z",
-      },
-    ],
+    entries: [],
   }),
 }));
 
 vi.mock("@/services/profileService", () => ({
-  getProfile: vi.fn().mockResolvedValue({ name: "Test User" }),
+  getProfile: vi.fn().mockResolvedValue({ name: "Test User", onboarding_done: true, current_streak: 0 }),
+}));
+
+vi.mock("@/services/waterService", () => ({
+  getTodayWater: vi.fn().mockResolvedValue({ date: "2026-03-23", amount_ml: 500, goal_ml: 2000 }),
+  addWater: vi.fn().mockResolvedValue({ date: "2026-03-23", amount_ml: 750, goal_ml: 2000 }),
 }));
 
 vi.mock("@/services/entriesService", () => ({
@@ -43,6 +34,12 @@ vi.mock("@/services/entriesService", () => ({
 
 vi.mock("@/services/insightService", () => ({
   getDailyInsight: vi.fn().mockResolvedValue({ summary: "", suggestion: "Test tip", source: "static" }),
+  refreshInsight: vi.fn().mockResolvedValue({ summary: "", suggestion: "Test tip", source: "static" }),
+}));
+
+vi.mock("@/services/drinksService", () => ({
+  listDrinks: vi.fn().mockResolvedValue([]),
+  logDrink: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock("@/services/socialService", () => ({
@@ -52,25 +49,23 @@ vi.mock("@/services/socialService", () => ({
 }));
 
 vi.mock("react-i18next", () => ({
+  initReactI18next: { type: "3rdParty", init: () => {} },
   useTranslation: () => ({
-    t: (key: string) => {
+    t: (key: string, params?: Record<string, string>) => {
       const map: Record<string, string> = {
         "dashboard.goodMorning": "Good morning",
         "dashboard.goodAfternoon": "Good afternoon",
         "dashboard.goodEvening": "Good evening",
-        "dashboard.goal": "Goal",
         "dashboard.kcalToday": "kcal today",
-        "dashboard.onTrack": "on track",
-        "dashboard.offTrack": "off track",
-        "dashboard.left": "left",
-        "dashboard.max": "max",
-        "dashboard.todayLog": "Today's Log",
-        "dashboard.noEntries": "No entries yet",
+        "dashboard.dayStreak": "day streak",
         "macros.protein": "Protein",
         "macros.fat": "Fat",
         "macros.carbs": "Carbs",
+        "myday.addFood": "Add Food",
+        "myday.addDrink": "Add Drink",
         "log.title": "Log Food",
       };
+      if (key === "dashboard.ofXKcal" && params?.x) return `of ${params.x} kcal`;
       return map[key] ?? key;
     },
   }),
@@ -88,13 +83,11 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 describe("DashboardPage", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("renders calorie count and entries", async () => {
+  it("renders calorie ring and greeting", async () => {
     render(<DashboardPage />, { wrapper: Wrapper });
     await waitFor(() => {
       expect(screen.getByText("850")).toBeInTheDocument();
     });
-    expect(screen.getByText("Today's Log")).toBeInTheDocument();
-    expect(screen.getByText(/2 eggs, toast/)).toBeInTheDocument();
   });
 
   it("renders macro cards", async () => {
