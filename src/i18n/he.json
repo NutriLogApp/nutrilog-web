@@ -48,6 +48,10 @@
     "failedText": "לא ניתן לנתח טקסט",
     "failedImage": "לא ניתן לנתח תמונה",
     "g": "גרם",
+    "grams": "גרמים",
+    "milliliters": "מיליליטרים",
+    "addToFavorites": "הוסף למשקאות שלי",
+    "alreadyInFavorites": "כבר במשקאות שלך",
     "drinkDetected": "זוהה משקה — להוסיף למועדפים?"
   },
   "trends": {

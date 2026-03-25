@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Camera, Type, Loader2 } from "lucide-react";
@@ -25,30 +25,67 @@ export default function LogFoodModal({ onDone }: Props) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [parsing, setParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [drinkSuggestions, setDrinkSuggestions] = useState<DrinkSuggestion[]>([]);
+  const [drinkFavorites, setDrinkFavorites] = useState<Record<number, DrinkSuggestion | null>>({});
   const fileRef = useRef<HTMLInputElement>(null);
 
   const recentFoods = useQuery({ queryKey: ["recentFoods"], queryFn: () => getRecentFoods() });
+  const existingDrinks = useQuery({ queryKey: ["drinks"], queryFn: listDrinks });
+
+  // Populate drinkFavorites when items change
+  useEffect(() => {
+    if (items.length === 0 || !existingDrinks.data) {
+      setDrinkFavorites({});
+      return;
+    }
+    const existingNames = new Set(existingDrinks.data.map(d => d.name.toLowerCase()));
+    const initial: Record<number, DrinkSuggestion | null> = {};
+    items.forEach((item, idx) => {
+      if (item.is_drink) {
+        if (existingNames.has(item.food_name.toLowerCase())) {
+          initial[idx] = null; // already exists
+        } else {
+          initial[idx] = {
+            name: item.food_name,
+            name_he: item.food_name_he ?? null,
+            icon: "\uD83E\uDD64",
+            volume_ml: item.volume_ml ?? item.grams,
+            calories: item.calories,
+            sugar_g: 0,
+            protein_g: item.protein_g,
+            fat_g: item.fat_g,
+            carbs_g: item.carbs_g,
+            water_pct: item.water_pct ?? 0,
+          };
+        }
+      }
+    });
+    setDrinkFavorites(initial);
+  }, [items, existingDrinks.data]);
 
   const saveMut = useMutation({
     mutationFn: (entry: EntryCreate) => createEntry(entry),
-    onSuccess: async (result) => {
+    onSuccess: async () => {
+      // Create custom drinks for toggled-on favorites
+      const drinksToCreate = Object.values(drinkFavorites).filter(
+        (s): s is DrinkSuggestion => s !== null
+      );
+      if (drinksToCreate.length > 0) {
+        await Promise.all(
+          drinksToCreate.map(s =>
+            createDrink({
+              name: s.name, name_he: s.name_he, icon: s.icon,
+              volume_ml: s.volume_ml, calories: s.calories,
+              sugar_g: s.sugar_g, protein_g: s.protein_g,
+              fat_g: s.fat_g, carbs_g: s.carbs_g,
+              counts_as_water: s.water_pct > 0, water_pct: s.water_pct,
+            })
+          )
+        );
+        qc.invalidateQueries({ queryKey: ["drinks"] });
+      }
       qc.invalidateQueries({ queryKey: ["dailyStats"] });
       qc.invalidateQueries({ queryKey: ["recentFoods"] });
       qc.invalidateQueries({ queryKey: ["water"] });
-      if (result.drink_suggestions && result.drink_suggestions.length > 0) {
-        try {
-          const existing = await listDrinks();
-          const existingNames = new Set(existing.map(d => d.name.toLowerCase()));
-          const newSuggestions = result.drink_suggestions.filter(
-            s => !existingNames.has(s.name.toLowerCase())
-          );
-          if (newSuggestions.length > 0) {
-            setDrinkSuggestions(newSuggestions);
-            return;
-          }
-        } catch { /* if listDrinks fails, skip suggestions */ }
-      }
       onDone();
     },
   });
@@ -76,6 +113,33 @@ export default function LogFoodModal({ onDone }: Props) {
       const ratio = grams / (item.grams || 1);
       return { ...item, grams, calories: Math.round(item.calories * ratio), protein_g: +(item.protein_g * ratio).toFixed(1), fat_g: +(item.fat_g * ratio).toFixed(1), carbs_g: +(item.carbs_g * ratio).toFixed(1) };
     }));
+  }
+
+  function toggleDrinkFavorite(idx: number) {
+    setDrinkFavorites(prev => {
+      const next = { ...prev };
+      if (next[idx]) {
+        // Toggle OFF — remove the suggestion
+        next[idx] = undefined as unknown as DrinkSuggestion | null;
+        delete next[idx];
+      } else if (next[idx] === undefined) {
+        // Toggle back ON — reconstruct from current item
+        const item = items[idx];
+        next[idx] = {
+          name: item.food_name,
+          name_he: item.food_name_he ?? null,
+          icon: "\uD83E\uDD64",
+          volume_ml: item.volume_ml ?? item.grams,
+          calories: item.calories,
+          sugar_g: 0,
+          protein_g: item.protein_g,
+          fat_g: item.fat_g,
+          carbs_g: item.carbs_g,
+          water_pct: item.water_pct ?? 0,
+        };
+      }
+      return next;
+    });
   }
 
   function handleSave() {
@@ -135,22 +199,55 @@ export default function LogFoodModal({ onDone }: Props) {
           {items.map((item, i) => {
             const isHe = i18n.language === "he";
             const name = isHe && item.food_name_he ? item.food_name_he : item.food_name;
+            const isDrink = !!item.is_drink;
+            const favoriteState = drinkFavorites[i]; // null = already exists, DrinkSuggestion = toggled ON, undefined = toggled OFF
+            const isToggledOn = isDrink && favoriteState !== null && favoriteState !== undefined;
+
             return (
-              <div key={i} className="glass-card-sm p-3.5">
+              <div key={i} className="glass-card-sm p-3.5"
+                style={isDrink ? { borderLeft: "3px solid rgba(56, 189, 248, 0.5)" } : undefined}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{name}</span>
                   <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{item.calories} {t("dashboard.kcal")}</span>
                 </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <label className="text-xs" style={{ color: "var(--text-muted)" }}>{item.is_drink ? t("water.ml") : t("log.g")}:</label>
-                  <input type="number" value={item.grams} onChange={(e) => updateItemGrams(i, +e.target.value || 0)}
-                    className="w-20 rounded-lg px-2 py-1 text-sm" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
+
+                {/* Amount input with full label */}
+                <div className="mb-2">
+                  <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: "var(--text-muted)" }}>
+                    {isDrink ? t("log.milliliters") : t("log.grams")}
+                  </span>
+                  <div className="flex items-center rounded-lg mt-0.5 px-2.5 py-1.5" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}>
+                    <input type="number" value={item.grams} onChange={(e) => updateItemGrams(i, +e.target.value || 0)}
+                      className="flex-1 bg-transparent text-sm font-medium focus:outline-none" style={{ color: "var(--text-primary)" }} />
+                    <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? "mL" : "g"}</span>
+                  </div>
                 </div>
+
                 <div className="flex gap-3 text-[11px]" style={{ color: "var(--text-muted)" }}>
                   <span><span className="text-indigo-500 font-semibold">{item.protein_g}</span> {t("macros.protein")}</span>
                   <span><span className="text-amber-500 font-semibold">{item.fat_g}</span> {t("macros.fat")}</span>
                   <span><span className="text-emerald-500 font-semibold">{item.carbs_g}</span> {t("macros.carbs")}</span>
                 </div>
+
+                {/* Drink favorite toggle */}
+                {isDrink && favoriteState !== null && (
+                  <button onClick={() => toggleDrinkFavorite(i)}
+                    className="flex items-center gap-2.5 w-full mt-2.5 px-3 py-2 rounded-xl transition-all active:scale-[0.98]"
+                    style={{ backgroundColor: isToggledOn ? "rgba(56, 189, 248, 0.08)" : "var(--bg-input)" }}>
+                    {/* Pill toggle */}
+                    <div className="relative flex-shrink-0" style={{ width: 36, height: 20, borderRadius: 10, background: isToggledOn ? "linear-gradient(135deg, var(--theme-start), var(--theme-end))" : "var(--border)", transition: "background 0.2s" }}>
+                      <div style={{ width: 16, height: 16, borderRadius: "50%", background: "white", position: "absolute", top: 2, transition: "left 0.2s, right 0.2s", ...(isToggledOn ? { right: 2 } : { left: 2 }), boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+                    </div>
+                    <span className="text-xs font-medium" style={{ color: isToggledOn ? "var(--theme-accent, #14b8a6)" : "var(--text-muted)" }}>
+                      {t("log.addToFavorites")}
+                    </span>
+                  </button>
+                )}
+                {isDrink && favoriteState === null && (
+                  <p className="text-[11px] mt-2" style={{ color: "var(--text-muted)" }}>
+                    {t("log.alreadyInFavorites")}
+                  </p>
+                )}
               </div>
             );
           })}
@@ -159,50 +256,6 @@ export default function LogFoodModal({ onDone }: Props) {
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
             {saveMut.isPending ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.save")}
           </button>
-        </div>
-      )}
-
-      {drinkSuggestions.length > 0 && (
-        <div className="space-y-3">
-          <p className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{t("log.drinkDetected")}</p>
-          {drinkSuggestions.map((s, i) => (
-            <div key={i} className="glass-card-sm p-3.5 flex items-center justify-between">
-              <div>
-                <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
-                  {i18n.language === "he" && s.name_he ? s.name_he : s.name}
-                </p>
-                <p className="text-[11px]" style={{ color: "var(--text-muted)" }}>
-                  {s.volume_ml}{t("water.ml")} · {s.calories}{t("dashboard.kcal")}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button onClick={() => {
-                  setDrinkSuggestions(prev => prev.filter((_, idx) => idx !== i));
-                  if (drinkSuggestions.length <= 1) onDone();
-                }}
-                  className="px-3 py-1.5 rounded-lg text-xs font-medium"
-                  style={{ backgroundColor: "var(--bg-input)", color: "var(--text-muted)" }}>
-                  {t("profile.cancel")}
-                </button>
-                <button onClick={async () => {
-                  await createDrink({
-                    name: s.name, name_he: s.name_he, icon: s.icon,
-                    volume_ml: s.volume_ml, calories: s.calories,
-                    sugar_g: s.sugar_g, protein_g: s.protein_g,
-                    fat_g: s.fat_g, carbs_g: s.carbs_g,
-                    counts_as_water: s.water_pct > 0, water_pct: s.water_pct,
-                  });
-                  qc.invalidateQueries({ queryKey: ["drinks"] });
-                  setDrinkSuggestions(prev => prev.filter((_, idx) => idx !== i));
-                  if (drinkSuggestions.length <= 1) onDone();
-                }}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white"
-                  style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-                  {t("profile.save")}
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
       )}
 
