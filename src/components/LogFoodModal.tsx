@@ -33,7 +33,6 @@ export default function LogFoodModal({ onDone }: Props) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["dailyStats"] });
       qc.invalidateQueries({ queryKey: ["recentFoods"] });
-      qc.invalidateQueries({ queryKey: ["petStatus"] });
       onDone();
     },
   });
