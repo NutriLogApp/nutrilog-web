@@ -15,6 +15,11 @@ export async function getWeightHistory(): Promise<WeightEntry[]> {
   return data.entries;
 }
 
+export async function updateWeight(date: string, weight_kg: number): Promise<WeightEntry> {
+  const { data } = await apiClient.put<WeightEntry>(`/api/v1/weight/${date}`, { weight_kg });
+  return data;
+}
+
 export async function deleteWeight(date: string) {
   await apiClient.delete(`/api/v1/weight/${date}`);
 }

@@ -226,5 +226,33 @@
   "common": {
     "delete": "מחק",
     "deleteConfirm": "בטוח שברצונך למחוק?"
+  },
+  "profileTabs": {
+    "stats": "סטטיסטיקות",
+    "friends": "חברים",
+    "log": "יומן",
+    "weight": "משקל",
+    "currentStreak": "רצף נוכחי",
+    "bestStreak": "רצף שיא",
+    "weeklyGoalHit": "עמידה ביעד שבועי",
+    "days": "ימים",
+    "daysCount": "{{hit}}/{{total}} ימים",
+    "weightLabel": "משקל",
+    "thisMonth": "החודש",
+    "seeAllFriends": "כל החברים",
+    "shareInvite": "שתף קישור הזמנה",
+    "addFriendEmpty": "הוסף חברים כדי לעקוב ביחד",
+    "viewFullHistory": "צפה בהיסטוריה מלאה",
+    "logTodaysWeight": "רשום משקל להיום",
+    "updateTodaysWeight": "עדכן משקל להיום",
+    "weightHistory": "היסטוריה",
+    "noWeightData": "רשום לפחות שני משקלים כדי לראות מגמה",
+    "noEntries": "אין רשומות עדיין",
+    "today": "היום",
+    "yesterday": "אתמול"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "back": "חזרה"
   }
 }
