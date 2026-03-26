@@ -29,7 +29,11 @@ export default function NavBar() {
         }}
       >
         {tabs.map(({ path, icon: Icon, labelKey }) => {
-          const active = path === "/" ? pathname === "/" : pathname.startsWith(path);
+          const active = path === "/"
+            ? pathname === "/"
+            : path === "/profile"
+              ? pathname.startsWith("/profile") || pathname === "/settings"
+              : pathname.startsWith(path);
           return (
             <button
               key={path}
