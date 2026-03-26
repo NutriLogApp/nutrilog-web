@@ -19,6 +19,7 @@ const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const GroupLeaderboardPage = lazy(() => import("@/pages/GroupLeaderboardPage"));
 const CreateGroupPage = lazy(() => import("@/pages/CreateGroupPage"));
+const ChatPage = lazy(() => import("@/pages/ChatPage"));
 
 import { queryClient } from "@/lib/queryConfig";
 
@@ -56,6 +57,7 @@ export default function App() {
                   <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/myday" element={<Navigate to="/" replace />} />
+                    <Route path="/chat" element={<ChatPage />} />
                     <Route path="/contest" element={<ContestPage />} />
                     <Route path="/contest/groups/new" element={<CreateGroupPage />} />
                     <Route path="/contest/groups/:groupId" element={<GroupLeaderboardPage />} />
