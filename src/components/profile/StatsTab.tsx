@@ -58,29 +58,39 @@ export default function StatsTab({ onSwitchTab }: Props) {
     <div className="space-y-3">
       {/* Streaks */}
       <div className="glass-card overflow-hidden">
-        <div className="flex items-center p-3.5" title={t("profileTabs.streakHint")}>
-          <Flame size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
-          <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
-            {t("profileTabs.currentStreak")}
-          </span>
-          <span className="text-sm font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>
-            {streak} {t("profileTabs.days")}
-          </span>
+        <div className="p-3.5">
+          <div className="flex items-center">
+            <Flame size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
+            <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
+              {t("profileTabs.currentStreak")}
+            </span>
+            <span className="text-sm font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>
+              {streak} {t("profileTabs.days")}
+            </span>
+          </div>
+          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)", paddingLeft: 28 }}>
+            {t("profileTabs.streakHint")}
+          </p>
         </div>
-        <div className="flex items-center p-3.5" style={{ borderTop: "1px solid var(--border)" }} title={t("profileTabs.bestStreakHint")}>
-          <Target size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
-          <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
-            {t("profileTabs.bestStreak")}
-          </span>
-          <span className="text-sm font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>
-            {bestStreak} {t("profileTabs.days")}
-          </span>
+        <div className="p-3.5" style={{ borderTop: "1px solid var(--border)" }}>
+          <div className="flex items-center">
+            <Target size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
+            <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
+              {t("profileTabs.bestStreak")}
+            </span>
+            <span className="text-sm font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>
+              {bestStreak} {t("profileTabs.days")}
+            </span>
+          </div>
+          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)", paddingLeft: 28 }}>
+            {t("profileTabs.bestStreakHint")}
+          </p>
         </div>
       </div>
 
       {/* Calorie adherence */}
-      <div className="glass-card p-3.5" title={t("profileTabs.weeklyGoalHint")}>
-        <div className="flex items-center mb-2">
+      <div className="glass-card p-3.5">
+        <div className="flex items-center mb-1">
           <BarChart3 size={16} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.weeklyGoalHit")}
@@ -89,6 +99,9 @@ export default function StatsTab({ onSwitchTab }: Props) {
             {t("profileTabs.daysCount", { hit: goalHit, total: 7 })}
           </span>
         </div>
+        <p className="text-[10px] mb-2" style={{ color: "var(--text-muted)", paddingLeft: 26 }}>
+          {t("profileTabs.weeklyGoalHint")}
+        </p>
         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
           <div
             className="h-full rounded-full"
