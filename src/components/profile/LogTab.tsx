@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Droplets } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
-import { useDeleteEntry } from "@/hooks/useDeleteEntry";
-
+import { getProfile } from "@/services/profileService";
 import { formatTime } from "@/lib/formatTime";
 import EntryEditModal from "@/components/EntryEditModal";
-import ConfirmDialog from "@/components/ConfirmDialog";
 import Modal from "@/components/Modal";
 import FullLogModal from "./FullLogModal";
 import type { EntryOut } from "@/types/api";
@@ -34,16 +32,31 @@ interface Props {
   use24h?: boolean;
 }
 
+function computeWaterMl(entries: EntryOut[]): number {
+  let ml = 0;
+  for (const e of entries) {
+    if (Array.isArray(e.items)) {
+      for (const item of e.items) {
+        if (item.is_drink) {
+          const vol = item.volume_ml ?? item.grams ?? 0;
+          const pct = item.water_pct ?? 0;
+          ml += Math.round(vol * pct / 100);
+        }
+      }
+    }
+  }
+  return ml;
+}
+
 export default function LogTab({ use24h = true }: Props) {
   const { t } = useTranslation();
   const [dates] = useState(getDateStrings);
   const [todayStr, yesterdayStr] = dates;
 
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showFullLog, setShowFullLog] = useState(false);
-
-  const deleteMut = useDeleteEntry();
+  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
+  const waterGoal = profile?.daily_water_goal_ml ?? 2000;
 
   const results = useQueries({
     queries: dates.map((dateStr) => ({
@@ -53,7 +66,20 @@ export default function LogTab({ use24h = true }: Props) {
   });
 
   const groups = dates
-    .map((dateStr, i) => ({ dateStr, entries: results[i].data?.entries ?? [] }))
+    .map((dateStr, i) => {
+      const entries = results[i].data?.entries ?? [];
+      return {
+        dateStr,
+        entries,
+        totals: {
+          cal: entries.reduce((s, e) => s + e.total_calories, 0),
+          p: Math.round(entries.reduce((s, e) => s + e.total_protein_g, 0)),
+          f: Math.round(entries.reduce((s, e) => s + e.total_fat_g, 0)),
+          c: Math.round(entries.reduce((s, e) => s + e.total_carbs_g, 0)),
+          waterMl: computeWaterMl(entries),
+        },
+      };
+    })
     .filter((g) => g.entries.length > 0);
 
   const anyEntries = groups.some((g) => g.entries.length > 0);
@@ -69,14 +95,34 @@ export default function LogTab({ use24h = true }: Props) {
         </p>
       )}
 
-      {groups.map(({ dateStr, entries }) => (
+      {groups.map(({ dateStr, entries, totals }) => (
         <div key={dateStr}>
-          <p
-            className="text-[11px] font-bold uppercase tracking-widest mb-2"
-            style={{ color: "var(--text-muted)" }}
-          >
-            {dateLabel(dateStr, todayStr, yesterdayStr, t)}
-          </p>
+          <div className="mb-2">
+            <div className="flex items-baseline justify-between">
+              <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
+                {dateLabel(dateStr, todayStr, yesterdayStr, t)}
+              </p>
+              <p className="text-[10px] font-semibold tabular-nums" style={{ color: "var(--text-muted)" }}>
+                {totals.cal} {t("dashboard.kcal")}
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-1.5 mt-0.5">
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#6366f1" }}>{totals.p}<span className="font-bold">P</span></span>
+              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#f59e0b" }}>{totals.f}<span className="font-bold">F</span></span>
+              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#10b981" }}>{totals.c}<span className="font-bold">C</span></span>
+              {totals.waterMl > 0 && (
+                <>
+                  <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
+                  <Droplets size={10} color="#38bdf8" />
+                  <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#38bdf8" }}>
+                    {Math.round((totals.waterMl / waterGoal) * 100)}%
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
 
           <div className="space-y-1.5">
             {entries.map((entry) => {
@@ -87,49 +133,22 @@ export default function LogTab({ use24h = true }: Props) {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
                   style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}
                 >
-                  {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p
-                      className="font-semibold truncate"
-                      style={{ fontSize: 14, color: "var(--text-primary)" }}
-                    >
+                    <p className="font-semibold truncate" style={{ fontSize: 14, color: "var(--text-primary)" }}>
                       {entry.description}
                     </p>
-                    <p
-                      className="tabular-nums"
-                      style={{ fontSize: 11, color: "var(--text-muted)" }}
-                    >
+                    <p className="tabular-nums" style={{ fontSize: 11, color: "var(--text-muted)" }}>
                       {time} · {entry.total_calories} {t("dashboard.kcal")}
                     </p>
                   </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <button
-                      onClick={() => setEditEntry(entry)}
-                      className="flex items-center justify-center rounded-lg transition-all active:scale-90"
-                      style={{
-                        width: 30,
-                        height: 30,
-                        background: "rgba(139, 92, 246, 0.1)",
-                      }}
-                      aria-label="Edit"
-                    >
-                      <Pencil size={14} color="#8b5cf6" />
-                    </button>
-                    <button
-                      onClick={() => setDeleteId(entry.id)}
-                      className="flex items-center justify-center rounded-lg transition-all active:scale-90"
-                      style={{
-                        width: 30,
-                        height: 30,
-                        background: "rgba(239, 68, 68, 0.1)",
-                      }}
-                      aria-label="Delete"
-                    >
-                      <Trash2 size={14} color="#ef4444" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => setEditEntry(entry)}
+                    className="flex items-center justify-center rounded-lg transition-all active:scale-90 shrink-0"
+                    style={{ width: 30, height: 30, background: "rgba(139, 92, 246, 0.1)" }}
+                    aria-label="Edit"
+                  >
+                    <Pencil size={14} color="#8b5cf6" />
+                  </button>
                 </div>
               );
             })}
@@ -156,17 +175,6 @@ export default function LogTab({ use24h = true }: Props) {
           <EntryEditModal entry={editEntry} onClose={() => setEditEntry(null)} />
         </Modal>
       )}
-
-      {/* Delete confirm */}
-      <ConfirmDialog
-        open={!!deleteId}
-        message={t("common.deleteConfirm")}
-        onConfirm={() => {
-          if (deleteId) deleteMut.mutate(deleteId);
-          setDeleteId(null);
-        }}
-        onCancel={() => setDeleteId(null)}
-      />
 
       {/* Full log modal */}
       <FullLogModal open={showFullLog} onClose={() => setShowFullLog(false)} use24h={use24h} />

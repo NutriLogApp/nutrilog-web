@@ -1,14 +1,12 @@
 import { useState, useRef, useCallback } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Pencil, Trash2, Droplets } from "lucide-react";
+import { Pencil, Droplets } from "lucide-react";
 import { getEntryHistory } from "@/services/entriesService";
 import { getProfile } from "@/services/profileService";
-import { useDeleteEntry } from "@/hooks/useDeleteEntry";
 import { formatTime } from "@/lib/formatTime";
 import Modal from "@/components/Modal";
 import EntryEditModal from "@/components/EntryEditModal";
-import ConfirmDialog from "@/components/ConfirmDialog";
 import type { EntryOut } from "@/types/api";
 
 type Cursor = { time: string; id: string } | undefined;
@@ -67,12 +65,9 @@ function formatDateLabel(dateStr: string): string {
 export default function FullLogModal({ open, onClose, use24h = true }: Props) {
   const { t } = useTranslation();
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const waterGoal = profile?.daily_water_goal_ml ?? 2000;
-
-  const deleteMut = useDeleteEntry();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["foodLog"],
@@ -169,24 +164,14 @@ export default function FullLogModal({ open, onClose, use24h = true }: Props) {
                           {time} · {entry.total_calories} {t("dashboard.kcal")}
                         </p>
                       </div>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <button
-                          onClick={() => setEditEntry(entry)}
-                          className="flex items-center justify-center rounded-lg transition-all active:scale-90"
-                          style={{ width: 30, height: 30, background: "rgba(139, 92, 246, 0.1)" }}
-                          aria-label="Edit"
-                        >
-                          <Pencil size={14} color="#8b5cf6" />
-                        </button>
-                        <button
-                          onClick={() => setDeleteId(entry.id)}
-                          className="flex items-center justify-center rounded-lg transition-all active:scale-90"
-                          style={{ width: 30, height: 30, background: "rgba(239, 68, 68, 0.1)" }}
-                          aria-label="Delete"
-                        >
-                          <Trash2 size={14} color="#ef4444" />
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => setEditEntry(entry)}
+                        className="flex items-center justify-center rounded-lg transition-all active:scale-90 shrink-0"
+                        style={{ width: 30, height: 30, background: "rgba(139, 92, 246, 0.1)" }}
+                        aria-label="Edit"
+                      >
+                        <Pencil size={14} color="#8b5cf6" />
+                      </button>
                     </div>
                   );
                 })}
@@ -211,15 +196,6 @@ export default function FullLogModal({ open, onClose, use24h = true }: Props) {
         </Modal>
       )}
 
-      <ConfirmDialog
-        open={!!deleteId}
-        message={t("common.deleteConfirm")}
-        onConfirm={() => {
-          if (deleteId) deleteMut.mutate(deleteId);
-          setDeleteId(null);
-        }}
-        onCancel={() => setDeleteId(null)}
-      />
     </>
   );
 }
