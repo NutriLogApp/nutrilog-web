@@ -61,7 +61,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto" style={{ paddingBottom: "calc(96px + env(safe-area-inset-bottom, 0px))" }}>
+    <div>
       {/* Hero Section */}
       <div className="animate-fade-up stagger-1">
         <HeroSection

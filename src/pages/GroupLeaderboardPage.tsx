@@ -16,7 +16,7 @@ export default function GroupLeaderboardPage() {
   });
 
   return (
-    <div className="px-5 pt-6 pb-4 max-w-lg mx-auto space-y-5">
+    <div className="px-5 pt-6 pb-4 space-y-5">
       <button onClick={() => navigate("/contest")} className="mb-0" style={{ color: "var(--text-muted)" }}><ArrowLeft size={20} /></button>
       <div className="animate-fade-up">
         <h1 className="text-xl font-bold tracking-tight mb-1" style={{ color: "var(--text-primary)" }}>{t("groups.leaderboard")}</h1>

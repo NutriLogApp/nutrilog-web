@@ -35,7 +35,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto pb-8">
+    <div className="pb-8">
       <ProfileHero profile={profile} />
       <ProfileTabs active={activeTab} onChange={setActiveTab} />
       <div className="px-5 pt-4">

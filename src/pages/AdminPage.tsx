@@ -28,7 +28,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="px-5 pt-8 pb-8 max-w-lg mx-auto">
+    <div className="px-5 pt-8 pb-8">
       <h1 className="text-[26px] font-bold tracking-tight mb-6 animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
 
       <div className="space-y-3 animate-fade-up stagger-1">

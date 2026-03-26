@@ -24,7 +24,7 @@ export default function ContestPage() {
   // No username — prompt to set one
   if (!profile?.username) {
     return (
-      <div className="px-5 pt-8 pb-4 max-w-lg mx-auto flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
+      <div className="px-5 pt-8 pb-4 flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
         <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
           style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}>
           <Users size={24} style={{ color: "var(--theme-accent)" }} />
@@ -47,7 +47,7 @@ export default function ContestPage() {
   // No groups — CTA
   if (!firstGroup) {
     return (
-      <div className="px-5 pt-8 pb-4 max-w-lg mx-auto flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
+      <div className="px-5 pt-8 pb-4 flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
         <Trophy size={40} strokeWidth={1.2} style={{ color: "var(--text-muted)", opacity: 0.5, marginBottom: 20 }} />
         <h1 className="text-xl font-bold tracking-tight text-center mb-1.5" style={{ color: "var(--text-primary)" }}>
           {t("contest.noCompetitions", "No competitions yet")}
@@ -68,7 +68,7 @@ export default function ContestPage() {
   const me = leaderboard?.standings.find((s) => s.is_current_user);
 
   return (
-    <div className="px-5 pt-8 pb-4 max-w-lg mx-auto">
+    <div className="px-5 pt-8 pb-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 animate-fade-up">
         <h1 className="text-[26px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{firstGroup.name}</h1>

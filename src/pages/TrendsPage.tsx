@@ -71,7 +71,7 @@ export default function TrendsPage() {
   ];
 
   return (
-    <div className="px-5 pt-8 pb-4 max-w-lg mx-auto">
+    <div className="px-5 pt-8 pb-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 animate-fade-up">
         <h1 className="text-[26px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{t("trends.title")}</h1>
