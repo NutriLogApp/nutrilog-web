@@ -12,10 +12,9 @@ interface Props {
 }
 
 export default function ProfileHero({ profile }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const lang = i18n.language;
 
   const [editingName, setEditingName] = useState(false);
   const [editName, setEditName] = useState("");

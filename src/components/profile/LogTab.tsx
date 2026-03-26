@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Pencil, Trash2 } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { useDeleteEntry } from "@/hooks/useDeleteEntry";
-import { todayLocal } from "@/lib/dateUtils";
+
 import { formatTime } from "@/lib/formatTime";
 import EntryEditModal from "@/components/EntryEditModal";
 import ConfirmDialog from "@/components/ConfirmDialog";
