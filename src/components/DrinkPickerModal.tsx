@@ -59,7 +59,7 @@ export default function DrinkPickerModal({ onDone }: Props) {
         <p className="text-center text-xs py-3" style={{ color: "var(--text-muted)" }}>{t("myday.noDrinksYet")}</p>
       )}
 
-      <button onClick={() => { onDone(); navigate("/profile"); }}
+      <button onClick={() => { onDone(); navigate("/settings?modal=drinks"); }}
         className="w-full flex items-center justify-center gap-2 py-3 text-xs font-medium transition-all"
         style={{ color: "var(--text-muted)" }}>
         <Settings size={14} />

@@ -57,6 +57,7 @@
     "analyze": "נתח",
     "placeholder": "למשל 2 ביצים, טוסט עם חמאה, קפה",
     "takePhoto": "לחץ לצילום",
+    "retakePhoto": "צלם שוב",
     "failedText": "לא ניתן לנתח טקסט",
     "failedImage": "לא ניתן לנתח תמונה",
     "g": "גרם",

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Camera, Type, Loader2 } from "lucide-react";
+import { Camera, Type, Loader2, RefreshCw } from "lucide-react";
 import i18n from "@/i18n";
 import { parseText, parseImage, reparseImage } from "@/services/foodService";
 import { createEntry } from "@/services/entriesService";
@@ -28,6 +28,7 @@ export default function LogFoodModal({ onDone }: Props) {
   const [drinkFavorites, setDrinkFavorites] = useState<Record<number, DrinkSuggestion | null>>({});
   const [showHint, setShowHint] = useState(false);
   const [hintText, setHintText] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const recentFoods = useQuery({ queryKey: ["recentFoods"], queryFn: () => getRecentFoods() });
@@ -103,10 +104,21 @@ export default function LogFoodModal({ onDone }: Props) {
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    setPreviewUrl(URL.createObjectURL(file));
     setParsing(true); setError(null);
     try { const r = await parseImage(file); setItems(r.items); setImageUrl(r.image_url); }
     catch { setError(t("log.failedImage")); }
     finally { setParsing(false); }
+  }
+
+  function handleRetakePhoto() {
+    setPreviewUrl(null);
+    setImageUrl(null);
+    setItems([]);
+    setError(null);
+    setShowHint(false);
+    setHintText("");
+    fileRef.current?.click();
   }
 
   async function handleReparse() {
@@ -173,7 +185,7 @@ export default function LogFoodModal({ onDone }: Props) {
       {/* Tabs */}
       <div className="flex gap-1 rounded-xl p-1" style={{ backgroundColor: "var(--bg-input)" }}>
         {tabButtons.map(({ key, icon: Icon, label }) => (
-          <button key={key} onClick={() => { setTab(key); setItems([]); setError(null); setShowHint(false); setHintText(""); }}
+          <button key={key} onClick={() => { setTab(key); setItems([]); setError(null); setShowHint(false); setHintText(""); setPreviewUrl(null); }}
             className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-all"
             style={tab === key ? { backgroundColor: "var(--bg-card-solid)", color: "var(--text-primary)", boxShadow: "var(--shadow-card)" } : { color: "var(--text-muted)" }}>
             <Icon size={16} /> {label}
@@ -197,11 +209,30 @@ export default function LogFoodModal({ onDone }: Props) {
       {tab === "photo" && (
         <div>
           <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={handleImageChange} className="hidden" />
-          <button onClick={() => fileRef.current?.click()} disabled={parsing}
-            className="w-full py-10 border-2 border-dashed rounded-xl text-sm flex flex-col items-center gap-2 transition-all active:scale-[0.98]"
-            style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
-            {parsing ? <Loader2 size={24} className="animate-spin" /> : <><Camera size={28} /><span>{t("log.takePhoto")}</span></>}
-          </button>
+          {previewUrl ? (
+            <div className="relative rounded-xl overflow-hidden">
+              <img src={previewUrl} alt="" className="w-full max-h-48 object-cover rounded-xl" />
+              {parsing && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-xl" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                  <Loader2 size={28} className="animate-spin text-white" />
+                </div>
+              )}
+              {!parsing && (
+                <button onClick={handleRetakePhoto}
+                  className="absolute top-2 end-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all active:scale-95"
+                  style={{ backgroundColor: "rgba(0,0,0,0.6)", color: "#fff", backdropFilter: "blur(4px)" }}>
+                  <RefreshCw size={12} />
+                  {t("log.retakePhoto")}
+                </button>
+              )}
+            </div>
+          ) : (
+            <button onClick={() => fileRef.current?.click()} disabled={parsing}
+              className="w-full py-10 border-2 border-dashed rounded-xl text-sm flex flex-col items-center gap-2 transition-all active:scale-[0.98]"
+              style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
+              {parsing ? <Loader2 size={24} className="animate-spin" /> : <><Camera size={28} /><span>{t("log.takePhoto")}</span></>}
+            </button>
+          )}
         </div>
       )}
 
