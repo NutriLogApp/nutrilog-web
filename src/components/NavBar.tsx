@@ -1,10 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, CalendarDays, BarChart3, User, Trophy } from "lucide-react";
+import { Home, BarChart3, User, Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const tabs = [
   { path: "/", icon: Home, labelKey: "nav.home" },
-  { path: "/myday", icon: CalendarDays, labelKey: "nav.myday" },
   { path: "/contest", icon: Trophy, labelKey: "nav.contest" },
   { path: "/trends", icon: BarChart3, labelKey: "nav.trends" },
   { path: "/profile", icon: User, labelKey: "nav.profile" },

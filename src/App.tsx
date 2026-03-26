@@ -11,8 +11,7 @@ import "@/i18n";
 // Lazy load pages
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
 const PendingPage = lazy(() => import("@/pages/PendingPage"));
-const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
-const MyDayPage = lazy(() => import("@/pages/MyDayPage"));
+const HomePage = lazy(() => import("@/pages/HomePage"));
 const ContestPage = lazy(() => import("@/pages/ContestPage"));
 const TrendsPage = lazy(() => import("@/pages/TrendsPage"));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
@@ -55,8 +54,8 @@ export default function App() {
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/pending" element={<PendingPage />} />
                   <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-                    <Route path="/" element={<DashboardPage />} />
-                    <Route path="/myday" element={<MyDayPage />} />
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/myday" element={<Navigate to="/" replace />} />
                     <Route path="/contest" element={<ContestPage />} />
                     <Route path="/contest/groups/new" element={<CreateGroupPage />} />
                     <Route path="/contest/groups/:groupId" element={<GroupLeaderboardPage />} />
