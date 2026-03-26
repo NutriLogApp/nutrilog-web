@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EntryRow } from "./EntryRow";
 import type { EntryOut } from "@/types/api";
@@ -7,12 +6,10 @@ interface EntryListProps {
   entries: EntryOut[];
   use24h: boolean;
   onEdit: (entry: EntryOut) => void;
-  onDelete: (entry: EntryOut) => void;
 }
 
-export function EntryList({ entries, use24h, onEdit, onDelete }: EntryListProps) {
+export function EntryList({ entries, use24h, onEdit }: EntryListProps) {
   const { t } = useTranslation();
-  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const sorted = [...entries].sort(
     (a, b) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime()
@@ -38,10 +35,7 @@ export function EntryList({ entries, use24h, onEdit, onDelete }: EntryListProps)
               <EntryRow
                 entry={entry}
                 use24h={use24h}
-                isExpanded={expandedId === entry.id}
-                onTap={() => setExpandedId(expandedId === entry.id ? null : entry.id)}
                 onEdit={onEdit}
-                onDelete={onDelete}
               />
             </div>
             {index < sorted.length - 1 && (

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useDailySummary } from "@/hooks/useDailySummary";
-import { useDeleteEntry } from "@/hooks/useDeleteEntry";
 import { getDailyInsight } from "@/services/insightService";
 import { HeroSection } from "@/components/home/HeroSection";
 import { QuickActions } from "@/components/home/QuickActions";
@@ -13,7 +12,6 @@ import LogFoodModal from "@/components/LogFoodModal";
 import DrinkPickerModal from "@/components/DrinkPickerModal";
 import EntryEditModal from "@/components/EntryEditModal";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
-import ConfirmDialog from "@/components/ConfirmDialog";
 import Modal from "@/components/Modal";
 import type { EntryOut } from "@/types/api";
 
@@ -21,8 +19,6 @@ export default function HomePage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const summary = useDailySummary();
-  const deleteMut = useDeleteEntry();
-
   // Insight query
   const insightQuery = useQuery({
     queryKey: ["insight"],
@@ -34,7 +30,6 @@ export default function HomePage() {
   const [showAddFood, setShowAddFood] = useState(false);
   const [showAddDrink, setShowAddDrink] = useState(false);
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
-  const [deleteEntry, setDeleteEntry] = useState<EntryOut | null>(null);
 
   // Invalidation callback after logging food/drink
   const handleDone = () => {
@@ -103,7 +98,6 @@ export default function HomePage() {
           entries={summary.entries}
           use24h={summary.use24h}
           onEdit={(entry) => setEditEntry(entry)}
-          onDelete={(entry) => setDeleteEntry(entry)}
         />
       </div>
 
@@ -125,18 +119,6 @@ export default function HomePage() {
         </Modal>
       )}
 
-      {/* Delete Confirmation */}
-      <ConfirmDialog
-        open={!!deleteEntry}
-        message={t("common.deleteConfirm")}
-        onConfirm={() => {
-          if (deleteEntry) {
-            deleteMut.mutate(deleteEntry.id);
-            setDeleteEntry(null);
-          }
-        }}
-        onCancel={() => setDeleteEntry(null)}
-      />
     </div>
   );
 }

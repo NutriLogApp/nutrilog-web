@@ -10,6 +10,7 @@ export interface FoodItem {
   is_drink?: boolean;
   volume_ml?: number;
   water_pct?: number;
+  quantity?: number;
 }
 
 export interface EntryOut {

@@ -156,6 +156,16 @@ export default function FullLogModal({ open, onClose, use24h = true }: Props) {
                           style={{ fontSize: 14, color: "var(--text-primary)" }}
                         >
                           {entry.description}
+                          {(entry.items[0]?.quantity ?? 1) > 1 && (
+                            <span style={{
+                              display: "inline-block", fontSize: 10, fontWeight: 600,
+                              color: "var(--theme-accent)",
+                              background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)",
+                              borderRadius: 6, padding: "1px 5px", marginLeft: 4, verticalAlign: "middle",
+                            }}>
+                              x{entry.items[0].quantity}
+                            </span>
+                          )}
                         </p>
                         <p
                           className="tabular-nums"
