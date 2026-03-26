@@ -40,7 +40,12 @@
     "glassOfWater": "כוס מים",
     "manageDrinks": "נהל משקאות בפרופיל",
     "noDrinksYet": "אין משקאות מותאמים — הוסף בפרופיל",
-    "entries": "רשומות"
+    "entries": "רשומות",
+    "quantity": "כמות",
+    "each": "ליחידה",
+    "perUnit": "ליחידה",
+    "total": "סה\"כ",
+    "valuesPerUnit": "ערכים ליחידה"
   },
   "log": {
     "title": "הוסף אוכל",

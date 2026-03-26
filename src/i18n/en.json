@@ -40,7 +40,12 @@
     "glassOfWater": "Glass of Water",
     "manageDrinks": "Manage drinks in Profile",
     "noDrinksYet": "No custom drinks yet — add in Profile",
-    "entries": "entries"
+    "entries": "entries",
+    "quantity": "Quantity",
+    "each": "each",
+    "perUnit": "per unit",
+    "total": "total",
+    "valuesPerUnit": "Values are per unit"
   },
   "log": {
     "title": "Add Food",
