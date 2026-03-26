@@ -107,17 +107,19 @@ export default function HomePage() {
       </div>
 
       {/* Log Food Modal */}
-      {showAddFood && <LogFoodModal onDone={handleDone} />}
+      <Modal open={showAddFood} onClose={() => setShowAddFood(false)} title={t("myday.addFood")}>
+        <LogFoodModal onDone={handleDone} />
+      </Modal>
 
       {/* Drink Picker Modal */}
-      {showAddDrink && <DrinkPickerModal onDone={handleDone} />}
+      <Modal open={showAddDrink} onClose={() => setShowAddDrink(false)} title={t("myday.addDrink")}>
+        <DrinkPickerModal onDone={handleDone} />
+      </Modal>
 
       {/* Entry Edit Modal */}
-      {editEntry && (
-        <Modal open={!!editEntry} onClose={() => setEditEntry(null)} title={t("myday.editEntry")}>
-          <EntryEditModal entry={editEntry} onClose={() => setEditEntry(null)} />
-        </Modal>
-      )}
+      <Modal open={!!editEntry} onClose={() => setEditEntry(null)} title={t("myday.editEntry")}>
+        {editEntry && <EntryEditModal entry={editEntry} onClose={() => setEditEntry(null)} />}
+      </Modal>
 
     </div>
   );

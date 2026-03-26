@@ -57,6 +57,7 @@
     "analyze": "Analyze",
     "placeholder": "e.g. 2 eggs, toast with butter, coffee",
     "takePhoto": "Tap to take a photo",
+    "retakePhoto": "Retake",
     "failedText": "Failed to parse text",
     "failedImage": "Failed to parse image",
     "g": "g",

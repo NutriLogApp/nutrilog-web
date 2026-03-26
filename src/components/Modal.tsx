@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { X } from "lucide-react";
 
 interface Props {
@@ -8,10 +9,18 @@ interface Props {
 }
 
 export default function Modal({ open, onClose, title, children }: Props) {
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+
   if (!open) return null;
 
   return (
     <div
+      data-testid="modal-backdrop"
       className="fixed inset-0 flex items-end sm:items-center justify-center"
       style={{ zIndex: 60, backgroundColor: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
       onClick={onClose}

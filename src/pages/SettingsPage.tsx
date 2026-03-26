@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Scale, Flame, Beef, Droplets, Wheat, CircleDot, Trash2, AlertTriangle } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
@@ -56,7 +56,12 @@ export default function SettingsPage() {
   const { data: weightHistory } = useQuery({ queryKey: ["weightHistory"], queryFn: getWeightHistory });
 
   const [goals, setGoals] = useState({ daily_cal_goal: 2000, daily_protein_goal_g: 120, daily_fat_goal_g: 78, daily_carbs_goal_g: 180, daily_water_goal_ml: 2000 });
-  const [modal, setModal] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [modal, setModalRaw] = useState<string | null>(searchParams.get("modal"));
+  function setModal(v: string | null) {
+    setModalRaw(v);
+    if (searchParams.has("modal")) { searchParams.delete("modal"); setSearchParams(searchParams, { replace: true }); }
+  }
   const [activeTheme, setActiveTheme] = useState<ThemeName>("ocean");
   const [darkMode, setDarkMode] = useState<"auto" | "light" | "dark">("auto");
   const [weightInput, setWeightInput] = useState("");
