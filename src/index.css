@@ -26,6 +26,7 @@
   --radius-sm: 14px;
   --radius-xs: 10px;
   --ring-track: color-mix(in srgb, var(--text-primary) 15%, transparent);
+  --macro-row-bg: rgba(255, 255, 255, 0.5);
 }
 
 /* Dark */
@@ -44,6 +45,7 @@
     --shadow-card: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
     --shadow-elevated: 0 4px 24px rgba(0,0,0,0.3);
     --shadow-fab: 0 4px 20px rgba(0,0,0,0.4);
+    --macro-row-bg: rgba(255, 255, 255, 0.06);
   }
 }
 
@@ -61,6 +63,7 @@ html.force-dark {
   --shadow-card: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
   --shadow-elevated: 0 4px 24px rgba(0,0,0,0.3);
   --shadow-fab: 0 4px 20px rgba(0,0,0,0.4);
+  --macro-row-bg: rgba(255, 255, 255, 0.06);
 }
 
 html.force-light {

@@ -1,4 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { formatTime } from "@/lib/formatTime";
 import type { EntryOut } from "@/types/api";
 
@@ -21,6 +22,7 @@ export function EntryRow({
   onEdit,
   onDelete,
 }: EntryRowProps) {
+  const { t } = useTranslation();
   const expandedBg = "color-mix(in srgb, var(--theme-accent) 4%, var(--bg-card-solid))";
 
   return (
@@ -118,7 +120,7 @@ export function EntryRow({
             }}
           >
             <Pencil size={12} />
-            Edit
+            {t("myday.editEntry")}
           </button>
           <button
             onClick={() => onDelete(entry)}
@@ -137,7 +139,7 @@ export function EntryRow({
             }}
           >
             <Trash2 size={12} />
-            Delete
+            {t("common.delete")}
           </button>
         </div>
       )}

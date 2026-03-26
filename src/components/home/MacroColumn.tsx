@@ -90,7 +90,7 @@ export function MacroColumn({
             style={{
               padding: "6px 10px",
               borderRadius: "10px",
-              background: "color-mix(in srgb, var(--text-primary) 6%, transparent)",
+              background: "var(--macro-row-bg)",
               boxShadow: rowShadow,
             }}
             className="flex items-center gap-[10px]"
