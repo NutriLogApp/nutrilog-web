@@ -5,6 +5,7 @@ export interface InsightResponse {
   suggestion: string;
   source: string;
   refreshes_left: number;
+  category?: "positive" | "warning" | "suggestion" | "motivational";
 }
 
 export async function getDailyInsight(): Promise<InsightResponse> {
