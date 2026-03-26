@@ -59,7 +59,12 @@
     "milliliters": "Milliliters",
     "addToFavorites": "Add to my drinks",
     "alreadyInFavorites": "Already in your drinks",
-    "drinkDetected": "Drink detected — add to favorites?"
+    "drinkDetected": "Drink detected — add to favorites?",
+    "notAccurate": "Not accurate? Add a correction",
+    "hintPlaceholder": "Describe what's wrong...",
+    "reanalyze": "Re-analyze",
+    "redetect": "Re-detect with hint",
+    "failedReparse": "Failed to re-analyze"
   },
   "trends": {
     "title": "Trends",
