@@ -1,40 +1,36 @@
-import { Pencil, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { formatTime } from "@/lib/formatTime";
 import type { EntryOut } from "@/types/api";
+import i18n from "@/i18n";
 
 interface EntryRowProps {
   entry: EntryOut;
   use24h: boolean;
   showMacros?: boolean;
-  isExpanded: boolean;
-  onTap: () => void;
   onEdit: (entry: EntryOut) => void;
-  onDelete: (entry: EntryOut) => void;
 }
 
 export function EntryRow({
   entry,
   use24h,
   showMacros = true,
-  isExpanded,
-  onTap,
   onEdit,
-  onDelete,
 }: EntryRowProps) {
   const { t } = useTranslation();
-  const expandedBg = "color-mix(in srgb, var(--theme-accent) 4%, var(--bg-card-solid))";
+  const item = entry.items[0];
+  const isHe = i18n.language === "he";
+  const qty = item?.quantity ?? 1;
+
+  const displayName = item
+    ? (isHe && item.food_name_he ? item.food_name_he : item.food_name)
+    : entry.description;
 
   return (
     <div
-      onClick={onTap}
-      style={{
-        background: isExpanded ? expandedBg : undefined,
-        cursor: "pointer",
-      }}
+      onClick={() => onEdit(entry)}
+      style={{ cursor: "pointer" }}
     >
       <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-        {/* Time column */}
         <span
           style={{
             fontSize: "10px",
@@ -48,9 +44,7 @@ export function EntryRow({
           {formatTime(entry.logged_at, use24h)}
         </span>
 
-        {/* Body column */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Top line */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <span
               style={{
@@ -65,7 +59,24 @@ export function EntryRow({
                 marginRight: "8px",
               }}
             >
-              {entry.description}
+              {displayName}
+              {qty > 1 && (
+                <span
+                  style={{
+                    display: "inline-block",
+                    fontSize: "10px",
+                    fontWeight: 600,
+                    color: "var(--theme-accent)",
+                    background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)",
+                    borderRadius: "6px",
+                    padding: "1px 5px",
+                    marginLeft: "4px",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  x{qty}
+                </span>
+              )}
             </span>
             <span
               style={{
@@ -80,7 +91,6 @@ export function EntryRow({
             </span>
           </div>
 
-          {/* Macros line */}
           {showMacros && (
             <div style={{ display: "flex", gap: "8px", marginTop: "2px" }}>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#0d9488" }}>
@@ -96,53 +106,6 @@ export function EntryRow({
           )}
         </div>
       </div>
-
-      {/* Expanded action panel */}
-      {isExpanded && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          style={{ display: "flex", gap: "8px", padding: "8px 0 4px" }}
-        >
-          <button
-            onClick={() => onEdit(entry)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              fontSize: "11px",
-              fontWeight: 600,
-              borderRadius: "10px",
-              padding: "6px 14px",
-              background: "color-mix(in srgb, var(--theme-accent) 10%, transparent)",
-              color: "var(--theme-accent)",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <Pencil size={12} />
-            {t("myday.editEntry")}
-          </button>
-          <button
-            onClick={() => onDelete(entry)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              fontSize: "11px",
-              fontWeight: 600,
-              borderRadius: "10px",
-              padding: "6px 14px",
-              background: "rgba(239,68,68,0.1)",
-              color: "#ef4444",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <Trash2 size={12} />
-            {t("common.delete")}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
