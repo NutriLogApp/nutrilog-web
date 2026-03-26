@@ -6,6 +6,7 @@ import { useDeleteEntry } from "@/hooks/useDeleteEntry";
 import i18n from "@/i18n";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import type { EntryOut, FoodItem } from "@/types/api";
+import { reparseImage } from "@/services/foodService";
 
 interface Props {
   entry: EntryOut;
@@ -23,6 +24,10 @@ export default function EntryEditModal({ entry, onClose }: Props) {
   const saveMut = useUpdateEntry();
   const deleteMut = useDeleteEntry();
   const [deleteItemIdx, setDeleteItemIdx] = useState<number | null>(null);
+  const [showHint, setShowHint] = useState(false);
+  const [hintText, setHintText] = useState("");
+  const [reparsing, setReparsing] = useState(false);
+  const [reparseError, setReparseError] = useState<string | null>(null);
 
   function removeItem(idx: number) {
     const remaining = items.filter((_, i) => i !== idx);
@@ -58,6 +63,18 @@ export default function EntryEditModal({ entry, onClose }: Props) {
       updated.calories = Math.round(updated.protein_g * 4 + updated.fat_g * 9 + updated.carbs_g * 4);
       return updated;
     }));
+  }
+
+  async function handleRedetect() {
+    if (!hintText.trim() || !entry.image_url) return;
+    setReparsing(true); setReparseError(null);
+    try {
+      const newItems = await reparseImage(entry.image_url, hintText);
+      setItems(newItems);
+      setShowHint(false);
+      setHintText("");
+    } catch { setReparseError(t("log.failedReparse")); }
+    finally { setReparsing(false); }
   }
 
   return (
@@ -134,6 +151,40 @@ export default function EntryEditModal({ entry, onClose }: Props) {
           </div>
         );
       })}
+
+      {/* Re-detect with hint for image entries */}
+      {entry.source === "image" && entry.image_url && (
+        <div>
+          {!showHint ? (
+            <button
+              onClick={() => setShowHint(true)}
+              className="w-full text-center py-2.5 text-xs font-medium rounded-xl transition-all active:scale-[0.98]"
+              style={{ color: "var(--theme-accent)", backgroundColor: "rgba(13,148,136,0.06)", border: "1px solid rgba(13,148,136,0.15)" }}
+            >
+              {t("log.redetect")}
+            </button>
+          ) : (
+            <div className="space-y-2">
+              <textarea
+                value={hintText}
+                onChange={(e) => setHintText(e.target.value)}
+                placeholder={t("log.hintPlaceholder")}
+                className="w-full rounded-xl p-3 text-sm resize-none h-16 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
+                style={{ backgroundColor: "var(--bg-input)", color: "var(--text-primary)", border: "1px solid var(--border)" }}
+              />
+              <button
+                onClick={handleRedetect}
+                disabled={reparsing || !hintText.trim()}
+                className="w-full py-2.5 rounded-xl text-white font-semibold text-sm disabled:opacity-50 transition-all active:scale-[0.98]"
+                style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
+              >
+                {reparsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.reanalyze")}
+              </button>
+              {reparseError && <p className="text-red-500 text-sm text-center">{reparseError}</p>}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="flex gap-2">
         <button onClick={onClose}
