@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { formatTime } from "@/lib/formatTime";
 import type { EntryOut } from "@/types/api";
 import i18n from "@/i18n";
@@ -16,7 +15,6 @@ export function EntryRow({
   showMacros = true,
   onEdit,
 }: EntryRowProps) {
-  const { t } = useTranslation();
   const item = entry.items[0];
   const isHe = i18n.language === "he";
   const qty = item?.quantity ?? 1;
