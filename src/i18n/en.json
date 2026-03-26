@@ -20,6 +20,13 @@
     "overBudget": "Over budget",
     "ofXKcal": "of {{x}} kcal"
   },
+  "home": {
+    "addFood": "Add Food",
+    "addDrink": "Add Drink",
+    "noEntries": "No entries yet",
+    "streak": "{{count}}-day streak",
+    "rankedIn": "Ranked #{{rank}} in {{group}}"
+  },
   "nav": { "home": "Home", "myday": "My Day", "contest": "Contest", "trends": "Trends", "profile": "Profile" },
   "myday": {
     "title": "My Day",

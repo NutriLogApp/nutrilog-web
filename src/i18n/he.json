@@ -20,6 +20,13 @@
     "overBudget": "חריגה מהתקציב",
     "ofXKcal": "מתוך {{x}} קק״ל"
   },
+  "home": {
+    "addFood": "הוסף אוכל",
+    "addDrink": "הוסף שתייה",
+    "noEntries": "אין רשומות עדיין",
+    "streak": "רצף של {{count}} ימים",
+    "rankedIn": "מדורג #{{rank}} ב{{group}}"
+  },
   "nav": { "home": "בית", "myday": "היום שלי", "contest": "תחרות", "trends": "מגמות", "profile": "פרופיל" },
   "myday": {
     "title": "היום שלי",
