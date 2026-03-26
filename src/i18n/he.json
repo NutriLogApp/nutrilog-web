@@ -64,7 +64,12 @@
     "milliliters": "מיליליטרים",
     "addToFavorites": "הוסף למשקאות שלי",
     "alreadyInFavorites": "כבר במשקאות שלך",
-    "drinkDetected": "זוהה משקה — להוסיף למועדפים?"
+    "drinkDetected": "זוהה משקה — להוסיף למועדפים?",
+    "notAccurate": "לא מדויק? הוסף תיקון",
+    "hintPlaceholder": "תאר מה לא נכון...",
+    "reanalyze": "נתח מחדש",
+    "redetect": "זהה מחדש עם רמז",
+    "failedReparse": "הניתוח מחדש נכשל"
   },
   "trends": {
     "title": "מגמות",

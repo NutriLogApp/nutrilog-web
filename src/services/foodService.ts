@@ -25,3 +25,11 @@ export async function lookupBarcode(barcode: string): Promise<FoodItem[]> {
   );
   return data.items;
 }
+
+export async function reparseImage(imageUrl: string, hint: string): Promise<FoodItem[]> {
+  const { data } = await apiClient.post<{ items: FoodItem[] }>(
+    "/api/v1/food/re-parse-image",
+    { image_url: imageUrl, hint },
+  );
+  return data.items;
+}

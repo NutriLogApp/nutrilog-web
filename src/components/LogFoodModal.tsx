@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Camera, Type, Loader2 } from "lucide-react";
 import i18n from "@/i18n";
-import { parseText, parseImage } from "@/services/foodService";
+import { parseText, parseImage, reparseImage } from "@/services/foodService";
 import { createEntry } from "@/services/entriesService";
 import { getRecentFoods } from "@/services/recentFoodsService";
 import { listDrinks, createDrink } from "@/services/drinksService";
@@ -26,6 +26,8 @@ export default function LogFoodModal({ onDone }: Props) {
   const [parsing, setParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [drinkFavorites, setDrinkFavorites] = useState<Record<number, DrinkSuggestion | null>>({});
+  const [showHint, setShowHint] = useState(false);
+  const [hintText, setHintText] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const recentFoods = useQuery({ queryKey: ["recentFoods"], queryFn: () => getRecentFoods() });
@@ -107,6 +109,18 @@ export default function LogFoodModal({ onDone }: Props) {
     finally { setParsing(false); }
   }
 
+  async function handleReparse() {
+    if (!hintText.trim() || !imageUrl) return;
+    setParsing(true); setError(null);
+    try {
+      const newItems = await reparseImage(imageUrl, hintText);
+      setItems(newItems);
+      setShowHint(false);
+      setHintText("");
+    } catch { setError(t("log.failedReparse")); }
+    finally { setParsing(false); }
+  }
+
   function updateItemGrams(idx: number, grams: number) {
     setItems((prev) => prev.map((item, i) => {
       if (i !== idx) return item;
@@ -159,7 +173,7 @@ export default function LogFoodModal({ onDone }: Props) {
       {/* Tabs */}
       <div className="flex gap-1 rounded-xl p-1" style={{ backgroundColor: "var(--bg-input)" }}>
         {tabButtons.map(({ key, icon: Icon, label }) => (
-          <button key={key} onClick={() => { setTab(key); setItems([]); setError(null); }}
+          <button key={key} onClick={() => { setTab(key); setItems([]); setError(null); setShowHint(false); setHintText(""); }}
             className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-all"
             style={tab === key ? { backgroundColor: "var(--bg-card-solid)", color: "var(--text-primary)", boxShadow: "var(--shadow-card)" } : { color: "var(--text-muted)" }}>
             <Icon size={16} /> {label}
@@ -196,6 +210,40 @@ export default function LogFoodModal({ onDone }: Props) {
       {items.length > 0 && (
         <div className="space-y-3">
           <p className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{t("log.aiResult")}</p>
+
+          {/* Hint correction for photo tab */}
+          {tab === "photo" && imageUrl && (
+            <div>
+              {!showHint ? (
+                <button
+                  onClick={() => setShowHint(true)}
+                  className="w-full text-center py-2 text-xs font-medium rounded-lg transition-all active:scale-[0.98]"
+                  style={{ color: "var(--text-muted)", backgroundColor: "rgba(239,68,68,0.06)", border: "1px dashed rgba(239,68,68,0.25)" }}
+                >
+                  {t("log.notAccurate")}
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <textarea
+                    value={hintText}
+                    onChange={(e) => setHintText(e.target.value)}
+                    placeholder={t("log.hintPlaceholder")}
+                    className="w-full rounded-xl p-3 text-sm resize-none h-16 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
+                    style={{ backgroundColor: "var(--bg-input)", color: "var(--text-primary)", border: "1px solid var(--border)" }}
+                  />
+                  <button
+                    onClick={handleReparse}
+                    disabled={parsing || !hintText.trim()}
+                    className="w-full py-2.5 rounded-xl text-white font-semibold text-sm disabled:opacity-50 transition-all active:scale-[0.98]"
+                    style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
+                  >
+                    {parsing ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("log.reanalyze")}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {items.map((item, i) => {
             const isHe = i18n.language === "he";
             const name = isHe && item.food_name_he ? item.food_name_he : item.food_name;
