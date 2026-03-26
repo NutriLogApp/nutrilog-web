@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Scale, Flame, Beef, Droplets, Wheat, CircleDot, Trash2 } from "lucide-react";
+import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Scale, Flame, Beef, Droplets, Wheat, CircleDot, Trash2, AlertTriangle } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
@@ -152,6 +152,23 @@ export default function SettingsPage() {
             </div>
           </div>
         )}
+
+        {/* Disclaimer */}
+        <div className="animate-fade-up stagger-4">
+          <div className="glass-card-sm p-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle size={16} className="shrink-0 mt-0.5" style={{ color: "var(--text-muted)" }} />
+              <div>
+                <p className="text-xs font-semibold mb-1" style={{ color: "var(--text-secondary)" }}>
+                  {t("settings.disclaimer_title")}
+                </p>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
+                  {t("settings.disclaimer_text")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <button onClick={() => signOut()} className="w-full text-center text-sm py-3 font-medium text-red-400">{t("profile.signOut")}</button>
       </div>
