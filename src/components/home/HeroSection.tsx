@@ -45,6 +45,8 @@ export function HeroSection({
       style={{
         background: `linear-gradient(135deg, color-mix(in srgb, var(--theme-start) 14%, transparent), color-mix(in srgb, var(--theme-end) 8%, transparent))`,
         padding: "16px 16px 12px",
+        borderRadius: "var(--radius)",
+        margin: "0 16px",
       }}
     >
       {/* Header row */}

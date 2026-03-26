@@ -27,7 +27,7 @@
     "streak": "{{count}}-day streak",
     "rankedIn": "Ranked #{{rank}} in {{group}}"
   },
-  "nav": { "home": "Home", "myday": "My Day", "contest": "Contest", "trends": "Trends", "profile": "Profile" },
+  "nav": { "home": "Home", "myday": "My Day", "chat": "Chat", "contest": "Contest", "trends": "Trends", "profile": "Profile" },
   "myday": {
     "title": "My Day",
     "food": "Food",
@@ -269,8 +269,20 @@
     "weightHint": "Tap to see weight trend and history",
     "dailySummary": "{{cal}} kcal · {{p}}p · {{f}}f · {{c}}c"
   },
+  "chat": {
+    "placeholder": "Ask about food, nutrition...",
+    "subtitle": "Your nutrition assistant",
+    "welcome": "Hey! I can help you with meal ideas, nutrition questions, and calorie tracking. What's on your mind?\n\n\u26a0\ufe0f This is general information only \u2014 not medical advice. Always consult a professional.",
+    "hint": "Try asking: \"What should I eat for dinner?\"",
+    "newChat": "New chat",
+    "logMeal": "Log this meal",
+    "logging": "Logging...",
+    "logged": "Logged!"
+  },
   "settings": {
     "title": "Settings",
-    "back": "Back"
+    "back": "Back",
+    "disclaimer_title": "Disclaimer",
+    "disclaimer_text": "NutriLog's AI assistant provides general nutrition information only. It is not a substitute for professional medical or dietary advice. Always consult a qualified healthcare provider before making changes to your diet. NutriLog is not responsible for any decisions made based on the assistant's suggestions."
   }
 }
