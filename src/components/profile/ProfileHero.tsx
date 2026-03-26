@@ -30,7 +30,12 @@ export default function ProfileHero({ profile }: Props) {
   });
 
   return (
-    <div className="relative px-5 pt-10 pb-4 text-center">
+    <div
+      className="relative px-5 pt-10 pb-4 text-center"
+      style={{
+        background: `linear-gradient(135deg, color-mix(in srgb, var(--theme-start) 14%, transparent), color-mix(in srgb, var(--theme-end) 8%, transparent))`,
+      }}
+    >
       {/* Gear icon */}
       <button
         onClick={() => navigate("/settings")}
