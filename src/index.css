@@ -27,6 +27,8 @@
   --radius-xs: 10px;
   --ring-track: color-mix(in srgb, var(--text-primary) 15%, transparent);
   --macro-row-bg: rgba(255, 255, 255, 0.5);
+  --bg-shell-outer: #e4e7ed;
+  --shadow-shell: 0 4px 40px rgba(0,0,0,0.08);
 }
 
 /* Dark */
@@ -46,6 +48,8 @@
     --shadow-elevated: 0 4px 24px rgba(0,0,0,0.3);
     --shadow-fab: 0 4px 20px rgba(0,0,0,0.4);
     --macro-row-bg: rgba(255, 255, 255, 0.06);
+    --bg-shell-outer: #060810;
+    --shadow-shell: 0 4px 40px rgba(0,0,0,0.3);
   }
 }
 
@@ -64,6 +68,8 @@ html.force-dark {
   --shadow-elevated: 0 4px 24px rgba(0,0,0,0.3);
   --shadow-fab: 0 4px 20px rgba(0,0,0,0.4);
   --macro-row-bg: rgba(255, 255, 255, 0.06);
+  --bg-shell-outer: #060810;
+  --shadow-shell: 0 4px 40px rgba(0,0,0,0.3);
 }
 
 html.force-light {
@@ -102,6 +108,21 @@ html.force-light {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
+}
+
+/* ========== Desktop App Shell ========== */
+@media (min-width: 513px) {
+  .app-shell-outer {
+    background-color: var(--bg-shell-outer);
+  }
+  .app-shell-inner {
+    max-width: 512px;
+    margin: 0 auto;
+    border-radius: 24px;
+    box-shadow: var(--shadow-shell);
+    overflow: hidden;
+    background-color: var(--bg-page);
+  }
 }
 
 /* ========== Animations ========== */
