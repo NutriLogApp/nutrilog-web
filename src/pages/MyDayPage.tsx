@@ -1,12 +1,12 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { UtensilsCrossed, Droplets, Trash2, Pencil } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
-import { deleteEntry } from "@/services/entriesService";
 import { getTodayWater } from "@/services/waterService";
+import { useDeleteEntry } from "@/hooks/useDeleteEntry";
 import { formatTime } from "@/lib/formatTime";
 import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
@@ -28,13 +28,7 @@ export default function MyDayPage() {
   const { data: stats } = useQuery({ queryKey: ["dailyStats", todayLocal()], queryFn: () => getDailyStats(todayLocal()) });
   const { data: water } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
 
-  const deleteMut = useMutation({
-    mutationFn: (entryId: string) => deleteEntry(entryId),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["dailyStats"] });
-      qc.invalidateQueries({ queryKey: ["water"] });
-    },
-  });
+  const deleteMut = useDeleteEntry();
 
   const use24h = profile?.use_24h ?? true;
   const waterAmt = water?.amount_ml ?? 0;

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
-import { updateEntry } from "@/services/entriesService";
+import { useUpdateEntry } from "@/hooks/useUpdateEntry";
 import i18n from "@/i18n";
 import type { EntryOut, FoodItem } from "@/types/api";
 
@@ -13,21 +12,13 @@ interface Props {
 
 export default function EntryEditModal({ entry, onClose }: Props) {
   const { t } = useTranslation();
-  const qc = useQueryClient();
   const [items, setItems] = useState<FoodItem[]>([]);
 
   useEffect(() => {
     setItems(entry.items.map((item) => ({ ...item })));
   }, [entry]);
 
-  const saveMut = useMutation({
-    mutationFn: () => updateEntry(entry.id, items),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["dailyStats"] });
-      qc.invalidateQueries({ queryKey: ["water"] });
-      onClose();
-    },
-  });
+  const saveMut = useUpdateEntry();
 
   function updateItemGrams(idx: number, grams: number) {
     setItems((prev) => prev.map((item, i) => {
@@ -124,7 +115,7 @@ export default function EntryEditModal({ entry, onClose }: Props) {
           style={{ backgroundColor: "var(--bg-input)", color: "var(--text-secondary)" }}>
           {t("profile.cancel")}
         </button>
-        <button onClick={() => saveMut.mutate()} disabled={saveMut.isPending}
+        <button onClick={() => saveMut.mutate({ id: entry.id, items }, { onSuccess: onClose })} disabled={saveMut.isPending}
           className="flex-1 py-3 rounded-xl text-white text-sm font-semibold disabled:opacity-50 transition-all active:scale-[0.98]"
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
           {saveMut.isPending ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("profile.save")}
