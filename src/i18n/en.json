@@ -249,7 +249,18 @@
     "noWeightData": "Log at least two weights to see your trend",
     "noEntries": "No entries yet",
     "today": "Today",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "foodLog": "Food Log",
+    "7d": "7 Days",
+    "30d": "30 Days",
+    "all": "All",
+    "loadMore": "Load more",
+    "loadingMore": "Loading...",
+    "streakHint": "Days you logged food in a row",
+    "bestStreakHint": "Your longest ever logging streak",
+    "weeklyGoalHint": "Days this week where calories were within 10% of your goal",
+    "weightHint": "Tap to see weight trend and history",
+    "dailySummary": "{{cal}} kcal · {{p}}p · {{f}}f · {{c}}c"
   },
   "settings": {
     "title": "Settings",

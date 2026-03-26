@@ -58,7 +58,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
     <div className="space-y-3">
       {/* Streaks */}
       <div className="glass-card overflow-hidden">
-        <div className="flex items-center p-3.5">
+        <div className="flex items-center p-3.5" title={t("profileTabs.streakHint")}>
           <Flame size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.currentStreak")}
@@ -67,7 +67,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
             {streak} {t("profileTabs.days")}
           </span>
         </div>
-        <div className="flex items-center p-3.5" style={{ borderTop: "1px solid var(--border)" }}>
+        <div className="flex items-center p-3.5" style={{ borderTop: "1px solid var(--border)" }} title={t("profileTabs.bestStreakHint")}>
           <Target size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.bestStreak")}
@@ -79,7 +79,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
       </div>
 
       {/* Calorie adherence */}
-      <div className="glass-card p-3.5">
+      <div className="glass-card p-3.5" title={t("profileTabs.weeklyGoalHint")}>
         <div className="flex items-center mb-2">
           <BarChart3 size={16} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
@@ -104,6 +104,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
       <button
         onClick={() => onSwitchTab("weight")}
         className="glass-card p-3.5 w-full text-start active:scale-[0.98] transition-transform"
+        title={t("profileTabs.weightHint")}
       >
         <div className="flex items-center">
           <Scale size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />

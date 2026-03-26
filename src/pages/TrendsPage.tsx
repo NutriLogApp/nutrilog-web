@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { TrendingUp, Scale } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import {
-  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
 import { getRangeStats } from "@/services/statsService";
 import { getProfile } from "@/services/profileService";
-import { getWeightHistory } from "@/services/weightService";
 
 function getWeekRange(firstDay: number = 0) {
   // firstDay: 0=Sunday, 1=Monday
@@ -156,47 +155,6 @@ export default function TrendsPage() {
         </div>
       )}
 
-      {/* Weight Trend — Secondary Section */}
-      <WeightTrend />
-    </div>
-  );
-}
-
-function WeightTrend() {
-  const { t } = useTranslation();
-  const { data: history } = useQuery({ queryKey: ["weightHistory"], queryFn: getWeightHistory });
-
-  if (!history || history.length < 2) return null;
-
-  const chartData = history.map((w) => ({
-    date: `${w.date.slice(8)}/${w.date.slice(5, 7)}`,
-    weight: w.weight_kg,
-  }));
-
-  return (
-    <div className="mt-6 animate-fade-up stagger-3">
-      <div className="flex items-center gap-2 mb-3">
-        <Scale size={14} style={{ color: "var(--theme-accent)" }} />
-        <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.title")}</h2>
-        <span className="text-xs font-bold tabular-nums ms-auto" style={{ color: "var(--theme-accent)" }}>
-          {history[history.length - 1].weight_kg} kg
-        </span>
-      </div>
-      <div className="glass-card p-4">
-      <ResponsiveContainer width="100%" height={120}>
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-          <XAxis dataKey="date" tick={{ fontSize: 9, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fontSize: 9, fill: "var(--text-muted)" }} width={30} axisLine={false} tickLine={false} domain={["dataMin - 1", "dataMax + 1"]} />
-          <Tooltip
-            contentStyle={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12, color: "var(--text-primary)" }}
-            labelStyle={{ color: "var(--text-primary)" }}
-            itemStyle={{ color: "var(--text-secondary)" }}
-          />
-          <Line type="monotone" dataKey="weight" stroke="var(--theme-accent)" strokeWidth={2} dot={{ r: 2.5, fill: "var(--theme-accent)" }} />
-        </LineChart>
-      </ResponsiveContainer>
-      </div>
     </div>
   );
 }
