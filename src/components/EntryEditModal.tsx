@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Loader2 } from "lucide-react";
-import { updateEntry } from "@/services/entriesService";
+import { Loader2, Trash2 } from "lucide-react";
+import { useUpdateEntry } from "@/hooks/useUpdateEntry";
+import { useDeleteEntry } from "@/hooks/useDeleteEntry";
 import i18n from "@/i18n";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import type { EntryOut, FoodItem } from "@/types/api";
 
 interface Props {
@@ -13,21 +14,27 @@ interface Props {
 
 export default function EntryEditModal({ entry, onClose }: Props) {
   const { t } = useTranslation();
-  const qc = useQueryClient();
   const [items, setItems] = useState<FoodItem[]>([]);
 
   useEffect(() => {
     setItems(entry.items.map((item) => ({ ...item })));
   }, [entry]);
 
-  const saveMut = useMutation({
-    mutationFn: () => updateEntry(entry.id, items),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["dailyStats"] });
-      qc.invalidateQueries({ queryKey: ["water"] });
-      onClose();
-    },
-  });
+  const saveMut = useUpdateEntry();
+  const deleteMut = useDeleteEntry();
+  const [deleteItemIdx, setDeleteItemIdx] = useState<number | null>(null);
+
+  function removeItem(idx: number) {
+    const remaining = items.filter((_, i) => i !== idx);
+    if (remaining.length === 0) {
+      // Last item — delete the entire entry
+      deleteMut.mutate(entry.id, { onSuccess: onClose });
+    } else {
+      // Save with remaining items
+      setItems(remaining);
+      saveMut.mutate({ id: entry.id, items: remaining }, { onSuccess: () => setDeleteItemIdx(null) });
+    }
+  }
 
   function updateItemGrams(idx: number, grams: number) {
     setItems((prev) => prev.map((item, i) => {
@@ -63,12 +70,22 @@ export default function EntryEditModal({ entry, onClose }: Props) {
           <div key={idx} className="glass-card-sm p-4 space-y-3"
             style={isDrink ? { borderLeft: "3px solid rgba(56, 189, 248, 0.5)" } : undefined}>
             <div className="flex items-center justify-between">
-              <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{name}</p>
-              <div className="text-end">
-                <p className="text-lg font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
-                  {item.calories}
-                </p>
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{t("dashboard.kcal")}</p>
+              <p className="font-semibold text-sm flex-1 min-w-0 truncate" style={{ color: "var(--text-primary)" }}>{name}</p>
+              <div className="flex items-center gap-2">
+                <div className="text-end">
+                  <p className="text-lg font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
+                    {item.calories}
+                  </p>
+                  <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{t("dashboard.kcal")}</p>
+                </div>
+                <button
+                  onClick={() => setDeleteItemIdx(idx)}
+                  className="p-1.5 rounded-full transition-all hover:bg-red-500/10 active:scale-90"
+                  style={{ color: "var(--text-muted)" }}
+                  aria-label={t("common.delete")}
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
             </div>
 
@@ -124,12 +141,22 @@ export default function EntryEditModal({ entry, onClose }: Props) {
           style={{ backgroundColor: "var(--bg-input)", color: "var(--text-secondary)" }}>
           {t("profile.cancel")}
         </button>
-        <button onClick={() => saveMut.mutate()} disabled={saveMut.isPending}
+        <button onClick={() => saveMut.mutate({ id: entry.id, items }, { onSuccess: onClose })} disabled={saveMut.isPending}
           className="flex-1 py-3 rounded-xl text-white text-sm font-semibold disabled:opacity-50 transition-all active:scale-[0.98]"
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
           {saveMut.isPending ? <Loader2 size={16} className="animate-spin mx-auto" /> : t("profile.save")}
         </button>
       </div>
+
+      <ConfirmDialog
+        open={deleteItemIdx !== null}
+        message={t("common.deleteConfirm")}
+        onConfirm={() => {
+          if (deleteItemIdx !== null) removeItem(deleteItemIdx);
+          setDeleteItemIdx(null);
+        }}
+        onCancel={() => setDeleteItemIdx(null)}
+      />
     </div>
   );
 }

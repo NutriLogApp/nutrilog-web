@@ -17,6 +17,7 @@ const ContestPage = lazy(() => import("@/pages/ContestPage"));
 const TrendsPage = lazy(() => import("@/pages/TrendsPage"));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
 const AdminPage = lazy(() => import("@/pages/AdminPage"));
+const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const GroupLeaderboardPage = lazy(() => import("@/pages/GroupLeaderboardPage"));
 const CreateGroupPage = lazy(() => import("@/pages/CreateGroupPage"));
 
@@ -61,6 +62,7 @@ export default function App() {
                     <Route path="/contest/groups/:groupId" element={<GroupLeaderboardPage />} />
                     <Route path="/trends" element={<TrendsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/admin" element={<AdminPage />} />
                   </Route>
                   <Route path="*" element={<Navigate to="/" replace />} />

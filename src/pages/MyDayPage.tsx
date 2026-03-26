@@ -1,18 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { UtensilsCrossed, Droplets, Trash2, Pencil } from "lucide-react";
+import { UtensilsCrossed, Droplets, Pencil } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { todayLocal } from "@/lib/dateUtils";
 import { getProfile } from "@/services/profileService";
-import { deleteEntry } from "@/services/entriesService";
 import { getTodayWater } from "@/services/waterService";
 import { formatTime } from "@/lib/formatTime";
 import Modal from "@/components/Modal";
 import LogFoodModal from "@/components/LogFoodModal";
 import DrinkPickerModal from "@/components/DrinkPickerModal";
 import EntryEditModal from "@/components/EntryEditModal";
-import ConfirmDialog from "@/components/ConfirmDialog";
 import type { EntryOut } from "@/types/api";
 
 
@@ -22,19 +20,9 @@ export default function MyDayPage() {
   const [showAddFood, setShowAddFood] = useState(false);
   const [showAddDrink, setShowAddDrink] = useState(false);
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-
   const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const { data: stats } = useQuery({ queryKey: ["dailyStats", todayLocal()], queryFn: () => getDailyStats(todayLocal()) });
   const { data: water } = useQuery({ queryKey: ["water"], queryFn: getTodayWater });
-
-  const deleteMut = useMutation({
-    mutationFn: (entryId: string) => deleteEntry(entryId),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["dailyStats"] });
-      qc.invalidateQueries({ queryKey: ["water"] });
-    },
-  });
 
   const use24h = profile?.use_24h ?? true;
   const waterAmt = water?.amount_ml ?? 0;
@@ -118,17 +106,12 @@ export default function MyDayPage() {
                   </p>
                 </button>
 
-                {/* Actions */}
+                {/* Edit action */}
                 <div className="flex items-center pe-1 shrink-0">
                   <button onClick={() => setEditEntry(entry)}
                     className="p-3 rounded-full transition-all active:scale-90"
                     style={{ color: "var(--text-muted)", minWidth: 44, minHeight: 44 }}>
                     <Pencil size={16} />
-                  </button>
-                  <button onClick={() => setDeleteId(entry.id)}
-                    className="p-3 rounded-full transition-all active:scale-90 hover:bg-red-500/10"
-                    style={{ color: "var(--text-muted)", minWidth: 44, minHeight: 44 }}>
-                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
@@ -150,12 +133,6 @@ export default function MyDayPage() {
         </Modal>
       )}
 
-      <ConfirmDialog
-        open={!!deleteId}
-        message={t("common.deleteConfirm")}
-        onConfirm={() => { if (deleteId) deleteMut.mutate(deleteId); setDeleteId(null); }}
-        onCancel={() => setDeleteId(null)}
-      />
     </div>
   );
 }

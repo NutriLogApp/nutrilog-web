@@ -226,5 +226,44 @@
   "common": {
     "delete": "Delete",
     "deleteConfirm": "Are you sure you want to delete this?"
+  },
+  "profileTabs": {
+    "stats": "Stats",
+    "friends": "Friends",
+    "log": "Log",
+    "weight": "Weight",
+    "currentStreak": "Current Streak",
+    "bestStreak": "Best Streak",
+    "weeklyGoalHit": "Weekly Goal Hit",
+    "days": "days",
+    "daysCount": "{{hit}}/{{total}} days",
+    "weightLabel": "Weight",
+    "thisMonth": "this month",
+    "seeAllFriends": "See all friends",
+    "shareInvite": "Share invite link",
+    "addFriendEmpty": "Add friends to track together",
+    "viewFullHistory": "View full history",
+    "logTodaysWeight": "Log today's weight",
+    "updateTodaysWeight": "Update today's weight",
+    "weightHistory": "History",
+    "noWeightData": "Log at least two weights to see your trend",
+    "noEntries": "No entries yet",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "foodLog": "Food Log",
+    "7d": "7 Days",
+    "30d": "30 Days",
+    "all": "All",
+    "loadMore": "Load more",
+    "loadingMore": "Loading...",
+    "streakHint": "Days you logged food in a row",
+    "bestStreakHint": "Your longest ever logging streak",
+    "weeklyGoalHint": "Days this week where calories were within 10% of your goal",
+    "weightHint": "Tap to see weight trend and history",
+    "dailySummary": "{{cal}} kcal · {{p}}p · {{f}}f · {{c}}c"
+  },
+  "settings": {
+    "title": "Settings",
+    "back": "Back"
   }
 }
