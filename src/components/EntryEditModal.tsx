@@ -17,10 +17,6 @@ function LegacyMultiItemEdit({ entry, onClose }: { entry: EntryOut; onClose: () 
   const saveMut = useUpdateEntry();
   const deleteMut = useDeleteEntry();
   const [deleteItemIdx, setDeleteItemIdx] = useState<number | null>(null);
-  const [showHint, setShowHint] = useState(false);
-  const [hintText, setHintText] = useState("");
-  const [reparsing, setReparsing] = useState(false);
-  const [reparseError, setReparseError] = useState<string | null>(null);
 
   function removeItem(idx: number) {
     const remaining = items.filter((_, i) => i !== idx);
@@ -53,18 +49,6 @@ function LegacyMultiItemEdit({ entry, onClose }: { entry: EntryOut; onClose: () 
       updated.calories = Math.round(updated.protein_g * 4 + updated.fat_g * 9 + updated.carbs_g * 4);
       return updated;
     }));
-  }
-
-  async function handleRedetect() {
-    if (!hintText.trim() || !entry.image_url) return;
-    setReparsing(true); setReparseError(null);
-    try {
-      const newItems = await reparseImage(entry.image_url, hintText);
-      setItems(newItems);
-      setShowHint(false);
-      setHintText("");
-    } catch { setReparseError(t("log.failedReparse")); }
-    finally { setReparsing(false); }
   }
 
   return (
@@ -160,6 +144,22 @@ export default function EntryEditModal({ entry, onClose }: Props) {
 
   const saveMut = useUpdateEntry();
   const deleteMut = useDeleteEntry();
+  const [showHint, setShowHint] = useState(false);
+  const [hintText, setHintText] = useState("");
+  const [reparsing, setReparsing] = useState(false);
+  const [reparseError, setReparseError] = useState<string | null>(null);
+
+  async function handleRedetect() {
+    if (!hintText.trim() || !entry.image_url) return;
+    setReparsing(true); setReparseError(null);
+    try {
+      const newItems = await reparseImage(entry.image_url, hintText);
+      setItem({ ...newItems[0], quantity: newItems[0]?.quantity ?? 1 });
+      setShowHint(false);
+      setHintText("");
+    } catch { setReparseError(t("log.failedReparse")); }
+    finally { setReparsing(false); }
+  }
 
   const isHe = i18n.language === "he";
   const name = isHe && item.food_name_he ? item.food_name_he : item.food_name;
