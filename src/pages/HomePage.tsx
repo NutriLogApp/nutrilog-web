@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useDailySummary } from "@/hooks/useDailySummary";
-import { getDailyInsight } from "@/services/insightService";
 import { HeroSection } from "@/components/home/HeroSection";
 import { QuickActions } from "@/components/home/QuickActions";
-import { InsightLine } from "@/components/home/InsightLine";
 import { EntryList } from "@/components/shared/EntryList";
 import CompetitionWidget from "@/components/CompetitionWidget";
 import LogFoodModal from "@/components/LogFoodModal";
@@ -19,13 +17,6 @@ export default function HomePage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const summary = useDailySummary();
-  // Insight query
-  const insightQuery = useQuery({
-    queryKey: ["insight"],
-    queryFn: getDailyInsight,
-    staleTime: 10 * 60 * 1000, // 10 min
-  });
-
   // Modal state
   const [showAddFood, setShowAddFood] = useState(false);
   const [showAddDrink, setShowAddDrink] = useState(false);
@@ -37,7 +28,6 @@ export default function HomePage() {
     setShowAddDrink(false);
     qc.invalidateQueries({ queryKey: ["dailyStats"] });
     qc.invalidateQueries({ queryKey: ["water"] });
-    qc.invalidateQueries({ queryKey: ["insight"] });
   };
 
   // Onboarding guard
@@ -82,18 +72,8 @@ export default function HomePage() {
         />
       </div>
 
-      {/* AI Insight */}
-      {insightQuery.data?.suggestion && (
-        <div className="animate-fade-up stagger-3">
-          <InsightLine
-            text={insightQuery.data.suggestion}
-            category={insightQuery.data.category}
-          />
-        </div>
-      )}
-
       {/* Entry List */}
-      <div className="animate-fade-up stagger-4 px-4 mt-2">
+      <div className="animate-fade-up stagger-3 px-4 mt-2">
         <EntryList
           entries={summary.entries}
           use24h={summary.use24h}
