@@ -22,6 +22,7 @@ export default function AddFriendModal({ isOpen, onClose, initialSearch }: AddFr
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const appliedInitialRef = useRef(false);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -31,11 +32,16 @@ export default function AddFriendModal({ isOpen, onClose, initialSearch }: AddFr
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Apply initialSearch when modal opens
+  // Pre-fill search when modal opens with initialSearch (deep link flow)
   useEffect(() => {
-    if (isOpen && initialSearch) {
+    if (isOpen && initialSearch && !appliedInitialRef.current) {
+      appliedInitialRef.current = true;
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: seeds input before async search
       setFriendSearch(initialSearch);
       searchUser(initialSearch.trim()).then(setFriendResult);
+    }
+    if (!isOpen) {
+      appliedInitialRef.current = false;
     }
   }, [isOpen, initialSearch]);
 

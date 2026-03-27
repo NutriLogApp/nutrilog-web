@@ -82,13 +82,13 @@ export default function FriendsTab() {
 
       {/* All Friends Modal — lists all friends with pending requests at top */}
       <Modal open={modal === "all"} onClose={() => setModal(null)} title={t("profileTabs.seeAllFriends")}>
-        <AllFriendsList onClose={() => setModal(null)} />
+        <AllFriendsList />
       </Modal>
     </div>
   );
 }
 
-function AllFriendsList({ onClose: _onClose }: { onClose: () => void }) {
+function AllFriendsList() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const { data: friends = [] } = useQuery({ queryKey: ["friends"], queryFn: listFriends });
