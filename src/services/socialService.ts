@@ -96,3 +96,12 @@ export async function getWeekPoints(): Promise<{ week_start: string; total_point
   const { data } = await apiClient.get<{ week_start: string; total_points: number; days: { date: string; total_points: number }[] }>("/api/v1/points/week");
   return data;
 }
+
+export async function resolveFriendCode(code: string): Promise<{ username: string; name: string } | null> {
+  try {
+    const { data } = await apiClient.get<{ username: string; name: string }>(`/api/v1/friends/resolve?code=${encodeURIComponent(code)}`);
+    return data;
+  } catch {
+    return null;
+  }
+}

@@ -20,6 +20,7 @@ const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const GroupLeaderboardPage = lazy(() => import("@/pages/GroupLeaderboardPage"));
 const CreateGroupPage = lazy(() => import("@/pages/CreateGroupPage"));
 const ChatPage = lazy(() => import("@/pages/ChatPage"));
+const FriendAddPage = lazy(() => import("@/pages/FriendAddPage"));
 
 import { queryClient } from "@/lib/queryConfig";
 
@@ -61,6 +62,7 @@ export default function App() {
                     <Route path="/contest" element={<ContestPage />} />
                     <Route path="/contest/groups/new" element={<CreateGroupPage />} />
                     <Route path="/contest/groups/:groupId" element={<GroupLeaderboardPage />} />
+                    <Route path="/friends/add" element={<FriendAddPage />} />
                     <Route path="/trends" element={<TrendsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/settings" element={<SettingsPage />} />
