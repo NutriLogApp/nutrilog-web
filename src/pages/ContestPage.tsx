@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Trophy, Crown, Users, Plus, Flame } from "lucide-react";
+import { Trophy, Crown, Users, UserPlus, Plus, Flame } from "lucide-react";
 import { getProfile } from "@/services/profileService";
 import { listGroups, getLeaderboard, getWeekPoints } from "@/services/socialService";
+import AddFriendModal from "@/components/shared/AddFriendModal";
 
 export default function ContestPage() {
   const { t } = useTranslation();
@@ -13,6 +15,8 @@ export default function ContestPage() {
   const enabled = !!profile?.username;
   const { data: groups } = useQuery({ queryKey: ["groups"], queryFn: listGroups, enabled });
   const { data: weekPts } = useQuery({ queryKey: ["weekPoints"], queryFn: getWeekPoints, enabled });
+
+  const [showAddFriend, setShowAddFriend] = useState(false);
 
   const firstGroup = groups?.[0];
   const { data: leaderboard } = useQuery({
@@ -47,19 +51,26 @@ export default function ContestPage() {
   // No groups — CTA
   if (!firstGroup) {
     return (
-      <div className="px-5 pt-8 pb-4 flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
-        <Trophy size={40} strokeWidth={1.2} style={{ color: "var(--text-muted)", opacity: 0.5, marginBottom: 20 }} />
-        <h1 className="text-xl font-bold tracking-tight text-center mb-1.5" style={{ color: "var(--text-primary)" }}>
-          {t("contest.noCompetitions", "No competitions yet")}
-        </h1>
-        <p className="text-[13px] text-center mb-6 max-w-[240px] leading-relaxed" style={{ color: "var(--text-muted)" }}>
-          {t("contest.addFriendsToStart", "Add friends to start competing")}
-        </p>
-        <button onClick={() => navigate("/profile")}
-          className="px-7 py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-[0.97]"
-          style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-          {t("contest.findFriends", "Find Friends")}
-        </button>
+      <div className="px-5 pt-8 pb-4">
+        <div className="glass-card p-5 mt-8"
+          style={{ border: "1px solid color-mix(in srgb, var(--theme-accent) 12%, var(--border))" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <Trophy size={18} style={{ color: "var(--theme-accent)" }} />
+            <h2 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>
+              {t("contest.noCompetitions", "No competitions yet")}
+            </h2>
+          </div>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "var(--text-muted)" }}>
+            {t("contest.addFriendsToStart", "Add friends to start competing")}
+          </p>
+          <button onClick={() => setShowAddFriend(true)}
+            className="flex items-center gap-1.5 text-sm font-semibold transition-all active:scale-[0.97]"
+            style={{ color: "var(--theme-accent)" }}>
+            <UserPlus size={15} />
+            {t("contest.findFriends", "Add Friends")}
+          </button>
+        </div>
+        <AddFriendModal isOpen={showAddFriend} onClose={() => setShowAddFriend(false)} />
       </div>
     );
   }
@@ -160,12 +171,13 @@ export default function ContestPage() {
             <Plus size={15} /> {t("contest.newGroup")}
           </button>
         )}
-        <button onClick={() => navigate("/profile")}
+        <button onClick={() => setShowAddFriend(true)}
           className="flex-1 glass-card-sm py-3 flex items-center justify-center gap-2 text-sm font-semibold transition-all active:scale-[0.97]"
           style={{ color: "var(--theme-accent)" }}>
           <Users size={15} /> {t("contest.inviteFriends")}
         </button>
       </div>
+      <AddFriendModal isOpen={showAddFriend} onClose={() => setShowAddFriend(false)} />
     </div>
   );
 }
