@@ -6,6 +6,7 @@ import { Trophy, Crown, Users, UserPlus, Plus, Flame } from "lucide-react";
 import { getProfile } from "@/services/profileService";
 import { listGroups, getLeaderboard, getWeekPoints } from "@/services/socialService";
 import AddFriendModal from "@/components/shared/AddFriendModal";
+import DevScenarioPanel from "@/components/contest/DevScenarioPanel";
 
 export default function ContestPage() {
   const { t } = useTranslation();
@@ -44,6 +45,7 @@ export default function ContestPage() {
           style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
           {t("contest.goToProfile")}
         </button>
+        <DevScenarioPanel />
       </div>
     );
   }
@@ -71,6 +73,7 @@ export default function ContestPage() {
           </button>
         </div>
         <AddFriendModal isOpen={showAddFriend} onClose={() => setShowAddFriend(false)} />
+        <DevScenarioPanel />
       </div>
     );
   }
@@ -178,6 +181,7 @@ export default function ContestPage() {
         </button>
       </div>
       <AddFriendModal isOpen={showAddFriend} onClose={() => setShowAddFriend(false)} />
+      <DevScenarioPanel />
     </div>
   );
 }
