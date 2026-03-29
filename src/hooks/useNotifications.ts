@@ -141,7 +141,13 @@ export function useNotifications(streak: number) {
   ]);
 
   const [lastViewed, setLastViewed] = useState(getLastViewed);
-  const hasUnread = items.some((item) => item.timestamp > lastViewed);
+  // Only friend requests and announcements have stable server timestamps.
+  // Contest/streak use query-refresh timestamps that change on every load.
+  const hasUnread = items.some(
+    (item) =>
+      (item.type === "friend_request" || item.type === "announcement") &&
+      item.timestamp > lastViewed
+  );
 
   const markRead = useCallback(() => {
     const now = Date.now();
