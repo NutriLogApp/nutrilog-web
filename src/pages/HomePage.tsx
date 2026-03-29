@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useDailySummary } from "@/hooks/useDailySummary";
-import { HeroSection } from "@/components/home/HeroSection";
+import { CalorieSummary } from "@/components/home/CalorieSummary";
 import { QuickActions } from "@/components/home/QuickActions";
 import { EntryList } from "@/components/shared/EntryList";
-import CompetitionWidget from "@/components/CompetitionWidget";
+import { NotificationCenter } from "@/components/notifications/NotificationCenter";
+import { useNotifications } from "@/hooks/useNotifications";
+import { respondToRequest } from "@/services/socialService";
 import LogFoodModal from "@/components/LogFoodModal";
 import DrinkPickerModal from "@/components/DrinkPickerModal";
 import EntryEditModal from "@/components/EntryEditModal";
@@ -21,6 +23,26 @@ export default function HomePage() {
   const [showAddFood, setShowAddFood] = useState(false);
   const [showAddDrink, setShowAddDrink] = useState(false);
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const { items, hasUnread, markRead, lastViewed } = useNotifications(summary.streak);
+
+  const approveMut = useMutation({
+    mutationFn: (friendshipId: string) => respondToRequest(friendshipId, "accept"),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["friendRequests"] });
+      qc.invalidateQueries({ queryKey: ["friendsLeaderboard"] });
+    },
+  });
+
+  const handleOpenNotifications = () => {
+    setShowNotifications(true);
+    markRead();
+  };
+  const handleCloseNotifications = () => setShowNotifications(false);
+  const handleApproveFriend = (friendshipId: string, _name: string) => {
+    approveMut.mutate(friendshipId);
+  };
 
   // Invalidation callback after logging food/drink
   const handleDone = () => {
@@ -47,9 +69,9 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero Section */}
+      {/* Calorie Summary */}
       <div className="animate-fade-up stagger-1">
-        <HeroSection
+        <CalorieSummary
           caloriesConsumed={summary.caloriesConsumed}
           caloriesGoal={summary.caloriesGoal}
           proteinConsumed={summary.proteinConsumed}
@@ -61,6 +83,8 @@ export default function HomePage() {
           waterMl={summary.waterMl}
           waterGoalMl={summary.waterGoalMl}
           streak={summary.streak}
+          onBellClick={handleOpenNotifications}
+          hasUnread={hasUnread}
         />
       </div>
 
@@ -81,10 +105,14 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Competition Widget */}
-      <div className="px-4 mt-3">
-        <CompetitionWidget />
-      </div>
+      {/* Notification Center */}
+      <NotificationCenter
+        open={showNotifications}
+        items={items}
+        lastViewed={lastViewed}
+        onClose={handleCloseNotifications}
+        onApproveFriend={handleApproveFriend}
+      />
 
       {/* Log Food Modal */}
       <Modal open={showAddFood} onClose={() => setShowAddFood(false)} title={t("myday.addFood")}>
