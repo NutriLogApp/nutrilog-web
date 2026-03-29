@@ -14,12 +14,6 @@ export interface FriendRequest {
   created_at: string;
 }
 
-export interface GroupOut {
-  group_id: string;
-  name: string;
-  member_count: number;
-}
-
 export interface Standing {
   rank: number;
   user_id: string;
@@ -69,23 +63,6 @@ export async function setUsername(username: string): Promise<{ username: string;
   return data;
 }
 
-export async function listGroups(): Promise<GroupOut[]> {
-  const { data } = await apiClient.get<GroupOut[]>("/api/v1/groups");
-  return data;
-}
-
-export async function createGroup(name: string, memberIds: string[]): Promise<void> {
-  await apiClient.post("/api/v1/groups", { name, member_ids: memberIds });
-}
-
-export async function getLeaderboard(groupId: string): Promise<LeaderboardResponse> {
-  const { data } = await apiClient.get<LeaderboardResponse>(`/api/v1/groups/${groupId}/leaderboard`);
-  return data;
-}
-
-export async function leaveGroup(groupId: string): Promise<void> {
-  await apiClient.delete(`/api/v1/groups/${groupId}/members/me`);
-}
 
 export async function getTodayPoints(): Promise<{ total_points: number }> {
   const { data } = await apiClient.get<{ total_points: number }>("/api/v1/points/today");
@@ -94,6 +71,11 @@ export async function getTodayPoints(): Promise<{ total_points: number }> {
 
 export async function getWeekPoints(): Promise<{ week_start: string; total_points: number; days: { date: string; total_points: number }[] }> {
   const { data } = await apiClient.get<{ week_start: string; total_points: number; days: { date: string; total_points: number }[] }>("/api/v1/points/week");
+  return data;
+}
+
+export async function getFriendsLeaderboard(): Promise<LeaderboardResponse> {
+  const { data } = await apiClient.get<LeaderboardResponse>("/api/v1/friends/leaderboard");
   return data;
 }
 
