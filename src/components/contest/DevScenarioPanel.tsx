@@ -5,19 +5,12 @@ import { seedScenario } from "@/services/devService";
 
 const SCENARIOS = [
   { key: "no_username", label: "No Username" },
-  { key: "no_friends_no_groups", label: "No Friends/Groups" },
-  { key: "has_friends_no_groups", label: "Has Friends, No Groups" },
-  { key: "group_2_members", label: "Group (2 members)" },
-  { key: "group_4_members", label: "Group (4 members)" },
-  { key: "group_8_members", label: "Group (8 max)" },
-  { key: "user_rank_1", label: "User Rank #1" },
-  { key: "user_last_place", label: "User Last Place" },
-  { key: "all_tied_zero", label: "All Tied Zero" },
+  { key: "no_friends_no_groups", label: "No Friends" },
+  { key: "one_friend", label: "1 Friend" },
+  { key: "friends_with_points", label: "5 Friends + Points" },
+  { key: "friends_all_zero", label: "5 Friends, All Zero" },
+  { key: "many_friends", label: "15 Friends" },
   { key: "pending_requests", label: "Pending Requests" },
-  { key: "max_friends", label: "Max Friends (20)" },
-  { key: "has_friends_no_pending", label: "Friends, No Pending" },
-  { key: "two_groups_max", label: "Two Groups (max)" },
-  { key: "long_usernames", label: "Long Usernames" },
 ];
 
 export default function DevScenarioPanel() {
