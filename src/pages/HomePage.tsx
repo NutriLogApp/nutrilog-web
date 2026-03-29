@@ -40,7 +40,7 @@ export default function HomePage() {
     markRead();
   };
   const handleCloseNotifications = () => setShowNotifications(false);
-  const handleApproveFriend = (friendshipId: string, _name: string) => {
+  const handleApproveFriend = (friendshipId: string) => {
     approveMut.mutate(friendshipId);
   };
 

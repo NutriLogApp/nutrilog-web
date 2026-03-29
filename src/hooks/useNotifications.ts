@@ -63,7 +63,7 @@ export function useNotifications(streak: number) {
 
   const items = useMemo(() => {
     const result: NotificationItem[] = [];
-    const now = Date.now();
+    const now = announcementsQuery.dataUpdatedAt || 0;
 
     // 1. Friend requests (highest priority)
     if (friendRequestsQuery.data) {
@@ -134,6 +134,7 @@ export function useNotifications(streak: number) {
   }, [
     friendRequestsQuery.data,
     announcementsQuery.data,
+    announcementsQuery.dataUpdatedAt,
     leaderboardQuery.data,
     streak,
     t,
