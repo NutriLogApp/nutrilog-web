@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Users, Crown, Flame, Lightbulb } from "lucide-react";
+import { Users, Crown, Lightbulb, Info } from "lucide-react";
 import { getProfile } from "@/services/profileService";
 import {
   getFriendsLeaderboard,
@@ -38,6 +38,7 @@ export default function ContestPage() {
   });
 
   const [showAddFriend, setShowAddFriend] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const [usernameInput, setUsernameInput] = useState("");
   const [usernameError, setUsernameError] = useState("");
 
@@ -182,36 +183,44 @@ export default function ContestPage() {
 
   // --- State 4: Leaderboard ---
   const standings = leaderboard?.standings ?? [];
-  const me = standings.find((s) => s.is_current_user);
   const allZeroPoints = standings.length > 0 && standings.every((s) => s.total_points === 0);
 
   return (
     <div className="px-5 pt-8 pb-4">
       {/* Header */}
-      <div className="flex items-start justify-between mb-5 animate-fade-up">
-        <div>
+      <div className="mb-5 animate-fade-up">
+        <div className="flex items-center gap-2">
           <p
             className="text-[11px] font-bold uppercase tracking-widest"
             style={{ color: "var(--text-muted)" }}
           >
             {t("contest.thisWeek")}
           </p>
-          <h1
-            className="text-[22px] font-bold tracking-tight"
-            style={{ color: "var(--text-primary)" }}
+          <button
+            onClick={() => setShowInfo(!showInfo)}
+            className="p-0.5 rounded-full transition-all active:scale-90"
+            style={{ color: "var(--text-muted)" }}
           >
-            {leaderboard ? formatDateRange(leaderboard.week_start) : ""}
-          </h1>
+            <Info size={14} />
+          </button>
         </div>
-        {me && (
+        <h1
+          className="text-[22px] font-bold tracking-tight"
+          style={{ color: "var(--text-primary)" }}
+        >
+          {leaderboard ? formatDateRange(leaderboard.week_start) : ""}
+        </h1>
+        {showInfo && (
           <div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full shrink-0"
-            style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}
+            className="glass-card p-4 mt-3 animate-fade-up"
+            style={{ boxShadow: "var(--shadow-elevated)" }}
           >
-            <Flame size={14} style={{ color: "var(--theme-accent)" }} />
-            <span className="text-sm font-bold tabular-nums" style={{ color: "var(--theme-accent)" }}>
-              {me.total_points}
-            </span>
+            <p className="text-[13px] font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+              {t("contest.infoTitle")}
+            </p>
+            <p className="text-[12px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
+              {t("contest.infoBody")}
+            </p>
           </div>
         )}
       </div>
