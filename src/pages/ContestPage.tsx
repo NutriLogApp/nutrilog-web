@@ -38,17 +38,35 @@ export default function ContestPage() {
   });
 
   const [showAddFriend, setShowAddFriend] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
-  const infoRef = useRef<HTMLDivElement>(null);
+  const [infoPos, setInfoPos] = useState<{ top: number; left: number } | null>(null);
+  const infoBtnRef = useRef<HTMLButtonElement>(null);
+  const infoPopupRef = useRef<HTMLDivElement>(null);
+
+  const toggleInfo = () => {
+    if (infoPos) {
+      // Close
+      setInfoPos(null);
+    } else if (infoBtnRef.current) {
+      // Open — capture position immediately
+      const rect = infoBtnRef.current.getBoundingClientRect();
+      setInfoPos({ top: rect.bottom + 8, left: rect.left });
+    }
+  };
 
   useEffect(() => {
-    if (!showInfo) return;
+    if (!infoPos) return;
     function handleTapOutside(e: MouseEvent) {
-      if (infoRef.current && !infoRef.current.contains(e.target as Node)) setShowInfo(false);
+      if (
+        infoBtnRef.current && !infoBtnRef.current.contains(e.target as Node) &&
+        (!infoPopupRef.current || !infoPopupRef.current.contains(e.target as Node))
+      ) setInfoPos(null);
     }
-    document.addEventListener("mousedown", handleTapOutside);
-    return () => document.removeEventListener("mousedown", handleTapOutside);
-  }, [showInfo]);
+    // Delay to avoid the opening click triggering dismiss
+    const timer = setTimeout(() => {
+      document.addEventListener("mousedown", handleTapOutside);
+    }, 10);
+    return () => { clearTimeout(timer); document.removeEventListener("mousedown", handleTapOutside); };
+  }, [infoPos]);
   const [usernameInput, setUsernameInput] = useState("");
   const [usernameError, setUsernameError] = useState("");
 
@@ -206,42 +224,14 @@ export default function ContestPage() {
           >
             {t("contest.thisWeek")}
           </p>
-          <div ref={infoRef} className="relative">
-            <button
-              onClick={() => setShowInfo(!showInfo)}
-              onMouseEnter={() => setShowInfo(true)}
-              onMouseLeave={() => setShowInfo(false)}
-              className="p-0.5 rounded-full transition-all active:scale-90"
-              style={{ color: "var(--text-muted)" }}
-            >
-              <Info size={14} />
-            </button>
-            {showInfo && (
-              <div
-                className="absolute z-50 p-3.5 rounded-2xl"
-                style={{
-                  top: "calc(100% + 8px)",
-                  left: 0,
-                  width: "calc(100vw - 40px)",
-                  maxWidth: "280px",
-                  background: "var(--bg-elevated)",
-                  backdropFilter: "var(--blur)",
-                  WebkitBackdropFilter: "var(--blur)",
-                  border: "1px solid var(--border)",
-                  boxShadow: "var(--shadow-elevated)",
-                }}
-                onMouseEnter={() => setShowInfo(true)}
-                onMouseLeave={() => setShowInfo(false)}
-              >
-                <p className="text-[12px] font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>
-                  {t("contest.infoTitle")}
-                </p>
-                <p className="text-[11px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
-                  {t("contest.infoBody")}
-                </p>
-              </div>
-            )}
-          </div>
+          <button
+            ref={infoBtnRef}
+            onClick={toggleInfo}
+            className="p-0.5 rounded-full transition-all active:scale-90"
+            style={{ color: "var(--text-muted)" }}
+          >
+            <Info size={14} />
+          </button>
         </div>
         <h1
           className="text-[22px] font-bold tracking-tight"
@@ -267,6 +257,31 @@ export default function ContestPage() {
           <Lightbulb size={18} style={{ color: "var(--theme-accent)", flexShrink: 0, marginTop: 2 }} />
           <p className="text-[13px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             {t("contest.newWeekTip")}
+          </p>
+        </div>
+      )}
+
+      {/* Info tooltip - fixed position to escape backdrop-filter stacking contexts */}
+      {infoPos && (
+        <div
+          ref={infoPopupRef}
+          className="fixed z-[9999] p-3.5 rounded-2xl"
+          style={{
+            top: infoPos.top,
+            left: infoPos.left,
+            width: 280,
+            background: "var(--bg-elevated)",
+            backdropFilter: "var(--blur)",
+            WebkitBackdropFilter: "var(--blur)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-elevated)",
+          }}
+        >
+          <p className="text-[12px] font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>
+            {t("contest.infoTitle")}
+          </p>
+          <p className="text-[11px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
+            {t("contest.infoBody")}
           </p>
         </div>
       )}
