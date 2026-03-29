@@ -130,7 +130,7 @@
     "publicNameDesc": "כך אחרים ימצאו אותך באפליקציה"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
-  "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה" },
+  "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה", "announcements": "הודעות מערכת", "announcementTitle": "כותרת", "announcementBody": "תוכן (אופציונלי)", "send": "שלח", "inactive": "לא פעיל" },
   "friends": {
     "title": "חברים",
     "pendingRequests": "בקשות ממתינות",
@@ -278,6 +278,24 @@
     "logMeal": "הוסף ליומן",
     "logging": "מוסיף...",
     "logged": "נוסף!"
+  },
+  "calorieSummary": {
+    "remaining": "קלוריות נותרו",
+    "details": "פרטים",
+    "consumed": "נצרכו"
+  },
+  "notifications": {
+    "title": "התראות",
+    "empty": "אין התראות חדשות!",
+    "friendRequest": "{{name}} רוצה להיות חבר/ה שלך",
+    "friendAccepted": "אתה ו{{name}} עכשיו חברים! בדקו את התחרות",
+    "contestLeading": "אתה מוביל השבוע עם {{points}} נקודות!",
+    "contestBehind": "אתה במקום #{{rank}} השבוע — {{gap}} נקודות מאחורי {{leader}}",
+    "streak7": "רצף של 7 ימים! המשך כך!",
+    "streak14": "רצף של 14 ימים! אתה על אש!",
+    "streak30": "רצף של 30 ימים! מסירות מדהימה!",
+    "streak60": "רצף של 60 ימים! בלתי ניתן לעצירה!",
+    "streak100": "רצף של 100 ימים! אגדי!"
   },
   "settings": {
     "title": "הגדרות",

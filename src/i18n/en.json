@@ -130,7 +130,7 @@
     "publicNameDesc": "This is how others will find you in the app"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
-  "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended" },
+  "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended", "announcements": "Announcements", "announcementTitle": "Title", "announcementBody": "Body (optional)", "send": "Send", "inactive": "Inactive" },
   "friends": {
     "title": "Friends",
     "pendingRequests": "Pending Requests",
@@ -278,6 +278,24 @@
     "logMeal": "Log this meal",
     "logging": "Logging...",
     "logged": "Logged!"
+  },
+  "calorieSummary": {
+    "remaining": "calories remaining",
+    "details": "details",
+    "consumed": "consumed"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You're all caught up!",
+    "friendRequest": "{{name}} wants to be your friend",
+    "friendAccepted": "You and {{name}} are now friends! Check the contest to see who logs more",
+    "contestLeading": "You're leading this week with {{points}} pts!",
+    "contestBehind": "You're #{{rank}} this week — {{gap}} pts behind {{leader}}",
+    "streak7": "7-day streak! Keep it going!",
+    "streak14": "14-day streak! You're on fire!",
+    "streak30": "30-day streak! Incredible dedication!",
+    "streak60": "60-day streak! Unstoppable!",
+    "streak100": "100-day streak! Legendary!"
   },
   "settings": {
     "title": "Settings",
