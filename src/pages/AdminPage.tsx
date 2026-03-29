@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router-dom";
 import { getProfile } from "@/services/profileService";
 import { listUsers, updateUserStatus } from "@/services/adminService";
+import {
+  getAdminAnnouncements,
+  createAnnouncement,
+  updateAnnouncement,
+} from "@/services/announcementService";
 
 export default function AdminPage() {
   const { t } = useTranslation();
@@ -15,6 +21,29 @@ export default function AdminPage() {
     mutationFn: ({ id, status }: { id: string; status: string }) => updateUserStatus(id, status),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["adminUsers"] }),
   });
+
+  const { data: announcements } = useQuery({
+    queryKey: ["adminAnnouncements"],
+    queryFn: getAdminAnnouncements,
+  });
+
+  const createAnnMut = useMutation({
+    mutationFn: createAnnouncement,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["adminAnnouncements"] });
+      setAnnTitle("");
+      setAnnBody("");
+    },
+  });
+
+  const toggleAnnMut = useMutation({
+    mutationFn: ({ id, active }: { id: string; active: boolean }) =>
+      updateAnnouncement(id, { active }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["adminAnnouncements"] }),
+  });
+
+  const [annTitle, setAnnTitle] = useState("");
+  const [annBody, setAnnBody] = useState("");
 
   if (!profileLoading && profile?.role !== "admin") return <Navigate to="/" replace />;
 
@@ -63,6 +92,94 @@ export default function AdminPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Announcements Section */}
+      <div className="mt-8 animate-fade-up stagger-2">
+        <h2 className="text-lg font-bold mb-4" style={{ color: "var(--text-primary)" }}>
+          {t("admin.announcements")}
+        </h2>
+
+        {/* Create form */}
+        <div className="glass-card p-4 mb-4">
+          <input
+            type="text"
+            value={annTitle}
+            onChange={(e) => setAnnTitle(e.target.value)}
+            placeholder={t("admin.announcementTitle")}
+            className="w-full rounded-xl px-4 py-3 text-sm font-medium mb-2"
+            style={{
+              background: "var(--bg-input)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border)",
+            }}
+          />
+          <textarea
+            value={annBody}
+            onChange={(e) => setAnnBody(e.target.value)}
+            placeholder={t("admin.announcementBody")}
+            rows={2}
+            className="w-full rounded-xl px-4 py-3 text-sm font-medium mb-3"
+            style={{
+              background: "var(--bg-input)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border)",
+              resize: "vertical",
+            }}
+          />
+          <button
+            onClick={() => {
+              if (annTitle.trim()) {
+                createAnnMut.mutate({
+                  title: annTitle.trim(),
+                  body: annBody.trim() || undefined,
+                });
+              }
+            }}
+            disabled={!annTitle.trim() || createAnnMut.isPending}
+            className="text-xs font-semibold px-5 py-2.5 rounded-xl text-white transition-all active:scale-[0.97] disabled:opacity-50"
+            style={{
+              background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))",
+              minHeight: 44,
+            }}
+          >
+            {t("admin.send")}
+          </button>
+        </div>
+
+        {/* Announcement list */}
+        <div className="space-y-3">
+          {announcements?.map((ann) => (
+            <div key={ann.id} className="glass-card p-4 flex items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm truncate" style={{ color: "var(--text-primary)" }}>
+                  {ann.title}
+                </p>
+                {ann.body && (
+                  <p className="text-xs mt-1 line-clamp-2" style={{ color: "var(--text-muted)" }}>
+                    {ann.body}
+                  </p>
+                )}
+                <span
+                  className="inline-block mt-1.5 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                  style={{
+                    backgroundColor: ann.active ? "rgba(16,185,129,0.12)" : "rgba(239,68,68,0.12)",
+                    color: ann.active ? "#10b981" : "#ef4444",
+                  }}
+                >
+                  {t(ann.active ? "admin.active" : "admin.inactive")}
+                </span>
+              </div>
+              <button
+                onClick={() => toggleAnnMut.mutate({ id: ann.id, active: !ann.active })}
+                className="text-xs font-semibold px-4 py-2.5 rounded-xl text-white transition-all active:scale-[0.97]"
+                style={{ backgroundColor: ann.active ? "#ef4444" : "#10b981", minHeight: 44 }}
+              >
+                {t(ann.active ? "admin.suspend" : "admin.approve")}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
