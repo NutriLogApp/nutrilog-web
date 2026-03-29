@@ -17,8 +17,6 @@ const TrendsPage = lazy(() => import("@/pages/TrendsPage"));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
 const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
-const GroupLeaderboardPage = lazy(() => import("@/pages/GroupLeaderboardPage"));
-const CreateGroupPage = lazy(() => import("@/pages/CreateGroupPage"));
 const ChatPage = lazy(() => import("@/pages/ChatPage"));
 const FriendAddPage = lazy(() => import("@/pages/FriendAddPage"));
 
@@ -60,8 +58,6 @@ export default function App() {
                     <Route path="/myday" element={<Navigate to="/" replace />} />
                     <Route path="/chat" element={<ChatPage />} />
                     <Route path="/contest" element={<ContestPage />} />
-                    <Route path="/contest/groups/new" element={<CreateGroupPage />} />
-                    <Route path="/contest/groups/:groupId" element={<GroupLeaderboardPage />} />
                     <Route path="/friends/add" element={<FriendAddPage />} />
                     <Route path="/trends" element={<TrendsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
