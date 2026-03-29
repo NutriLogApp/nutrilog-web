@@ -160,8 +160,8 @@ html.force-light {
   51%, 100% { opacity: 0; }
 }
 @keyframes slideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
 }
 .animate-fade-up {
   animation: fadeUp 0.4s ease-out both;
