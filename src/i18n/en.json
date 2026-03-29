@@ -168,7 +168,7 @@
     "yourPoints": "Your points",
     "days": "days",
     "infoTitle": "Compete with friends to hit your nutrition goals each week!",
-    "infoBody": "You earn up to 20 points per day:\n• Calorie goal accuracy — up to 10 pts\n• Logging meals — up to 5 pts\n• Hitting macro targets — up to 5 pts\n\nScores reset every Monday. Stay consistent to win!"
+    "infoBody": "You earn up to 20 points per day:\n• Calorie goal accuracy — up to 10 pts\n• Logging meals — up to 5 pts\n• Hitting macro targets — up to 5 pts\n\nScores reset at the start of each week. Stay consistent to win!"
   },
   "insight": { "title": "Daily Insight" },
   "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
