@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Users, Crown, Lightbulb, Info } from "lucide-react";
@@ -39,6 +39,16 @@ export default function ContestPage() {
 
   const [showAddFriend, setShowAddFriend] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const infoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showInfo) return;
+    function handleTapOutside(e: MouseEvent) {
+      if (infoRef.current && !infoRef.current.contains(e.target as Node)) setShowInfo(false);
+    }
+    document.addEventListener("mousedown", handleTapOutside);
+    return () => document.removeEventListener("mousedown", handleTapOutside);
+  }, [showInfo]);
   const [usernameInput, setUsernameInput] = useState("");
   const [usernameError, setUsernameError] = useState("");
 
@@ -196,13 +206,38 @@ export default function ContestPage() {
           >
             {t("contest.thisWeek")}
           </p>
-          <button
-            onClick={() => setShowInfo(!showInfo)}
-            className="p-0.5 rounded-full transition-all active:scale-90"
-            style={{ color: "var(--text-muted)" }}
-          >
-            <Info size={14} />
-          </button>
+          <div className="relative" ref={infoRef}>
+            <button
+              onClick={() => setShowInfo(!showInfo)}
+              onMouseEnter={() => setShowInfo(true)}
+              onMouseLeave={() => setShowInfo(false)}
+              className="p-0.5 rounded-full transition-all active:scale-90"
+              style={{ color: "var(--text-muted)" }}
+            >
+              <Info size={14} />
+            </button>
+            {showInfo && (
+              <div
+                className="absolute left-0 top-7 z-50 w-64 p-3.5 rounded-2xl"
+                style={{
+                  background: "var(--bg-elevated)",
+                  backdropFilter: "var(--blur)",
+                  WebkitBackdropFilter: "var(--blur)",
+                  border: "1px solid var(--border)",
+                  boxShadow: "var(--shadow-elevated)",
+                }}
+                onMouseEnter={() => setShowInfo(true)}
+                onMouseLeave={() => setShowInfo(false)}
+              >
+                <p className="text-[12px] font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>
+                  {t("contest.infoTitle")}
+                </p>
+                <p className="text-[11px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
+                  {t("contest.infoBody")}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
         <h1
           className="text-[22px] font-bold tracking-tight"
@@ -210,19 +245,6 @@ export default function ContestPage() {
         >
           {leaderboard ? formatDateRange(leaderboard.week_start) : ""}
         </h1>
-        {showInfo && (
-          <div
-            className="glass-card p-4 mt-3 animate-fade-up"
-            style={{ boxShadow: "var(--shadow-elevated)" }}
-          >
-            <p className="text-[13px] font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
-              {t("contest.infoTitle")}
-            </p>
-            <p className="text-[12px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
-              {t("contest.infoBody")}
-            </p>
-          </div>
-        )}
       </div>
 
       {/* Leaderboard rows */}
