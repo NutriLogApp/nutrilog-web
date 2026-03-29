@@ -206,7 +206,7 @@ export default function ContestPage() {
           >
             {t("contest.thisWeek")}
           </p>
-          <div className="relative" ref={infoRef}>
+          <div ref={infoRef}>
             <button
               onClick={() => setShowInfo(!showInfo)}
               onMouseEnter={() => setShowInfo(true)}
@@ -216,27 +216,6 @@ export default function ContestPage() {
             >
               <Info size={14} />
             </button>
-            {showInfo && (
-              <div
-                className="absolute left-0 top-7 z-50 w-64 p-3.5 rounded-2xl"
-                style={{
-                  background: "var(--bg-elevated)",
-                  backdropFilter: "var(--blur)",
-                  WebkitBackdropFilter: "var(--blur)",
-                  border: "1px solid var(--border)",
-                  boxShadow: "var(--shadow-elevated)",
-                }}
-                onMouseEnter={() => setShowInfo(true)}
-                onMouseLeave={() => setShowInfo(false)}
-              >
-                <p className="text-[12px] font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>
-                  {t("contest.infoTitle")}
-                </p>
-                <p className="text-[11px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
-                  {t("contest.infoBody")}
-                </p>
-              </div>
-            )}
           </div>
         </div>
         <h1
@@ -246,6 +225,29 @@ export default function ContestPage() {
           {leaderboard ? formatDateRange(leaderboard.week_start) : ""}
         </h1>
       </div>
+
+      {/* Info tooltip */}
+      {showInfo && (
+        <div
+          className="p-3.5 rounded-2xl mb-4 animate-fade-up"
+          style={{
+            background: "var(--bg-elevated)",
+            backdropFilter: "var(--blur)",
+            WebkitBackdropFilter: "var(--blur)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-elevated)",
+          }}
+          onMouseEnter={() => setShowInfo(true)}
+          onMouseLeave={() => setShowInfo(false)}
+        >
+          <p className="text-[12px] font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>
+            {t("contest.infoTitle")}
+          </p>
+          <p className="text-[11px] leading-relaxed whitespace-pre-line" style={{ color: "var(--text-secondary)" }}>
+            {t("contest.infoBody")}
+          </p>
+        </div>
+      )}
 
       {/* Leaderboard rows */}
       <div className="space-y-2 animate-fade-up stagger-1">
