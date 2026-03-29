@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build and push Docker image
+        run: |
+          IMAGE_LC=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build \
+            --build-arg "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" \
+            --build-arg "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+            --build-arg "VITE_API_URL=" \
+            -t "$IMAGE_LC:latest" .
+          docker push "$IMAGE_LC:latest"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ vars.VPS_ENABLED == 'true' }}
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/nutrilog
+            flock /tmp/nutrilog-deploy.lock bash -c 'docker compose -f docker-compose.prod.yml pull && docker compose -f docker-compose.prod.yml up -d'
