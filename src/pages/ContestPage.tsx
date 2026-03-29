@@ -55,17 +55,18 @@ export default function ContestPage() {
 
   useEffect(() => {
     if (!infoPos) return;
-    function handleTapOutside(e: MouseEvent) {
-      if (
-        infoBtnRef.current && !infoBtnRef.current.contains(e.target as Node) &&
-        (!infoPopupRef.current || !infoPopupRef.current.contains(e.target as Node))
-      ) setInfoPos(null);
+    let active = false;
+    // Wait 2 frames to avoid the opening tap triggering dismiss
+    requestAnimationFrame(() => requestAnimationFrame(() => { active = true; }));
+    function handleTapOutside(e: Event) {
+      if (!active) return;
+      const target = e.target as Node;
+      if (infoBtnRef.current?.contains(target)) return;
+      if (infoPopupRef.current?.contains(target)) return;
+      setInfoPos(null);
     }
-    // Delay to avoid the opening click triggering dismiss
-    const timer = setTimeout(() => {
-      document.addEventListener("mousedown", handleTapOutside);
-    }, 10);
-    return () => { clearTimeout(timer); document.removeEventListener("mousedown", handleTapOutside); };
+    document.addEventListener("pointerdown", handleTapOutside);
+    return () => document.removeEventListener("pointerdown", handleTapOutside);
   }, [infoPos]);
   const [usernameInput, setUsernameInput] = useState("");
   const [usernameError, setUsernameError] = useState("");
