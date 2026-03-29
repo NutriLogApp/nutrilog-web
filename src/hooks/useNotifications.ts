@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { getFriendRequests, getFriendsLeaderboard } from "@/services/socialService";
@@ -140,11 +140,13 @@ export function useNotifications(streak: number) {
     t,
   ]);
 
-  const lastViewed = getLastViewed();
+  const [lastViewed, setLastViewed] = useState(getLastViewed);
   const hasUnread = items.some((item) => item.timestamp > lastViewed);
 
   const markRead = useCallback(() => {
-    localStorage.setItem(LAST_VIEWED_KEY, String(Date.now()));
+    const now = Date.now();
+    localStorage.setItem(LAST_VIEWED_KEY, String(now));
+    setLastViewed(now);
     // Mark streak milestones as shown
     const shownMilestones = getShownMilestones();
     const newMilestones = items

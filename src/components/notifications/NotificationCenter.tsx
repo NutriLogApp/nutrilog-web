@@ -47,8 +47,10 @@ export function NotificationCenter({
         style={{
           position: "fixed",
           top: 0,
-          left: 0,
-          right: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "100%",
+          maxWidth: "32rem", /* max-w-lg — matches app container */
           maxHeight: "60vh",
           zIndex: 51,
           borderRadius: "0 0 20px 20px",
