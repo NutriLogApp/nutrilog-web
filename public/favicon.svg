@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
   <rect width="512" height="512" rx="96" fill="#0d9488"/>
-  <g transform="translate(128, 80)" fill="none" stroke="white" stroke-linecap="round">
-    <!-- Fork -->
-    <line x1="60" y1="0" x2="60" y2="120" stroke-width="20"/>
-    <line x1="30" y1="0" x2="30" y2="55" stroke-width="16"/>
-    <line x1="90" y1="0" x2="90" y2="55" stroke-width="16"/>
-    <path d="M30 55 Q30 80 60 80 Q90 80 90 55" stroke-width="16" fill="none"/>
-    <line x1="60" y1="120" x2="60" y2="340" stroke-width="20"/>
-    <!-- Leaf -->
-    <path d="M200 120 C200 40 260 0 320 0 C310 80 260 120 200 120 Z" fill="white" stroke="none"/>
-    <path d="M200 120 C260 120 300 80 320 0" stroke-width="12" fill="none"/>
-    <line x1="200" y1="120" x2="200" y2="340" stroke-width="20"/>
+  <g transform="translate(136, 56)">
+    <!-- Fork handle -->
+    <line x1="120" y1="180" x2="120" y2="400" stroke="white" stroke-width="24" stroke-linecap="round"/>
+    <!-- Fork tines -->
+    <line x1="60" y1="40" x2="60" y2="120" stroke="white" stroke-width="18" stroke-linecap="round"/>
+    <line x1="120" y1="40" x2="120" y2="120" stroke="white" stroke-width="18" stroke-linecap="round"/>
+    <line x1="180" y1="40" x2="180" y2="120" stroke="white" stroke-width="18" stroke-linecap="round"/>
+    <!-- Fork base curve -->
+    <path d="M60 120 Q60 180 120 180 Q180 180 180 120" stroke="white" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <!-- Lightning bolt -->
+    <polygon points="185,20 145,175 190,175 130,340 220,145 175,145 215,20" fill="#fbbf24" stroke="#f59e0b" stroke-width="4" stroke-linejoin="round"/>
   </g>
 </svg>
