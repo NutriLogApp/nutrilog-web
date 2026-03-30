@@ -8,6 +8,8 @@ import {
 } from "@/services/socialService";
 import type { Standing } from "@/services/socialService";
 import AddFriendModal from "@/components/shared/AddFriendModal";
+import Avatar from "@/components/shared/Avatar";
+import FriendProfileModal from "@/components/profile/FriendProfileModal";
 import DevScenarioPanel from "@/components/contest/DevScenarioPanel";
 
 function formatDateRange(weekStart: string): string {
@@ -34,6 +36,7 @@ export default function ContestPage() {
   });
 
   const [showAddFriend, setShowAddFriend] = useState(false);
+  const [profileUserId, setProfileUserId] = useState<string | null>(null);
   const [infoPos, setInfoPos] = useState<{ top: number; left: number } | null>(null);
   const infoBtnRef = useRef<HTMLButtonElement>(null);
   const infoPopupRef = useRef<HTMLDivElement>(null);
@@ -166,7 +169,7 @@ export default function ContestPage() {
       {/* Leaderboard rows */}
       <div className="space-y-2 animate-fade-up stagger-1">
         {standings.map((s) => (
-          <LeaderboardRow key={s.user_id} standing={s} t={t} />
+          <LeaderboardRow key={s.user_id} standing={s} t={t} onProfileClick={(id) => setProfileUserId(id)} />
         ))}
       </div>
 
@@ -208,12 +211,13 @@ export default function ContestPage() {
         </div>
       )}
 
+      <FriendProfileModal userId={profileUserId} onClose={() => setProfileUserId(null)} />
       <DevScenarioPanel />
     </div>
   );
 }
 
-function LeaderboardRow({ standing: s, t }: { standing: Standing; t: (key: string) => string }) {
+function LeaderboardRow({ standing: s, t, onProfileClick }: { standing: Standing; t: (key: string) => string; onProfileClick: (userId: string) => void }) {
   const isTop3 = s.rank <= 3;
 
   // Top 3 tinted backgrounds
@@ -254,19 +258,12 @@ function LeaderboardRow({ standing: s, t }: { standing: Standing; t: (key: strin
         ? "var(--text-primary)"
         : "var(--text-secondary)";
 
-  // Avatar styles
-  const avatarBg = s.is_current_user
-    ? "color-mix(in srgb, var(--theme-accent) 15%, transparent)"
-    : "var(--bg-input)";
-  const avatarColor = s.is_current_user ? "var(--theme-accent)" : "var(--text-secondary)";
-
-  const displayName = s.name || s.username || "?";
-  const initial = displayName.charAt(0).toUpperCase();
-
   return (
-    <div
-      className="glass-card-sm p-3 flex items-center gap-3"
+    <button
+      className="glass-card-sm p-3 flex items-center gap-3 w-full text-start"
       style={rowStyle}
+      onClick={() => !s.is_current_user && onProfileClick(s.user_id)}
+      disabled={s.is_current_user}
     >
       {/* Rank */}
       <div className="w-6 text-center">
@@ -283,19 +280,12 @@ function LeaderboardRow({ standing: s, t }: { standing: Standing; t: (key: strin
       </div>
 
       {/* Avatar */}
-      <div
-        className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-        style={{ backgroundColor: avatarBg }}
-      >
-        <span className="text-[13px] font-bold" style={{ color: avatarColor }}>
-          {initial}
-        </span>
-      </div>
+      <Avatar name={s.name || s.username || "?"} avatarUrl={s.avatar_url} size="sm" userId={s.user_id} />
 
       {/* Name */}
       <div className="flex-1 min-w-0">
         <p className="text-[13px] font-semibold truncate" style={{ color: "var(--text-primary)" }}>
-          {displayName}
+          {s.name || s.username || "?"}
           {s.is_current_user && (
             <span style={{ color: "var(--theme-accent)" }}> ({t("contest.you")})</span>
           )}
@@ -312,6 +302,6 @@ function LeaderboardRow({ standing: s, t }: { standing: Standing; t: (key: strin
       >
         {s.total_points}
       </span>
-    </div>
+    </button>
   );
 }
