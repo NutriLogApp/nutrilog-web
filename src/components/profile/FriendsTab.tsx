@@ -73,7 +73,7 @@ export default function FriendsTab() {
           )}
           <button onClick={() => {
             const url = `${window.location.origin}/friends/add?code=${profile?.friend_code}`;
-            if (navigator.share) navigator.share({ title: "NutriLog", text: t("profile.shareText"), url });
+            if (navigator.share) navigator.share({ title: "MealRiot", text: t("profile.shareText"), url });
             else navigator.clipboard.writeText(url);
           }} className="w-full py-3 rounded-xl text-white font-semibold active:scale-[0.98]"
             style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>{t("profile.shareLink")}</button>

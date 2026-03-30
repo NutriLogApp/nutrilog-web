@@ -25,8 +25,8 @@ export interface NotificationItem {
 }
 
 const STREAK_MILESTONES = [7, 14, 30, 60, 100] as const;
-const LAST_VIEWED_KEY = "nutrilog_notification_last_viewed";
-const SHOWN_MILESTONES_KEY = "nutrilog_shown_milestones";
+const LAST_VIEWED_KEY = "mealriot_notification_last_viewed";
+const SHOWN_MILESTONES_KEY = "mealriot_shown_milestones";
 
 function getLastViewed(): number {
   return parseInt(localStorage.getItem(LAST_VIEWED_KEY) ?? "0", 10);

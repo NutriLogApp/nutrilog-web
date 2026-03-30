@@ -1,6 +1,6 @@
 {
   "login": {
-    "title": "NutriLog",
+    "title": "MealRiot",
     "subtitle": "Track your nutrition, your way",
     "continueWithGoogle": "Continue with Google",
     "orContinueWithEmail": "or continue with email",
@@ -149,7 +149,7 @@
     "addFriend": "Add Friend",
     "shareInvite": "Share Invite Link",
     "shareDesc": "Share your invite code so friends can find you",
-    "shareText": "Join me on NutriLog!",
+    "shareText": "Join me on MealRiot!",
     "shareLink": "Share Link",
     "social": "Social",
     "publicName": "Public Name",
@@ -327,7 +327,7 @@
     "title": "Settings",
     "back": "Back",
     "disclaimer_title": "Disclaimer",
-    "disclaimer_text": "NutriLog's AI assistant provides general nutrition information only. It is not a substitute for professional medical or dietary advice. Always consult a qualified healthcare provider before making changes to your diet. NutriLog is not responsible for any decisions made based on the assistant's suggestions."
+    "disclaimer_text": "MealRiot's AI assistant provides general nutrition information only. It is not a substitute for professional medical or dietary advice. Always consult a qualified healthcare provider before making changes to your diet. MealRiot is not responsible for any decisions made based on the assistant's suggestions."
   },
   "feedback": {
     "buttonLabel": "Send Feedback",

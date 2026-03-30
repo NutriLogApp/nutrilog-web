@@ -18,7 +18,7 @@ interface CalorieSummaryProps {
   hasUnread: boolean;
 }
 
-const STORAGE_KEY = "nutrilog_hero_expanded";
+const STORAGE_KEY = "mealriot_hero_expanded";
 
 const MACROS = [
   { key: "protein", color: "#0d9488", labelKey: "macros.protein" },
