@@ -16,7 +16,9 @@
     "passwordHint": "Minimum 6 characters",
     "passwordsMustMatch": "Passwords must match",
     "emailRequired": "Email is required",
-    "passwordRequired": "Password is required"
+    "passwordRequired": "Password is required",
+    "publicName": "Public name",
+    "publicNameRequired": "Public name is required"
   },
   "verifyEmail": {
     "title": "Check your email",

@@ -16,7 +16,9 @@
     "passwordHint": "מינימום 6 תווים",
     "passwordsMustMatch": "הסיסמאות חייבות להתאים",
     "emailRequired": "אימייל נדרש",
-    "passwordRequired": "סיסמה נדרשת"
+    "passwordRequired": "סיסמה נדרשת",
+    "publicName": "שם ציבורי",
+    "publicNameRequired": "שם ציבורי נדרש"
   },
   "verifyEmail": {
     "title": "בדוק את האימייל שלך",

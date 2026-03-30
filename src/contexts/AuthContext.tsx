@@ -11,7 +11,7 @@ interface AuthContextValue {
   signOut: () => void;
   devLogin: (email: string, name?: string) => Promise<void>;
   isDevSession: boolean;
-  signUp: (email: string, password: string) => Promise<{ error?: string; needsVerification?: boolean }>;
+  signUp: (email: string, password: string, publicName?: string) => Promise<{ error?: string; needsVerification?: boolean }>;
   signInWithPassword: (email: string, password: string) => Promise<{ error?: string }>;
 }
 
@@ -53,12 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.signOut();
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, publicName?: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
+        ...(publicName ? { data: { full_name: publicName } } : {}),
       },
     });
     if (error) return { error: error.message };

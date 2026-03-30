@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [publicName, setPublicName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [devEmail, setDevEmail] = useState("test@nutrilog.dev");
@@ -27,10 +28,11 @@ export default function LoginPage() {
     if (!password) { setError(t("login.passwordRequired")); return; }
 
     if (mode === "signup") {
+      if (!publicName.trim()) { setError(t("login.publicNameRequired")); return; }
       if (password.length < 6) { setError(t("login.passwordHint")); return; }
       if (password !== confirmPassword) { setError(t("login.passwordsMustMatch")); return; }
       setLoading(true);
-      const result = await signUp(email, password);
+      const result = await signUp(email, password, publicName.trim());
       setLoading(false);
       if (result.error) { setError(result.error); return; }
       if (result.needsVerification) {
@@ -105,6 +107,16 @@ export default function LoginPage() {
 
         {/* Email form */}
         <form onSubmit={handleSubmit} className="space-y-3">
+          {mode === "signup" && (
+            <input
+              type="text"
+              value={publicName}
+              onChange={(e) => setPublicName(e.target.value)}
+              placeholder={t("login.publicName")}
+              className="w-full rounded-xl px-4 py-3 text-sm"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }}
+            />
+          )}
           <input
             type="email"
             value={email}
@@ -160,7 +172,7 @@ export default function LoginPage() {
         <p className="mt-6 text-sm" style={{ color: "var(--text-muted)" }}>
           {mode === "signin" ? t("login.newHere") : t("login.alreadyHaveAccount")}{" "}
           <button
-            onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); }}
+            onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setPublicName(""); }}
             className="font-semibold"
             style={{ color: "var(--theme-accent)" }}
           >
