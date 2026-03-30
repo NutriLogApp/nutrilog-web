@@ -16,6 +16,6 @@ describe("i18n", () => {
 
   it("falls back to English for unknown language", () => {
     i18n.changeLanguage("fr");
-    expect(i18n.t("login.signIn")).toBe("Sign in with Google");
+    expect(i18n.t("login.signIn")).toBe("Sign In");
   });
 });
