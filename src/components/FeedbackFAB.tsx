@@ -76,7 +76,7 @@ export default function FeedbackFAB() {
         className="feedback-fab-ignore fixed z-50 w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-95"
         style={{
           bottom: "calc(80px + env(safe-area-inset-bottom, 0px))",
-          right: "16px",
+          right: "max(16px, calc(50% - 240px))",
           backgroundColor: "var(--bg-card)",
           boxShadow: "var(--shadow-fab)",
           border: "1px solid var(--border)",

@@ -54,7 +54,7 @@ export default function HomePage() {
 
   // Onboarding guard
   if (!summary.isLoading && !summary.onboardingDone) {
-    return <OnboardingQuiz onDone={() => qc.invalidateQueries({ queryKey: ["profile"] })} />;
+    return <OnboardingQuiz onDone={() => qc.invalidateQueries({ queryKey: ["profile"] })} dismissable={false} />;
   }
 
   // Loading state

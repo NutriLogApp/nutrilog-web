@@ -51,7 +51,7 @@ function OnboardingGate({ children }: { children: React.ReactNode }) {
 
   if (isLoading) return <PageLoader />;
   if (profile && profile.onboarding_done === false) {
-    return <Navigate to="/profile" replace />;
+    return <Navigate to="/" replace />;
   }
   return <>{children}</>;
 }
@@ -69,7 +69,7 @@ export default function App() {
                   <Route path="/pending" element={<VerifyEmailPage />} />
                   <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                     <Route path="/profile" element={<ProfilePage />} />
-                    <Route element={<OnboardingGate><HomePage /></OnboardingGate>} path="/" />
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/myday" element={<Navigate to="/" replace />} />
                     <Route element={
                       <OnboardingGate>
@@ -91,11 +91,7 @@ export default function App() {
                         <TrendsPage />
                       </OnboardingGate>
                     } path="/trends" />
-                    <Route path="/settings" element={
-                      <OnboardingGate>
-                        <SettingsPage />
-                      </OnboardingGate>
-                    } />
+                    <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/admin" element={
                       <OnboardingGate>
                         <AdminPage />

@@ -1,10 +1,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Settings, User } from "lucide-react";
 import { updateProfile } from "@/services/profileService";
-import { setUsername as setUsernameApi } from "@/services/socialService";
 import type { ProfileOut } from "@/types/api";
 
 interface Props {
@@ -12,17 +10,12 @@ interface Props {
 }
 
 export default function ProfileHero({ profile }: Props) {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const qc = useQueryClient();
 
   const [editingName, setEditingName] = useState(false);
   const [editName, setEditName] = useState("");
-  const [editingUsername, setEditingUsername] = useState(false);
-  const [editUsername, setEditUsername] = useState("");
-  const [usernameError, setUsernameError] = useState<string | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
-  const usernameRef = useRef<HTMLInputElement>(null);
 
   const updateMut = useMutation({
     mutationFn: updateProfile,
@@ -100,41 +93,6 @@ export default function ProfileHero({ profile }: Props) {
         </p>
       )}
 
-      {/* Username */}
-      {editingUsername ? (
-        <div>
-          <input
-            ref={usernameRef}
-            value={editUsername}
-            onChange={(e) => { setEditUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "")); setUsernameError(null); }}
-            onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }}
-            onBlur={() => {
-              const val = editUsername.trim();
-              if (!val || val === profile.username) { setEditingUsername(false); return; }
-              if (val.length < 3 || val.length > 30) { setUsernameError(t("friends.usernameInvalid")); return; }
-              setUsernameApi(val)
-                .then(() => { qc.invalidateQueries({ queryKey: ["profile"] }); setEditingUsername(false); setUsernameError(null); })
-                .catch(() => setUsernameError(t("friends.usernameTaken")));
-            }}
-            className="mt-0.5 text-[13px] font-medium w-full bg-transparent outline-none border-b-2 text-center"
-            style={{ color: "var(--theme-accent)", borderColor: "var(--theme-accent)" }}
-          />
-          {usernameError && <p className="text-[10px] mt-0.5 text-red-500">{usernameError}</p>}
-        </div>
-      ) : (
-        <p
-          className="mt-0.5 text-[13px] font-medium cursor-pointer hover:opacity-70 transition-opacity"
-          style={{ color: "var(--theme-accent)" }}
-          onClick={() => {
-            setEditUsername(profile.username ?? "");
-            setEditingUsername(true);
-            setUsernameError(null);
-            setTimeout(() => usernameRef.current?.focus(), 0);
-          }}
-        >
-          {profile.username ? `@${profile.username}` : `@${t("friends.username")}`}
-        </p>
-      )}
     </div>
   );
 }

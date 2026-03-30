@@ -6,11 +6,12 @@ import { calculateGoals, type GoalCalculateRequest, type GoalCalculateResponse }
 
 interface Props {
   onDone: () => void;
+  dismissable?: boolean;
 }
 
 const TOTAL_STEPS = 7;
 
-export default function OnboardingQuiz({ onDone }: Props) {
+export default function OnboardingQuiz({ onDone, dismissable = true }: Props) {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const [step, setStep] = useState(0);
@@ -178,7 +179,7 @@ export default function OnboardingQuiz({ onDone }: Props) {
   if (result && step === TOTAL_STEPS) {
     return (
       <div className="fixed inset-0 flex flex-col" style={{ backgroundColor: "var(--bg-page)", zIndex: 70 }}>
-        <div className="flex-1 overflow-y-auto px-5 pt-8 pb-20 max-w-lg mx-auto w-full">
+        <div className="flex-1 overflow-y-auto px-5 pt-8 pb-20 max-w-lg mx-auto w-full hide-scrollbar">
           <h1 className="text-[26px] font-bold tracking-tight mb-2 animate-fade-up" style={{ color: "var(--text-primary)" }}>
             {t("onboarding.yourPlan")}
           </h1>
@@ -267,9 +268,11 @@ export default function OnboardingQuiz({ onDone }: Props) {
               <ChevronLeft size={22} />
             </button>
           ) : <div className="w-9" />}
-          <button onClick={onDone} className="p-2 -me-2 rounded-full transition-all active:scale-90" style={{ color: "var(--text-muted)" }}>
-            <X size={20} />
-          </button>
+          {dismissable ? (
+            <button onClick={onDone} className="p-2 -me-2 rounded-full transition-all active:scale-90" style={{ color: "var(--text-muted)" }}>
+              <X size={20} />
+            </button>
+          ) : <div className="w-9" />}
         </div>
         {/* Progress — clickable dots */}
         <div className="flex gap-0 justify-center mb-2">
@@ -286,7 +289,7 @@ export default function OnboardingQuiz({ onDone }: Props) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-5 pb-20 max-w-lg mx-auto w-full">
+      <div className="flex-1 overflow-y-auto px-5 pb-20 max-w-lg mx-auto w-full hide-scrollbar">
         {step < TOTAL_STEPS && (
           <div className="mb-5">
             <h2 className="text-xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>{titles[step]}</h2>
