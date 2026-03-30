@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
+import FeedbackFAB from "./FeedbackFAB";
 
 export default function AppLayout() {
   return (
@@ -8,6 +9,7 @@ export default function AppLayout() {
         <Outlet />
       </div>
       <NavBar />
+      <FeedbackFAB />
     </div>
   );
 }
