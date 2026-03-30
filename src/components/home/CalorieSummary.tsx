@@ -76,18 +76,8 @@ export function CalorieSummary({
         padding: "16px 16px 12px",
       }}
     >
-      {/* Header row: "Today" left, streak pill + bell right */}
-      <div className="flex justify-between items-center mb-3">
-        <span
-          style={{
-            fontSize: 16,
-            fontWeight: 700,
-            color: "var(--text-primary)",
-          }}
-        >
-          Today
-        </span>
-
+      {/* Header row: streak pill + bell right-aligned */}
+      <div className="flex justify-end items-center mb-3">
         <div className="flex items-center gap-2">
           {/* Streak pill */}
           <div
