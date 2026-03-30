@@ -178,7 +178,17 @@
     "usernameTaken": "שם משתמש תפוס או לא תקין",
     "usernameInvalid": "שם משתמש חייב להיות 3-30 תווים (אותיות, מספרים, קו תחתון)",
     "username": "שם משתמש",
-    "friendsCount": "חברים"
+    "friendsCount": "חברים",
+    "sentRequests": "בקשות שנשלחו",
+    "cancel": "ביטול",
+    "requestCancelled": "הבקשה בוטלה",
+    "joined": "הצטרף",
+    "bestStreak": "רצף שיא",
+    "friendsSince": "חברים מאז",
+    "inviteFriend": "הזמן חבר",
+    "inviteDesc": "שתף את הקישור הזה כדי שיוכלו להוסיף אותך",
+    "copyLink": "העתק קישור",
+    "linkCopied": "הקישור הועתק!"
   },
   "contest": {
     "title": "תחרות",
