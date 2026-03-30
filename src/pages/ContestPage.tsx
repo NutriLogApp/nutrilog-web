@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Users, Crown, Lightbulb, Info } from "lucide-react";
+import { Crown, Lightbulb, Info } from "lucide-react";
 import { getProfile } from "@/services/profileService";
 import {
   getFriendsLeaderboard,
-  setUsername,
 } from "@/services/socialService";
 import type { Standing } from "@/services/socialService";
 import AddFriendModal from "@/components/shared/AddFriendModal";
@@ -22,19 +21,16 @@ function formatDateRange(weekStart: string): string {
 
 export default function ContestPage() {
   const { t } = useTranslation();
-  const qc = useQueryClient();
 
   const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
   });
 
-  const enabled = !!profile?.username;
-
   const { data: leaderboard } = useQuery({
     queryKey: ["friendsLeaderboard"],
     queryFn: getFriendsLeaderboard,
-    enabled,
+    enabled: !!profile,
   });
 
   const [showAddFriend, setShowAddFriend] = useState(false);
@@ -68,20 +64,6 @@ export default function ContestPage() {
     document.addEventListener("pointerdown", handleTapOutside);
     return () => document.removeEventListener("pointerdown", handleTapOutside);
   }, [infoPos]);
-  const [usernameInput, setUsernameInput] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-
-  const usernameMutation = useMutation({
-    mutationFn: (name: string) => setUsername(name),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["profile"] });
-      setUsernameError("");
-    },
-    onError: (err: Error) => {
-      setUsernameError(err.message || t("friends.usernameTaken"));
-    },
-  });
-
   // --- State 1: Loading ---
   if (profileLoading) {
     return (
@@ -95,68 +77,7 @@ export default function ContestPage() {
     );
   }
 
-  // --- State 2: No Username ---
-  if (!profile?.username) {
-    return (
-      <div className="px-5 pt-8 pb-4 flex flex-col items-center justify-center" style={{ minHeight: "60vh" }}>
-        <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
-          style={{ background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)" }}
-        >
-          <Users size={24} style={{ color: "var(--theme-accent)" }} />
-        </div>
-        <h1
-          className="text-xl font-bold tracking-tight text-center mb-1.5"
-          style={{ color: "var(--text-primary)" }}
-        >
-          {t("contest.pickUsername")}
-        </h1>
-        <p
-          className="text-[13px] text-center mb-6 max-w-[260px] leading-relaxed"
-          style={{ color: "var(--text-muted)" }}
-        >
-          {t("contest.pickUsernameDesc")}
-        </p>
-        <div className="w-full max-w-[280px] space-y-3">
-          <input
-            value={usernameInput}
-            onChange={(e) => {
-              setUsernameInput(e.target.value);
-              setUsernameError("");
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && usernameInput.trim()) usernameMutation.mutate(usernameInput.trim());
-            }}
-            placeholder={t("friends.username")}
-            className="w-full rounded-xl px-4 py-2.5 text-sm outline-none"
-            style={{
-              backgroundColor: "var(--bg-input)",
-              border: usernameError ? "1px solid #ef4444" : "1px solid var(--border)",
-              color: "var(--text-primary)",
-            }}
-          />
-          {usernameError && (
-            <p className="text-xs" style={{ color: "#ef4444" }}>{usernameError}</p>
-          )}
-          <button
-            onClick={() => usernameInput.trim() && usernameMutation.mutate(usernameInput.trim())}
-            disabled={!usernameInput.trim() || usernameMutation.isPending}
-            className="w-full py-3 rounded-xl text-white text-sm font-semibold transition-all active:scale-[0.97] disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}
-          >
-            {usernameMutation.isPending ? (
-              <div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin mx-auto" />
-            ) : (
-              t("contest.save")
-            )}
-          </button>
-        </div>
-        <DevScenarioPanel />
-      </div>
-    );
-  }
-
-  // --- State 3: No Friends ---
+  // --- State 2: No Friends ---
   if (leaderboard && leaderboard.standings.length === 1) {
     const me = leaderboard.standings[0];
     return (
@@ -339,7 +260,7 @@ function LeaderboardRow({ standing: s, t }: { standing: Standing; t: (key: strin
     : "var(--bg-input)";
   const avatarColor = s.is_current_user ? "var(--theme-accent)" : "var(--text-secondary)";
 
-  const displayName = s.username || s.name;
+  const displayName = s.name || s.username || "?";
   const initial = displayName.charAt(0).toUpperCase();
 
   return (

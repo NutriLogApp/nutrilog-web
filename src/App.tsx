@@ -1,16 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { applyTheme, type ThemeName } from "@/themes/themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/AppLayout";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { getProfile } from "@/services/profileService";
 import "@/i18n";
 
 // Lazy load pages
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
-const PendingPage = lazy(() => import("@/pages/PendingPage"));
+const VerifyEmailPage = lazy(() => import("@/pages/VerifyEmailPage"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ContestPage = lazy(() => import("@/pages/ContestPage"));
 const TrendsPage = lazy(() => import("@/pages/TrendsPage"));
@@ -42,6 +43,19 @@ function PageLoader() {
   );
 }
 
+function OnboardingGate({ children }: { children: React.ReactNode }) {
+  const { data: profile, isLoading } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
+  });
+
+  if (isLoading) return <PageLoader />;
+  if (profile && profile.onboarding_done === false) {
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
+}
+
 export default function App() {
   return (
     <ErrorBoundary>
@@ -52,17 +66,37 @@ export default function App() {
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   <Route path="/login" element={<LoginPage />} />
-                  <Route path="/pending" element={<PendingPage />} />
+                  <Route path="/pending" element={<VerifyEmailPage />} />
                   <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+                    <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/" element={<HomePage />} />
                     <Route path="/myday" element={<Navigate to="/" replace />} />
-                    <Route path="/chat" element={<ChatPage />} />
-                    <Route path="/contest" element={<ContestPage />} />
-                    <Route path="/friends/add" element={<FriendAddPage />} />
-                    <Route path="/trends" element={<TrendsPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route element={
+                      <OnboardingGate>
+                        <ChatPage />
+                      </OnboardingGate>
+                    } path="/chat" />
+                    <Route element={
+                      <OnboardingGate>
+                        <ContestPage />
+                      </OnboardingGate>
+                    } path="/contest" />
+                    <Route element={
+                      <OnboardingGate>
+                        <FriendAddPage />
+                      </OnboardingGate>
+                    } path="/friends/add" />
+                    <Route element={
+                      <OnboardingGate>
+                        <TrendsPage />
+                      </OnboardingGate>
+                    } path="/trends" />
                     <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/admin" element={
+                      <OnboardingGate>
+                        <AdminPage />
+                      </OnboardingGate>
+                    } />
                   </Route>
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

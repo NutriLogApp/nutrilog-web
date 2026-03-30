@@ -1,6 +1,32 @@
 {
-  "login": { "title": "NutriLog", "subtitle": "עקוב אחר התזונה שלך", "signIn": "התחבר עם Google" },
-  "pending": { "title": "ממתין לאישור", "subtitle": "מנהל המערכת יאשר את חשבונך בקרוב." },
+  "login": {
+    "title": "NutriLog",
+    "subtitle": "עקוב אחרי התזונה שלך, בדרך שלך",
+    "continueWithGoogle": "המשך עם Google",
+    "orContinueWithEmail": "או המשך עם אימייל",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "confirmPassword": "אימות סיסמה",
+    "signIn": "התחברות",
+    "createAccount": "יצירת חשבון",
+    "newHere": "חדש כאן?",
+    "createAccountLink": "צור חשבון",
+    "alreadyHaveAccount": "כבר יש לך חשבון?",
+    "signInLink": "התחבר",
+    "passwordHint": "מינימום 6 תווים",
+    "passwordsMustMatch": "הסיסמאות חייבות להתאים",
+    "emailRequired": "אימייל נדרש",
+    "passwordRequired": "סיסמה נדרשת",
+    "publicName": "שם ציבורי",
+    "publicNameRequired": "שם ציבורי נדרש"
+  },
+  "verifyEmail": {
+    "title": "בדוק את האימייל שלך",
+    "subtitle": "שלחנו קישור אימות אל",
+    "resend": "שלח שוב אימייל אימות",
+    "resent": "אימייל אימות נשלח שוב!",
+    "backToLogin": "חזרה להתחברות"
+  },
   "dashboard": {
     "goodMorning": "בוקר טוב",
     "goodAfternoon": "צהריים טובים",
@@ -302,5 +328,17 @@
     "back": "חזרה",
     "disclaimer_title": "הצהרת אחריות",
     "disclaimer_text": "העוזר הבינה המלאכותית של NutriLog מספק מידע תזונתי כללי בלבד. הוא אינו תחליף לייעוץ רפואי או תזונתי מקצועי. תמיד התייעצו עם ספק שירותי בריאות מוסמך לפני ביצוע שינויים בתזונה. NutriLog אינו אחראי להחלטות שנעשו על סמך הצעות העוזר."
+  },
+  "feedback": {
+    "buttonLabel": "שלח משוב",
+    "placeholder": "תאר את הבעיה...",
+    "screenshotAttached": "צילום מסך מצורף",
+    "retake": "צלם מחדש",
+    "remove": "הסר",
+    "send": "שלח משוב",
+    "sending": "שולח...",
+    "sent": "המשוב נשלח! תודה.",
+    "error": "שליחת המשוב נכשלה. נסה שוב.",
+    "close": "סגור"
   }
 }

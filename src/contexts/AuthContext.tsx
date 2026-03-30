@@ -11,6 +11,8 @@ interface AuthContextValue {
   signOut: () => void;
   devLogin: (email: string, name?: string) => Promise<void>;
   isDevSession: boolean;
+  signUp: (email: string, password: string, publicName?: string) => Promise<{ error?: string; needsVerification?: boolean }>;
+  signInWithPassword: (email: string, password: string) => Promise<{ error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -51,6 +53,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.signOut();
   };
 
+  const signUp = async (email: string, password: string, publicName?: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/`,
+        ...(publicName ? { data: { full_name: publicName } } : {}),
+      },
+    });
+    if (error) return { error: error.message };
+    if (data.user && !data.session) return { needsVerification: true };
+    return {};
+  };
+
+  const signInWithPassword = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { error: error.message };
+    return {};
+  };
+
   const devLogin = async (email: string, name = "Test User") => {
     const apiUrl = import.meta.env.VITE_API_URL as string;
     const res = await fetch(`${apiUrl}/api/v1/dev/login`, {
@@ -66,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ session, loading, signInWithGoogle, signOut, devLogin, isDevSession }}>
+    <AuthContext.Provider value={{ session, loading, signInWithGoogle, signOut, devLogin, isDevSession, signUp, signInWithPassword }}>
       {children}
     </AuthContext.Provider>
   );
