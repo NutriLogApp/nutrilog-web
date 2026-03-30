@@ -90,7 +90,7 @@ describe("CalorieSummary", () => {
   it("persists expanded state to localStorage", async () => {
     render(<CalorieSummary {...defaultProps} />);
     await userEvent.click(screen.getByText(/details/));
-    expect(localStorage.getItem("nutrilog_hero_expanded")).toBe("true");
+    expect(localStorage.getItem("mealriot_hero_expanded")).toBe("true");
   });
 
   it("shows 0 when consumed exceeds goal", () => {

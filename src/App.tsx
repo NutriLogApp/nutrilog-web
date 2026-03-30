@@ -25,9 +25,9 @@ import { queryClient } from "@/lib/queryConfig";
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    const saved = localStorage.getItem("nutrilog-theme") as ThemeName | null;
+    const saved = localStorage.getItem("mealriot-theme") as ThemeName | null;
     applyTheme(saved ?? "ocean");
-    const dm = localStorage.getItem("nutrilog-dark-mode");
+    const dm = localStorage.getItem("mealriot-dark-mode");
     if (dm === "dark") document.documentElement.classList.add("force-dark");
     else if (dm === "light") document.documentElement.classList.add("force-light");
   }, []);

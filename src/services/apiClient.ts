@@ -1,7 +1,7 @@
 import axios from "axios";
 import { supabase } from "@/lib/supabase";
 
-const DEV_TOKEN_KEY = "nutrilog_dev_token";
+const DEV_TOKEN_KEY = "mealriot_dev_token";
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,

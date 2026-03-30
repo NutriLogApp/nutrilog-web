@@ -72,15 +72,15 @@ export default function SettingsPage() {
       setGoals({ daily_cal_goal: profile.daily_cal_goal ?? 2000, daily_protein_goal_g: profile.daily_protein_goal_g ?? 120, daily_fat_goal_g: profile.daily_fat_goal_g ?? 78, daily_carbs_goal_g: profile.daily_carbs_goal_g ?? 180, daily_water_goal_ml: profile.daily_water_goal_ml ?? 2000 });
       setActiveTheme((profile.theme ?? "ocean") as ThemeName);
     }
-    const saved = localStorage.getItem("nutrilog-dark-mode");
+    const saved = localStorage.getItem("mealriot-dark-mode");
     if (saved) setDarkMode(saved as "auto" | "light" | "dark");
   }, [profile]);
 
   function saveGoals() { updateMut.mutate(goals); setModal(null); }
   function switchLanguage(lang: string) { i18n.changeLanguage(lang); document.documentElement.dir = lang === "he" ? "rtl" : "ltr"; updateMut.mutate({ language: lang }); }
-  function switchTheme(name: ThemeName) { setActiveTheme(name); applyTheme(name); localStorage.setItem("nutrilog-theme", name); updateMut.mutate({ theme: name }); }
+  function switchTheme(name: ThemeName) { setActiveTheme(name); applyTheme(name); localStorage.setItem("mealriot-theme", name); updateMut.mutate({ theme: name }); }
   function switchDarkMode(mode: "auto" | "light" | "dark") {
-    setDarkMode(mode); localStorage.setItem("nutrilog-dark-mode", mode);
+    setDarkMode(mode); localStorage.setItem("mealriot-dark-mode", mode);
     const root = document.documentElement; root.classList.remove("force-dark", "force-light");
     if (mode === "dark") root.classList.add("force-dark");
     else if (mode === "light") root.classList.add("force-light");

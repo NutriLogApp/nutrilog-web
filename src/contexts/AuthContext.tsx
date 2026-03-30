@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
 
-const DEV_TOKEN_KEY = "nutrilog_dev_token";
+const DEV_TOKEN_KEY = "mealriot_dev_token";
 
 interface AuthContextValue {
   session: Session | null;

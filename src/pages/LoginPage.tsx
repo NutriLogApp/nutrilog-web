@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [publicName, setPublicName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [devEmail, setDevEmail] = useState("test@nutrilog.dev");
+  const [devEmail, setDevEmail] = useState("test@mealriot.dev");
   const [devLoading, setDevLoading] = useState(false);
 
   if (session) return <Navigate to="/" replace />;

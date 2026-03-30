@@ -1,6 +1,6 @@
 {
-  "name": "NutriLog",
-  "short_name": "NutriLog",
+  "name": "MealRiot",
+  "short_name": "MealRiot",
   "description": "Track your nutrition with AI",
   "start_url": "/",
   "display": "standalone",

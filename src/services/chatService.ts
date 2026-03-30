@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
-const DEV_TOKEN_KEY = "nutrilog_dev_token";
+const DEV_TOKEN_KEY = "mealriot_dev_token";
 
 export interface ChatMessage {
   role: "user" | "assistant";
