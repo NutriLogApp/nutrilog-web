@@ -188,11 +188,11 @@ export function CalorieSummary({
             fontWeight: 500,
           }}
         >
-          <span>P {proteinConsumed}g</span>
+          <span>{t("macros.proteinShort")} {proteinConsumed}g</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span>F {fatConsumed}g</span>
+          <span>{t("macros.fatShort")} {fatConsumed}g</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span>C {carbsConsumed}g</span>
+          <span>{t("macros.carbsShort")} {carbsConsumed}g</span>
           <span style={{ opacity: 0.4 }}>·</span>
           <span className="flex items-center gap-0.5">
             <Droplet size={12} />
@@ -229,7 +229,7 @@ export function CalorieSummary({
             const isWater = macro.key === "water";
             const pct = goal > 0 ? Math.min(consumed / goal, 1) * 100 : 0;
             const label = isWater
-              ? "Water"
+              ? t("water.label")
               : t(macro.labelKey as string);
             const valueText = isWater
               ? `${(consumed / 1000).toFixed(1)}/${(goal / 1000).toFixed(1)}L`

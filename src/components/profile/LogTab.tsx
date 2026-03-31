@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 import { Pencil, Droplets } from "lucide-react";
 import { getDailyStats } from "@/services/statsService";
 import { getProfile } from "@/services/profileService";
@@ -107,11 +108,11 @@ export default function LogTab({ use24h = true }: Props) {
               </p>
             </div>
             <div className="flex items-center justify-end gap-1.5 mt-0.5">
-              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#6366f1" }}>{totals.p}<span className="font-bold">P</span></span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#6366f1" }}>{totals.p}<span className="font-bold">{t("macros.proteinShort")}</span></span>
               <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
-              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#f59e0b" }}>{totals.f}<span className="font-bold">F</span></span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#f59e0b" }}>{totals.f}<span className="font-bold">{t("macros.fatShort")}</span></span>
               <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
-              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#10b981" }}>{totals.c}<span className="font-bold">C</span></span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#10b981" }}>{totals.c}<span className="font-bold">{t("macros.carbsShort")}</span></span>
               {totals.waterMl > 0 && (
                 <>
                   <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
@@ -127,6 +128,10 @@ export default function LogTab({ use24h = true }: Props) {
           <div className="space-y-1.5">
             {entries.map((entry) => {
               const time = formatTime(entry.logged_at, use24h);
+              const isHe = i18n.language === "he";
+              const displayName = entry.items[0]
+                ? (isHe && entry.items[0].food_name_he ? entry.items[0].food_name_he : entry.items[0].food_name)
+                : entry.description;
               return (
                 <div
                   key={entry.id}
@@ -135,13 +140,13 @@ export default function LogTab({ use24h = true }: Props) {
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold truncate" style={{ fontSize: 14, color: "var(--text-primary)" }}>
-                      {entry.description}
+                      {displayName}
                       {(entry.items[0]?.quantity ?? 1) > 1 && (
                         <span style={{
                           display: "inline-block", fontSize: 10, fontWeight: 600,
                           color: "var(--theme-accent)",
                           background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)",
-                          borderRadius: 6, padding: "1px 5px", marginLeft: 4, verticalAlign: "middle",
+                          borderRadius: 6, padding: "1px 5px", marginInlineStart: 4, verticalAlign: "middle",
                         }}>
                           x{entry.items[0].quantity}
                         </span>

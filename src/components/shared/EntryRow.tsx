@@ -1,6 +1,7 @@
 import { formatTime } from "@/lib/formatTime";
 import type { EntryOut } from "@/types/api";
 import i18n from "@/i18n";
+import { useTranslation } from "react-i18next";
 
 interface EntryRowProps {
   entry: EntryOut;
@@ -15,6 +16,7 @@ export function EntryRow({
   showMacros = true,
   onEdit,
 }: EntryRowProps) {
+  const { t } = useTranslation();
   const item = entry.items[0];
   const isHe = i18n.language === "he";
   const qty = item?.quantity ?? 1;
@@ -54,7 +56,7 @@ export function EntryRow({
                 whiteSpace: "nowrap",
                 flex: 1,
                 minWidth: 0,
-                marginRight: "8px",
+                marginInlineEnd: "8px",
               }}
             >
               {displayName}
@@ -68,7 +70,7 @@ export function EntryRow({
                     background: "color-mix(in srgb, var(--theme-accent) 12%, transparent)",
                     borderRadius: "6px",
                     padding: "1px 5px",
-                    marginLeft: "4px",
+                    marginInlineStart: "4px",
                     verticalAlign: "middle",
                   }}
                 >
@@ -85,20 +87,30 @@ export function EntryRow({
                 flexShrink: 0,
               }}
             >
-              {Math.round(entry.total_calories)} cal
+              {Math.round(entry.total_calories)} {t("units.cal")}
             </span>
           </div>
 
           {showMacros && (
             <div style={{ display: "flex", gap: "8px", marginTop: "2px" }}>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#0d9488" }}>
-                {Math.round(entry.total_protein_g)}g P
+                {Math.round(entry.total_protein_g)}g {t("macros.proteinShort")}
               </span>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#f59e0b" }}>
-                {Math.round(entry.total_fat_g)}g F
+                {Math.round(entry.total_fat_g)}g {t("macros.fatShort")}
               </span>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#ec4899" }}>
-                {Math.round(entry.total_carbs_g)}g C
+                {Math.round(entry.total_carbs_g)}g {t("macros.carbsShort")}
+              </span>
+            </div>
+          )}
+          {item?.is_drink && (item.water_pct ?? 0) > 0 && (
+            <div style={{ display: "flex", gap: "4px", marginTop: "2px", alignItems: "center" }}>
+              <span style={{ fontSize: "9px", fontWeight: 600, color: "#38bdf8", display: "flex", alignItems: "center", gap: "2px" }}>
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                </svg>
+                {Math.round(((item.volume_ml ?? item.grams ?? 0) * (item.water_pct ?? 0)) / 100)}{t("water.ml")}
               </span>
             </div>
           )}
