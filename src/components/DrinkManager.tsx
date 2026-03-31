@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Trash2, Loader2, Coffee, Beer, Wine, CupSoda, Milk, Droplets, GlassWater } from "lucide-react";
 import { listDrinks, parseDrink, createDrink, deleteDrink, type DrinkOut, type DrinkParseResult } from "@/services/drinksService";
 import i18n from "@/i18n";
+import NumericInput from "@/components/NumericInput";
 
 export default function DrinkManager() {
   const { t } = useTranslation();
@@ -132,8 +133,8 @@ export default function DrinkManager() {
             </div>
             <div className="rounded-lg p-2" style={{ backgroundColor: "var(--bg-input)" }}>
               <div className="flex items-center justify-center gap-1">
-                <input type="number" min={0} max={100} value={parsed.water_pct}
-                  onChange={(e) => setParsed((p) => p ? { ...p, water_pct: Math.min(100, Math.max(0, +e.target.value || 0)) } : p)}
+                <NumericInput value={parsed.water_pct} min={0} max={100}
+                  onChange={(v) => setParsed((p) => p ? { ...p, water_pct: v } : p)}
                   className="w-12 text-center text-lg font-bold bg-transparent outline-none"
                   style={{ color: "var(--text-primary)" }} />
                 <span className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>%</span>

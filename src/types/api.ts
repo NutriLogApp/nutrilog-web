@@ -108,6 +108,11 @@ export interface ProfileOut {
   onboarding_done: boolean;
   use_24h: boolean;
   first_day_of_week: number;
+  home_view_mode: string;
+  sex: string | null;
+  goal: string | null;
+  body_fat_pct: number | null;
+  macro_preset: string | null;
   friend_code: string | null;
   current_streak: number;
   longest_streak: number;
@@ -127,6 +132,7 @@ export interface ProfileUpdate {
   activity_level?: string;
   use_24h?: boolean;
   first_day_of_week?: number;
+  home_view_mode?: string;
 }
 
 export interface RecentFoodItem {

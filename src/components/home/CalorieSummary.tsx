@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell, ChevronDown, ChevronUp, Droplet, Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -16,6 +16,7 @@ interface CalorieSummaryProps {
   streak: number;
   onBellClick: () => void;
   hasUnread: boolean;
+  homeViewMode?: string;
 }
 
 const STORAGE_KEY = "mealriot_hero_expanded";
@@ -41,11 +42,18 @@ export function CalorieSummary({
   streak,
   onBellClick,
   hasUnread,
+  homeViewMode,
 }: CalorieSummaryProps) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(
     () => localStorage.getItem(STORAGE_KEY) === "true"
   );
+
+  const isFull = homeViewMode === "full";
+
+  useEffect(() => {
+    if (isFull) setExpanded(true);
+  }, [isFull]);
 
   const remaining = Math.max(caloriesGoal - caloriesConsumed, 0);
   const calorieProgress = Math.min(
@@ -64,6 +72,7 @@ export function CalorieSummary({
   const waterGoalL = (waterGoalMl / 1000).toFixed(1);
 
   const toggleExpanded = () => {
+    if (isFull) return;
     const next = !expanded;
     setExpanded(next);
     localStorage.setItem(STORAGE_KEY, String(next));
@@ -116,26 +125,32 @@ export function CalorieSummary({
         </div>
       </div>
 
-      {/* Big remaining calories number */}
+      {/* Big remaining / daily goal */}
       <div className="text-center">
-        <div
-          style={{
-            fontSize: 36,
-            fontWeight: 700,
-            lineHeight: 1.1,
-            color: "var(--text-primary)",
-          }}
-        >
-          {remaining}
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 2 }}>
+          <span
+            style={{
+              fontSize: 36,
+              fontWeight: 700,
+              lineHeight: 1.1,
+              color: "var(--text-primary)",
+            }}
+          >
+            {remaining.toLocaleString()}
+          </span>
+          <span style={{ fontSize: 16, fontWeight: 400, color: "var(--text-muted)", margin: "0 2px" }}>/</span>
+          <span style={{ fontSize: 16, fontWeight: 500, color: "var(--text-secondary)" }}>
+            {caloriesGoal.toLocaleString()}
+          </span>
         </div>
-        <div
-          style={{
-            fontSize: 12,
-            color: "var(--text-muted)",
-            marginTop: 2,
-          }}
-        >
-          {t("calorieSummary.remaining")}
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 2, marginTop: 3 }}>
+          <span style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.02em" }}>
+            {t("calorieSummary.remaining")}
+          </span>
+          <span style={{ fontSize: 10, color: "var(--text-muted)", margin: "0 1px" }}>/</span>
+          <span style={{ fontSize: 12, color: "var(--text-secondary)", letterSpacing: "0.02em" }}>
+            {t("calorieSummary.dailyGoal")}
+          </span>
         </div>
       </div>
 
@@ -162,44 +177,48 @@ export function CalorieSummary({
       </div>
 
       {/* Collapsed macro summary row */}
-      <div
-        className="flex items-center justify-center gap-2"
-        style={{
-          marginTop: 10,
-          fontSize: 12,
-          color: "var(--text-secondary)",
-          fontWeight: 500,
-        }}
-      >
-        <span>P {proteinConsumed}g</span>
-        <span style={{ opacity: 0.4 }}>·</span>
-        <span>F {fatConsumed}g</span>
-        <span style={{ opacity: 0.4 }}>·</span>
-        <span>C {carbsConsumed}g</span>
-        <span style={{ opacity: 0.4 }}>·</span>
-        <span className="flex items-center gap-0.5">
-          <Droplet size={12} />
-          {waterL}/{waterGoalL}
-        </span>
-      </div>
+      {!isFull && (
+        <div
+          className="flex items-center justify-center gap-2"
+          style={{
+            marginTop: 10,
+            fontSize: 12,
+            color: "var(--text-secondary)",
+            fontWeight: 500,
+          }}
+        >
+          <span>P {proteinConsumed}g</span>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <span>F {fatConsumed}g</span>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <span>C {carbsConsumed}g</span>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <span className="flex items-center gap-0.5">
+            <Droplet size={12} />
+            {waterL}/{waterGoalL}
+          </span>
+        </div>
+      )}
 
       {/* Details toggle */}
-      <button
-        onClick={toggleExpanded}
-        className="flex items-center justify-center gap-1 mx-auto"
-        style={{
-          marginTop: 6,
-          fontSize: 11,
-          color: "var(--text-muted)",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: 500,
-        }}
-      >
-        {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        {t("calorieSummary.details")}
-      </button>
+      {!isFull && (
+        <button
+          onClick={toggleExpanded}
+          className="flex items-center justify-center gap-1 mx-auto"
+          style={{
+            marginTop: 6,
+            fontSize: 11,
+            color: "var(--text-muted)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontWeight: 500,
+          }}
+        >
+          {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          {t("calorieSummary.details")}
+        </button>
+      )}
 
       {/* Expanded detail bars */}
       {expanded && (

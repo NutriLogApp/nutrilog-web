@@ -153,7 +153,11 @@
     "shareLink": "Share Link",
     "social": "Social",
     "publicName": "Public Name",
-    "publicNameDesc": "This is how others will find you in the app"
+    "publicNameDesc": "This is how others will find you in the app",
+    "homeScreen": "Home Screen",
+    "homeScreenCompact": "Compact",
+    "homeScreenFull": "Full",
+    "installApp": "Install App"
   },
   "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended", "announcements": "Announcements", "announcementTitle": "Title", "announcementBody": "Body (optional)", "send": "Send", "inactive": "Inactive" },
@@ -244,11 +248,14 @@
     "macroPreset": "Nutrition style",
     "macroPresetDesc": "Choose how to split your calories into macros",
     "balanced": "Balanced",
-    "balancedDesc": "Protein-first, moderate fat and carbs",
+    "balancedDesc": "Higher protein, moderate fat and carbs — for active lifestyles",
     "highProtein": "High Protein",
     "highProteinDesc": "2.2g protein per kg — for muscle building",
     "keto": "Keto",
     "ketoDesc": "70% fat, minimal carbs (under 20g)",
+    "flexible": "Flexible",
+    "flexibleDesc": "Standard balanced diet — track without a specific diet goal",
+    "nutritionStyleIntro": "Choose the eating style that fits your goals",
     "next": "Next",
     "sexWhy": "Metabolism differs between sexes — this helps us be accurate",
     "bodyWhy": "Your body measurements determine your base metabolic rate",
@@ -318,7 +325,8 @@
     "logged": "Logged!"
   },
   "calorieSummary": {
-    "remaining": "calories remaining",
+    "remaining": "remaining",
+    "dailyGoal": "daily goal",
     "details": "details",
     "consumed": "consumed"
   },
@@ -352,5 +360,12 @@
     "sent": "Feedback sent! Thank you.",
     "error": "Failed to send feedback. Please try again.",
     "close": "Close"
+  },
+  "install": {
+    "banner": "Add MealRiot to your home screen for quick access",
+    "bannerButton": "Install",
+    "iosTitle": "Install MealRiot",
+    "iosStep1": "Tap the Share button",
+    "iosStep2": "Scroll down and tap \"Add to Home Screen\""
   }
 }
