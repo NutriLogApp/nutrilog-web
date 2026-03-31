@@ -12,6 +12,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: false,
       manifest: {
         name: "MealRiot",
         short_name: "MealRiot",
@@ -27,6 +28,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ["**/*.{js,css,html,svg,png,woff2}"],
         // Don't precache API calls or large assets
         navigateFallback: "/index.html",
