@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Bell, ChevronDown, ChevronUp, Droplet, Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
+import { us } from "@/lib/unitSpace";
 
 interface CalorieSummaryProps {
   caloriesConsumed: number;
@@ -190,11 +191,11 @@ export function CalorieSummary({
             fontWeight: 500,
           }}
         >
-          <span>{t("macros.proteinShort")} {proteinConsumed} {t("log.g")}</span>
+          <span>{t("macros.proteinShort")} {proteinConsumed}{us()}{t("log.g")}</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span>{t("macros.fatShort")} {fatConsumed} {t("log.g")}</span>
+          <span>{t("macros.fatShort")} {fatConsumed}{us()}{t("log.g")}</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span>{t("macros.carbsShort")} {carbsConsumed} {t("log.g")}</span>
+          <span>{t("macros.carbsShort")} {carbsConsumed}{us()}{t("log.g")}</span>
           <span style={{ opacity: 0.4 }}>·</span>
           <span className="flex items-center gap-0.5">
             <Droplet size={12} />
@@ -234,8 +235,8 @@ export function CalorieSummary({
               ? t("water.label")
               : t(macro.labelKey as string);
             const valueText = isWater
-              ? `${(consumed / 1000).toFixed(1)}/${(goal / 1000).toFixed(1)} L`
-              : `${consumed}/${goal} ${t("log.g")}`;
+              ? `${(consumed / 1000).toFixed(1)}/${(goal / 1000).toFixed(1)}${us()}L`
+              : `${consumed}/${goal}${us()}${t("log.g")}`;
 
             return (
               <div key={macro.key}>

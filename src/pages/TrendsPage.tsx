@@ -7,6 +7,7 @@ import {
 } from "recharts";
 import { getRangeStats } from "@/services/statsService";
 import { getProfile } from "@/services/profileService";
+import { us } from "@/lib/unitSpace";
 
 function getWeekRange(firstDay: number = 0) {
   // firstDay: 0=Sunday, 1=Monday
@@ -136,9 +137,9 @@ export default function TrendsPage() {
           <div className="grid grid-cols-4 gap-2">
             {[
               { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
-              { label: t("macros.protein"), value: `${avg.p} ${t("log.g")}`, color: "#6366f1" },
-              { label: t("macros.fat"), value: `${avg.f} ${t("log.g")}`, color: "#f59e0b" },
-              { label: t("macros.carbs"), value: `${avg.c} ${t("log.g")}`, color: "#10b981" },
+              { label: t("macros.protein"), value: `${avg.p}${us()}${t("log.g")}`, color: "#6366f1" },
+              { label: t("macros.fat"), value: `${avg.f}${us()}${t("log.g")}`, color: "#f59e0b" },
+              { label: t("macros.carbs"), value: `${avg.c}${us()}${t("log.g")}`, color: "#10b981" },
             ].map((item) => (
               <div key={item.label} className="glass-card-sm p-3 text-center">
                 <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
