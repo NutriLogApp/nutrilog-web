@@ -48,14 +48,14 @@ export default function FriendsTab() {
         <Users size={16} style={{ color: "var(--theme-accent)" }} />
         <span className="flex-1 text-sm font-medium text-start" style={{ color: "var(--text-secondary)" }}>{t("profileTabs.seeAllFriends")}</span>
         <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>({friends.length})</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" className="rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
       </button>
 
       {/* Share invite */}
       <button onClick={() => setModal("share")} className="glass-card p-3.5 w-full flex items-center gap-2.5 active:scale-[0.98] transition-transform">
         <Share2 size={16} style={{ color: "var(--theme-accent)" }} />
         <span className="flex-1 text-sm font-medium text-start" style={{ color: "var(--text-secondary)" }}>{t("profileTabs.shareInvite")}</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" className="rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
       </button>
 
       {/* Add Friend Modal */}
