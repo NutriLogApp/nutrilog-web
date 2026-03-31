@@ -58,7 +58,11 @@ export function CalorieSummary({
   }, [isFull]);
 
   const remaining = Math.max(caloriesGoal - caloriesConsumed, 0);
+  const isOverBudget = caloriesConsumed > caloriesGoal;
+  const overage = Math.max(caloriesConsumed - caloriesGoal, 0);
+  const animatedConsumed = useAnimatedNumber(caloriesConsumed);
   const animatedRemaining = useAnimatedNumber(remaining);
+  const animatedOverage = useAnimatedNumber(overage);
   const calorieProgress = Math.min(
     caloriesGoal > 0 ? caloriesConsumed / caloriesGoal : 0,
     1
@@ -129,32 +133,114 @@ export function CalorieSummary({
         </div>
       </div>
 
-      {/* Big remaining / daily goal */}
-      <div className="text-center">
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 2 }}>
-          <span
+      {/* Three-column calorie display: Eaten | Remaining | Goal */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          textAlign: "center",
+          padding: "0 2px",
+        }}
+      >
+        {/* Eaten */}
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              fontSize: 20,
+              fontWeight: 600,
+              color: isOverBudget ? "#f87171" : "var(--text-secondary)",
+              lineHeight: 1,
+            }}
+          >
+            {animatedConsumed.toLocaleString()}
+          </div>
+          <div
+            style={{
+              fontSize: 10,
+              color: "var(--text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              marginTop: 3,
+            }}
+          >
+            {t("calorieSummary.eaten")}
+          </div>
+        </div>
+
+        {/* Separator */}
+        <div
+          style={{
+            width: 1,
+            height: 36,
+            background: "rgba(255,255,255,0.08)",
+            flexShrink: 0,
+            alignSelf: "center",
+          }}
+        />
+
+        {/* Remaining / Over */}
+        <div style={{ flex: 1 }}>
+          <div
             style={{
               fontSize: 36,
               fontWeight: 700,
-              lineHeight: 1.1,
-              color: "var(--text-primary)",
+              lineHeight: 1,
+              color: isOverBudget ? "#f87171" : "var(--text-primary)",
             }}
           >
-            {animatedRemaining.toLocaleString()}
-          </span>
-          <span style={{ fontSize: 16, fontWeight: 400, color: "var(--text-muted)", margin: "0 2px" }}>/</span>
-          <span style={{ fontSize: 16, fontWeight: 500, color: "var(--text-secondary)" }}>
-            {caloriesGoal.toLocaleString()}
-          </span>
+            {isOverBudget
+              ? `+${animatedOverage.toLocaleString()}`
+              : animatedRemaining.toLocaleString()}
+          </div>
+          <div
+            style={{
+              fontSize: 11,
+              color: isOverBudget ? "#f87171" : "var(--theme-end)",
+              fontWeight: 500,
+              marginTop: 3,
+            }}
+          >
+            {isOverBudget
+              ? t("calorieSummary.over")
+              : t("calorieSummary.remaining")}
+          </div>
         </div>
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 2, marginTop: 3 }}>
-          <span style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.02em" }}>
-            {t("calorieSummary.remaining")}
-          </span>
-          <span style={{ fontSize: 10, color: "var(--text-muted)", margin: "0 1px" }}>/</span>
-          <span style={{ fontSize: 12, color: "var(--text-secondary)", letterSpacing: "0.02em" }}>
+
+        {/* Separator */}
+        <div
+          style={{
+            width: 1,
+            height: 36,
+            background: "rgba(255,255,255,0.08)",
+            flexShrink: 0,
+            alignSelf: "center",
+          }}
+        />
+
+        {/* Goal */}
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              fontSize: 20,
+              fontWeight: 600,
+              color: "var(--text-secondary)",
+              lineHeight: 1,
+            }}
+          >
+            {caloriesGoal.toLocaleString()}
+          </div>
+          <div
+            style={{
+              fontSize: 10,
+              color: "var(--text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              marginTop: 3,
+            }}
+          >
             {t("calorieSummary.dailyGoal")}
-          </span>
+          </div>
         </div>
       </div>
 
@@ -173,8 +259,9 @@ export function CalorieSummary({
             width: `${calorieProgress * 100}%`,
             height: "100%",
             borderRadius: 9999,
-            background:
-              "linear-gradient(90deg, var(--theme-start), var(--theme-end))",
+            background: isOverBudget
+              ? "linear-gradient(90deg, #ef4444, #f87171)"
+              : "linear-gradient(90deg, var(--theme-start), var(--theme-end))",
             transition: "width 0.3s ease",
           }}
         />

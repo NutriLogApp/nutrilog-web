@@ -7,7 +7,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       const map: Record<string, string> = {
-        "calorieSummary.remaining": "calories remaining",
+        "calorieSummary.remaining": "Remaining",
+        "calorieSummary.eaten": "Eaten",
+        "calorieSummary.dailyGoal": "Goal",
+        "calorieSummary.over": "Over",
         "calorieSummary.details": "details",
         "home.streak": `${opts?.count}-day streak`,
         "macros.protein": "Protein",
@@ -45,14 +48,22 @@ describe("CalorieSummary", () => {
     localStorage.clear();
   });
 
-  it("shows remaining calories (goal - consumed)", () => {
+  it("shows eaten calories in left column", () => {
     render(<CalorieSummary {...defaultProps} />);
-    expect(screen.getByText("753")).toBeInTheDocument();
+    expect(screen.getByText("1,247")).toBeInTheDocument();
+    expect(screen.getByText("Eaten")).toBeInTheDocument();
   });
 
-  it("shows 'calories remaining' subtitle", () => {
+  it("shows remaining calories in center column", () => {
     render(<CalorieSummary {...defaultProps} />);
-    expect(screen.getByText("calories remaining")).toBeInTheDocument();
+    expect(screen.getByText("753")).toBeInTheDocument();
+    expect(screen.getByText("Remaining")).toBeInTheDocument();
+  });
+
+  it("shows daily goal in right column", () => {
+    render(<CalorieSummary {...defaultProps} />);
+    expect(screen.getByText("2,000")).toBeInTheDocument();
+    expect(screen.getByText("Goal")).toBeInTheDocument();
   });
 
   it("shows streak pill", () => {
@@ -98,9 +109,12 @@ describe("CalorieSummary", () => {
     expect(localStorage.getItem("mealriot_hero_expanded")).toBe("true");
   });
 
-  it("shows 0 when consumed exceeds goal", () => {
+  it("shows over-budget state when consumed exceeds goal", () => {
     render(<CalorieSummary {...defaultProps} caloriesConsumed={2500} caloriesGoal={2000} />);
-    expect(screen.getByText("0")).toBeInTheDocument();
+    expect(screen.getByText("+500")).toBeInTheDocument();
+    expect(screen.getByText("Over")).toBeInTheDocument();
+    expect(screen.getByText("2,500")).toBeInTheDocument();
+    expect(screen.getByText("2,000")).toBeInTheDocument();
   });
 
   it("calls onBellClick when bell is clicked", async () => {

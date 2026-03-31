@@ -329,10 +329,11 @@
     "logged": "Logged!"
   },
   "calorieSummary": {
-    "remaining": "remaining",
-    "dailyGoal": "daily goal",
-    "details": "details",
-    "consumed": "consumed"
+    "remaining": "Remaining",
+    "eaten": "Eaten",
+    "dailyGoal": "Goal",
+    "over": "Over",
+    "details": "details"
   },
   "notifications": {
     "title": "Notifications",

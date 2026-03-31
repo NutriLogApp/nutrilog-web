@@ -159,7 +159,7 @@
     "homeScreenFull": "מלא",
     "installApp": "התקן אפליקציה"
   },
-  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות", "proteinShort": "חלבון", "fatShort": "שומן", "carbsShort": "פחמימות" },
+  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימה", "proteinShort": "חלבון", "fatShort": "שומן", "carbsShort": "פחמימה" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה", "announcements": "הודעות מערכת", "announcementTitle": "כותרת", "announcementBody": "תוכן (אופציונלי)", "send": "שלח", "inactive": "לא פעיל" },
   "friends": {
     "title": "חברים",
@@ -250,11 +250,11 @@
     "macroPreset": "סגנון תזונה",
     "macroPresetDesc": "בחר כיצד לחלק את הקלוריות למאקרו",
     "balanced": "מאוזן",
-    "balancedDesc": "חלבון גבוה יותר, שומן ופחמימות מתונים — לאורח חיים פעיל",
+    "balancedDesc": "חלבון גבוה יותר, שומן פחמימה מתונים — לאורח חיים פעיל",
     "highProtein": "עשיר חלבון",
     "highProteinDesc": "2.2 גרם חלבון לק״ג — לבניית שריר",
     "keto": "קטו",
-    "ketoDesc": "70% שומן, מינימום פחמימות (מתחת ל-20 גרם)",
+    "ketoDesc": "70% שומן, מינימום פחמימה (מתחת ל-20 גרם)",
     "flexible": "גמיש",
     "flexibleDesc": "תזונה מאוזנת סטנדרטית — עקוב בלי מטרה דיאטטית מסוימת",
     "nutritionStyleIntro": "בחר את סגנון התזונה שמתאים למטרות שלך",
@@ -330,9 +330,10 @@
   },
   "calorieSummary": {
     "remaining": "נותרו",
-    "dailyGoal": "יעד יומי",
-    "details": "פרטים",
-    "consumed": "נצרכו"
+    "eaten": "נאכלו",
+    "dailyGoal": "יעד",
+    "over": "חריגה",
+    "details": "פרטים"
   },
   "notifications": {
     "title": "התראות",
