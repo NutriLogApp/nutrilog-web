@@ -119,7 +119,7 @@ export default function ChatPage() {
   return (
     <div
       className="flex flex-col"
-      style={{ height: "calc(100dvh - 96px - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px))" }}
+      style={{ height: "calc(100lvh - 96px - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px))" }}
     >
       {/* Header */}
       <div
