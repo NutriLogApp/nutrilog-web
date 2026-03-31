@@ -6,6 +6,7 @@ html, body {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
   background-color: var(--bg-page);
+  overscroll-behavior-y: none; /* Prevent iOS rubber-band showing white bg */
 }
 html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none; /* Chrome/Safari */

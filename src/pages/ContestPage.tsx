@@ -195,7 +195,7 @@ export default function ContestPage() {
           className="fixed z-[9999] p-3.5 rounded-2xl"
           style={{
             top: infoPos.top,
-            left: infoPos.left,
+            left: Math.max(10, Math.min(infoPos.left, window.innerWidth - 290)),
             width: 280,
             background: "var(--bg-elevated)",
             backdropFilter: "var(--blur)",
