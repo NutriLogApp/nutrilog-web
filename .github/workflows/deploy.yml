@@ -22,6 +22,7 @@ jobs:
             --build-arg "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" \
             --build-arg "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
             --build-arg "VITE_API_URL=" \
+            --build-arg "COMMIT_HASH=${GITHUB_SHA::7}" \
             -t "$IMAGE_LC:latest" .
           docker push "$IMAGE_LC:latest"
 
