@@ -153,7 +153,11 @@
     "shareLink": "שתף קישור",
     "social": "חברתי",
     "publicName": "שם ציבורי",
-    "publicNameDesc": "כך אחרים ימצאו אותך באפליקציה"
+    "publicNameDesc": "כך אחרים ימצאו אותך באפליקציה",
+    "homeScreen": "מסך הבית",
+    "homeScreenCompact": "קומפקטי",
+    "homeScreenFull": "מלא",
+    "installApp": "התקן אפליקציה"
   },
   "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה", "announcements": "הודעות מערכת", "announcementTitle": "כותרת", "announcementBody": "תוכן (אופציונלי)", "send": "שלח", "inactive": "לא פעיל" },
@@ -244,11 +248,14 @@
     "macroPreset": "סגנון תזונה",
     "macroPresetDesc": "בחר כיצד לחלק את הקלוריות למאקרו",
     "balanced": "מאוזן",
-    "balancedDesc": "חלבון ראשון, שומן ופחמימות מאוזנים",
+    "balancedDesc": "חלבון גבוה יותר, שומן ופחמימות מתונים — לאורח חיים פעיל",
     "highProtein": "עשיר חלבון",
     "highProteinDesc": "2.2 גרם חלבון לק״ג — לבניית שריר",
     "keto": "קטו",
     "ketoDesc": "70% שומן, מינימום פחמימות (מתחת ל-20 גרם)",
+    "flexible": "גמיש",
+    "flexibleDesc": "תזונה מאוזנת סטנדרטית — עקוב בלי מטרה דיאטטית מסוימת",
+    "nutritionStyleIntro": "בחר את סגנון התזונה שמתאים למטרות שלך",
     "next": "הבא",
     "sexWhy": "חילוף החומרים שונה בין המינים — זה עוזר לנו לחשב במדויק",
     "bodyWhy": "מידות הגוף שלך קובעות את קצב חילוף החומרים הבסיסי",
@@ -318,7 +325,8 @@
     "logged": "נוסף!"
   },
   "calorieSummary": {
-    "remaining": "קלוריות נותרו",
+    "remaining": "נותרו",
+    "dailyGoal": "יעד יומי",
     "details": "פרטים",
     "consumed": "נצרכו"
   },
@@ -352,5 +360,12 @@
     "sent": "המשוב נשלח! תודה.",
     "error": "שליחת המשוב נכשלה. נסה שוב.",
     "close": "סגור"
+  },
+  "install": {
+    "banner": "הוסף את MealRiot למסך הבית לגישה מהירה",
+    "bannerButton": "התקן",
+    "iosTitle": "התקן את MealRiot",
+    "iosStep1": "לחץ על כפתור השיתוף",
+    "iosStep2": "גלול למטה ולחץ על \"הוסף למסך הבית\""
   }
 }
