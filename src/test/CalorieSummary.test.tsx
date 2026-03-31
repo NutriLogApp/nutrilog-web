@@ -13,6 +13,11 @@ vi.mock("react-i18next", () => ({
         "macros.protein": "Protein",
         "macros.fat": "Fat",
         "macros.carbs": "Carbs",
+        "macros.proteinShort": "P",
+        "macros.fatShort": "F",
+        "macros.carbsShort": "C",
+        "water.label": "Water",
+        "log.g": "g",
       };
       return map[key] ?? key;
     },
@@ -57,9 +62,9 @@ describe("CalorieSummary", () => {
 
   it("shows macro summary in collapsed state", () => {
     render(<CalorieSummary {...defaultProps} />);
-    expect(screen.getByText(/P 85g/)).toBeInTheDocument();
-    expect(screen.getByText(/F 45g/)).toBeInTheDocument();
-    expect(screen.getByText(/C 180g/)).toBeInTheDocument();
+    expect(screen.getByText(/P 85 g/)).toBeInTheDocument();
+    expect(screen.getByText(/F 45 g/)).toBeInTheDocument();
+    expect(screen.getByText(/C 180 g/)).toBeInTheDocument();
   });
 
   it("shows water in collapsed state", () => {
@@ -76,7 +81,7 @@ describe("CalorieSummary", () => {
     render(<CalorieSummary {...defaultProps} />);
     await userEvent.click(screen.getByText(/details/));
     expect(screen.getByText("Protein")).toBeInTheDocument();
-    expect(screen.getByText("85/120g")).toBeInTheDocument();
+    expect(screen.getByText("85/120 g")).toBeInTheDocument();
   });
 
   it("collapses back when collapse is clicked", async () => {
@@ -84,7 +89,7 @@ describe("CalorieSummary", () => {
     await userEvent.click(screen.getByText(/details/));
     expect(screen.getByText("Protein")).toBeInTheDocument();
     await userEvent.click(screen.getByText(/details/));
-    expect(screen.queryByText("85/120g")).not.toBeInTheDocument();
+    expect(screen.queryByText("85/120 g")).not.toBeInTheDocument();
   });
 
   it("persists expanded state to localStorage", async () => {
