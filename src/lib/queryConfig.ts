@@ -1,13 +1,24 @@
 import { QueryClient, focusManager } from "@tanstack/react-query";
 
-// Use visibilitychange for PWA background/foreground detection.
-// This ensures data refreshes when the app is reopened on iOS/Android PWA,
-// when switching browser tabs, or when returning to the app on another device.
+// iOS PWA does not reliably fire visibilitychange on app resume.
+// Use all three events to cover: tab switch, app background/foreground,
+// iOS bfcache restore, and lock/unlock scenarios.
 focusManager.setEventListener((handleFocus) => {
   if (typeof window === "undefined" || !window.addEventListener) return;
-  const handler = () => handleFocus(document.visibilityState === "visible");
-  window.addEventListener("visibilitychange", handler, false);
-  return () => window.removeEventListener("visibilitychange", handler);
+
+  const onVisible = () => handleFocus(document.visibilityState === "visible");
+  const onFocus = () => handleFocus(true);
+  const onPageShow = (e: PageTransitionEvent) => { if (e.persisted) handleFocus(true); };
+
+  document.addEventListener("visibilitychange", onVisible, false);
+  window.addEventListener("focus", onFocus, false);
+  window.addEventListener("pageshow", onPageShow, false);
+
+  return () => {
+    document.removeEventListener("visibilitychange", onVisible);
+    window.removeEventListener("focus", onFocus);
+    window.removeEventListener("pageshow", onPageShow);
+  };
 });
 
 /**
