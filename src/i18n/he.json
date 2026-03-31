@@ -61,7 +61,7 @@
     "addFood": "הוסף אוכל",
     "addDrink": "הוסף משקה",
     "editEntry": "עריכת רשומה",
-    "caloriesAuto": "קלוריות מחושבות מהמאקרו (ח×4 + ש×9 + פ×4)",
+    "caloriesAuto": "קלוריות מחושבות מהמאקרו (חלבון×4 + שומן×9 + פחמימה×4)",
     "dailyLog": "יומן יומי",
     "glassOfWater": "כוס מים",
     "manageDrinks": "נהל משקאות בהגדרות",
@@ -77,7 +77,7 @@
     "title": "הוסף אוכל",
     "text": "טקסט",
     "photo": "תמונה",
-    "save": "שמור",
+    "save": "נשמר",
     "recent": "אחרונים",
     "aiResult": "תוצאת AI — ערוך אם צריך",
     "analyze": "נתח",
@@ -159,7 +159,7 @@
     "homeScreenFull": "מלא",
     "installApp": "התקן אפליקציה"
   },
-  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות", "proteinShort": "ח", "fatShort": "ש", "carbsShort": "פ" },
+  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות", "proteinShort": "חלבון", "fatShort": "שומן", "carbsShort": "פחמימות" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה", "announcements": "הודעות מערכת", "announcementTitle": "כותרת", "announcementBody": "תוכן (אופציונלי)", "send": "שלח", "inactive": "לא פעיל" },
   "friends": {
     "title": "חברים",
