@@ -16,19 +16,17 @@ export default function NavBar() {
   const { t } = useTranslation();
 
   return (
-    <div
-      className="fixed bottom-0 inset-x-0 z-50 pointer-events-none"
-      style={{
-        background: "var(--bg-elevated)",
-        backdropFilter: "var(--blur)",
-        WebkitBackdropFilter: "var(--blur)",
-        borderTop: "1px solid var(--border)",
-        boxShadow: "0 -4px 20px rgba(0,0,0,0.1)",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
-      }}
-    >
+    <div className="fixed bottom-0 inset-x-0 z-50 pointer-events-none">
       <nav
-        className="max-w-lg mx-auto flex justify-around py-2.5 pointer-events-auto"
+        className="max-w-lg mx-auto flex justify-around py-3 pointer-events-auto"
+        style={{
+          background: "var(--bg-elevated)",
+          backdropFilter: "var(--blur)",
+          WebkitBackdropFilter: "var(--blur)",
+          borderTop: "1px solid var(--border)",
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.1)",
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
       >
         {tabs.map(({ path, icon: Icon, labelKey }) => {
           const active = path === "/"
@@ -40,13 +38,13 @@ export default function NavBar() {
             <button
               key={path}
               onClick={() => navigate(path)}
-              className="flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-medium transition-all duration-200 relative"
+              className="flex flex-col items-center gap-1 px-3 py-1.5 text-[10px] font-medium transition-all duration-200 relative"
               style={{
                 color: active ? "var(--theme-accent)" : "var(--text-muted)",
                 transform: active ? "scale(1.08)" : "scale(1)",
               }}
             >
-              <Icon size={20} strokeWidth={active ? 2.5 : 1.8} />
+              <Icon size={22} strokeWidth={active ? 2.5 : 1.8} />
               <span>{t(labelKey)}</span>
             </button>
           );
