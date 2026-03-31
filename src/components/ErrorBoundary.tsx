@@ -23,6 +23,17 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      // Stale chunk after deployment — auto-reload once to get fresh assets
+      const msg = this.state.error?.message ?? "";
+      if (msg.includes("module script") || msg.includes("dynamically imported module")) {
+        const lastReload = Number(sessionStorage.getItem("mealriot-chunk-reload") || "0");
+        if (Date.now() - lastReload > 10_000) {
+          sessionStorage.setItem("mealriot-chunk-reload", String(Date.now()));
+          window.location.reload();
+          return null;
+        }
+      }
+
       const he = isHebrew();
       return (
         <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ backgroundColor: "var(--bg-page)" }}>
