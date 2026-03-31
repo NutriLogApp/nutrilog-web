@@ -76,7 +76,7 @@ export default function FeedbackFAB() {
         className="feedback-fab-ignore fixed z-50 w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-95"
         style={{
           bottom: "calc(80px + env(safe-area-inset-bottom, 0px))",
-          right: "max(16px, calc(50% - 240px))",
+          insetInlineEnd: "max(16px, calc(50% - 240px))",
           backgroundColor: "var(--bg-card)",
           boxShadow: "var(--shadow-fab)",
           border: "1px solid var(--border)",
@@ -103,7 +103,7 @@ export default function FeedbackFAB() {
                  backgroundColor: "var(--bg-card-solid)",
                  boxShadow: "var(--shadow-elevated)",
                }}>
-            <button onClick={handleClose} className="absolute top-4 right-4"
+            <button onClick={handleClose} className="absolute top-4 end-4"
                     style={{ color: "var(--text-muted)" }}>
               ✕
             </button>

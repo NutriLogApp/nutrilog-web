@@ -11,13 +11,15 @@ import AddFriendModal from "@/components/shared/AddFriendModal";
 import Avatar from "@/components/shared/Avatar";
 import FriendProfileModal from "@/components/profile/FriendProfileModal";
 import DevScenarioPanel from "@/components/contest/DevScenarioPanel";
+import i18n from "@/i18n";
 
 function formatDateRange(weekStart: string): string {
   const start = new Date(weekStart + "T12:00:00");
   const end = new Date(start);
   end.setDate(end.getDate() + 6);
+  const locale = i18n.language === "he" ? "he-IL" : "en-US";
   const fmt = (d: Date) =>
-    d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    d.toLocaleDateString(locale, { month: "short", day: "numeric" });
   return `${fmt(start)} - ${fmt(end)}`;
 }
 

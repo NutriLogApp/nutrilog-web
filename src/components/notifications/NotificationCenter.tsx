@@ -61,7 +61,7 @@ export function NotificationCenter({
           animation: "slideDown 0.25s ease-out",
         }}
       >
-        <div className="flex items-center justify-between px-4 pt-4 pb-2">
+        <div className="flex items-center justify-between px-4 pb-2" style={{ paddingTop: "calc(16px + env(safe-area-inset-top, 0px))" }}>
           <h2
             style={{
               fontSize: 16,
