@@ -159,7 +159,7 @@
     "homeScreenFull": "Full",
     "installApp": "Install App"
   },
-  "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs" },
+  "macros": { "protein": "Protein", "fat": "Fat", "carbs": "Carbs", "proteinShort": "P", "fatShort": "F", "carbsShort": "C" },
   "admin": { "title": "Admin Panel", "approve": "Approve", "suspend": "Suspend", "pending": "Pending", "active": "Active", "suspended": "Suspended", "announcements": "Announcements", "announcementTitle": "Title", "announcementBody": "Body (optional)", "send": "Send", "inactive": "Inactive" },
   "friends": {
     "title": "Friends",
@@ -194,7 +194,9 @@
     "copyLink": "Copy Link",
     "linkCopied": "Link copied!",
     "removeFriend": "Remove Friend",
-    "removeFriendConfirm": "Remove {{name}} from your friends?"
+    "removeFriendConfirm": "Remove {{name}} from your friends?",
+    "day": "day",
+    "days": "days"
   },
   "contest": {
     "title": "Contest",
@@ -210,10 +212,10 @@
     "yourPoints": "Your points",
     "days": "days",
     "infoTitle": "Compete with friends to hit your nutrition goals each week!",
-    "infoBody": "You earn up to 20 points per day:\n• Calorie goal accuracy — up to 10 pts\n• Logging meals — up to 5 pts\n• Hitting macro targets — up to 5 pts\n\nScores reset at the start of each week. Stay consistent to win!"
+    "infoBody": "You earn points every day:\n\u2022 Calorie goal accuracy \u2014 up to 10 pts\n\u2022 Each food or drink logged \u2014 1 pt each\n\u2022 Hitting macro targets \u2014 up to 5 pts\n\nScores reset weekly. Stay consistent to win!"
   },
   "insight": { "title": "Daily Insight" },
-  "water": { "title": "Water", "ml": "ml", "glasses": "glasses" },
+  "water": { "title": "Water", "ml": "ml", "glasses": "glasses", "label": "Water" },
   "weight": { "title": "Weight", "placeholder": "Today's weight (kg)", "log": "Log", "recent": "Recent" },
   "onboarding": {
     "sex": "What's your sex?",
@@ -279,6 +281,7 @@
     "delete": "Delete",
     "deleteConfirm": "Are you sure you want to delete this?"
   },
+  "units": { "kg": "kg", "cal": "cal" },
   "profileTabs": {
     "stats": "Stats",
     "friends": "Friends",
@@ -305,6 +308,7 @@
     "foodLog": "Food Log",
     "7d": "7 Days",
     "30d": "30 Days",
+    "90d": "90 Days",
     "all": "All",
     "loadMore": "Load more",
     "loadingMore": "Loading...",

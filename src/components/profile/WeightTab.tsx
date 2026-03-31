@@ -8,10 +8,10 @@ import WeightChart from "./WeightChart";
 
 type RangeDays = 7 | 30 | 90;
 
-const RANGE_OPTIONS: { label: string; days: RangeDays }[] = [
-  { label: "7D", days: 7 },
-  { label: "30D", days: 30 },
-  { label: "90D", days: 90 },
+const RANGE_OPTIONS: { labelKey: string; days: RangeDays }[] = [
+  { labelKey: "profileTabs.7d", days: 7 },
+  { labelKey: "profileTabs.30d", days: 30 },
+  { labelKey: "profileTabs.90d", days: 90 },
 ];
 
 export default function WeightTab() {
@@ -95,7 +95,7 @@ export default function WeightTab() {
                 : { backgroundColor: "var(--bg-input)", color: "var(--text-muted)" }
             }
           >
-            {opt.label}
+            {t(opt.labelKey)}
           </button>
         ))}
       </div>
@@ -137,7 +137,7 @@ export default function WeightTab() {
               min="0"
               value={logInput}
               onChange={(e) => setLogInput(e.target.value)}
-              placeholder="kg"
+              placeholder={t("units.kg")}
               autoFocus
               className="flex-1 rounded-xl px-4 py-2.5 text-sm mt-3"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }}
@@ -202,7 +202,7 @@ export default function WeightTab() {
               ) : (
                 <>
                   <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--text-primary)" }}>
-                    {w.weight_kg} <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>kg</span>
+                    {w.weight_kg} <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>{t("units.kg")}</span>
                   </span>
                   <button
                     onClick={() => startEdit(w.date, w.weight_kg)}

@@ -15,6 +15,8 @@ import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
 import InstallBanner from "@/components/InstallBanner";
 import { getProfile } from "@/services/profileService";
+import { showSuccessToast } from "@/lib/showSuccessToast";
+import HomePageSkeleton from "@/components/home/HomePageSkeleton";
 import type { EntryOut } from "@/types/api";
 
 export default function HomePage() {
@@ -54,6 +56,9 @@ export default function HomePage() {
     setShowAddDrink(false);
     qc.invalidateQueries({ queryKey: ["dailyStats"] });
     qc.invalidateQueries({ queryKey: ["water"] });
+    qc.invalidateQueries({ queryKey: ["friendsLeaderboard"] });
+    qc.invalidateQueries({ queryKey: ["points"] });
+    showSuccessToast(t("log.save"));
   };
 
   // Onboarding guard
@@ -63,12 +68,7 @@ export default function HomePage() {
 
   // Loading state
   if (summary.isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-          style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-start)" }} />
-      </div>
-    );
+    return <HomePageSkeleton />;
   }
 
   return (

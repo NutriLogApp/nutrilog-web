@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { X, UserMinus } from "lucide-react";
 import { getFriendProfile, removeFriend } from "@/services/socialService";
 import Avatar from "@/components/shared/Avatar";
+import i18n from "@/i18n";
 
 interface FriendProfileModalProps {
   userId: string | null;
@@ -12,6 +13,7 @@ interface FriendProfileModalProps {
 
 export default function FriendProfileModal({ userId, onClose }: FriendProfileModalProps) {
   const { t } = useTranslation();
+  const locale = i18n.language === "he" ? "he-IL" : "en-US";
   const qc = useQueryClient();
   const [confirmRemove, setConfirmRemove] = useState(false);
   const { data: profile } = useQuery({
@@ -36,11 +38,12 @@ export default function FriendProfileModal({ userId, onClose }: FriendProfileMod
     <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.4)" }} />
       <div
-        className="relative w-full max-w-lg rounded-t-[20px] pb-24"
+        className="relative w-full max-w-lg rounded-t-[20px]"
         style={{
           background: "var(--bg-elevated)",
           border: "1px solid var(--border)",
           borderBottom: "none",
+          paddingBottom: "calc(96px + env(safe-area-inset-bottom, 0px))",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -52,7 +55,7 @@ export default function FriendProfileModal({ userId, onClose }: FriendProfileMod
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center"
+          className="absolute top-3 end-3 w-8 h-8 rounded-full flex items-center justify-center"
           style={{ background: "var(--bg-input)" }}
         >
           <X size={16} style={{ color: "var(--text-muted)" }} />
@@ -77,9 +80,17 @@ export default function FriendProfileModal({ userId, onClose }: FriendProfileMod
 
             {/* Stats */}
             <div className="flex gap-3">
-              <StatCard label={t("friends.joined")} value={profile.joined} />
-              <StatCard label={t("friends.bestStreak")} value={`🔥 ${profile.longest_streak} ${profile.longest_streak === 1 ? "day" : "days"}`} />
-              <StatCard label={t("friends.friendsSince")} value={profile.friends_since} />
+              <StatCard label={t("friends.joined")} value={
+                profile.joined
+                  ? new Date(profile.joined.length <= 7 ? profile.joined + "-01" : profile.joined).toLocaleDateString(locale, { month: "short", year: "numeric" })
+                  : "—"
+              } />
+              <StatCard label={t("friends.bestStreak")} value={`🔥 ${profile.longest_streak} ${profile.longest_streak === 1 ? t("friends.day") : t("friends.days")}`} />
+              <StatCard label={t("friends.friendsSince")} value={
+                profile.friends_since
+                  ? new Date(profile.friends_since).toLocaleDateString(locale, { month: "short", year: "numeric" })
+                  : "—"
+              } />
             </div>
 
             {/* Remove friend */}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Bell, ChevronDown, ChevronUp, Droplet, Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
 
 interface CalorieSummaryProps {
   caloriesConsumed: number;
@@ -56,6 +57,7 @@ export function CalorieSummary({
   }, [isFull]);
 
   const remaining = Math.max(caloriesGoal - caloriesConsumed, 0);
+  const animatedRemaining = useAnimatedNumber(remaining);
   const calorieProgress = Math.min(
     caloriesGoal > 0 ? caloriesConsumed / caloriesGoal : 0,
     1
@@ -137,7 +139,7 @@ export function CalorieSummary({
               color: "var(--text-primary)",
             }}
           >
-            {remaining.toLocaleString()}
+            {animatedRemaining.toLocaleString()}
           </span>
           <span style={{ fontSize: 16, fontWeight: 400, color: "var(--text-muted)", margin: "0 2px" }}>/</span>
           <span style={{ fontSize: 16, fontWeight: 500, color: "var(--text-secondary)" }}>
@@ -188,11 +190,11 @@ export function CalorieSummary({
             fontWeight: 500,
           }}
         >
-          <span>P {proteinConsumed}g</span>
+          <span>{t("macros.proteinShort")} {proteinConsumed} {t("log.g")}</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span>F {fatConsumed}g</span>
+          <span>{t("macros.fatShort")} {fatConsumed} {t("log.g")}</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span>C {carbsConsumed}g</span>
+          <span>{t("macros.carbsShort")} {carbsConsumed} {t("log.g")}</span>
           <span style={{ opacity: 0.4 }}>·</span>
           <span className="flex items-center gap-0.5">
             <Droplet size={12} />
@@ -229,11 +231,11 @@ export function CalorieSummary({
             const isWater = macro.key === "water";
             const pct = goal > 0 ? Math.min(consumed / goal, 1) * 100 : 0;
             const label = isWater
-              ? "Water"
+              ? t("water.label")
               : t(macro.labelKey as string);
             const valueText = isWater
-              ? `${(consumed / 1000).toFixed(1)}/${(goal / 1000).toFixed(1)}L`
-              : `${consumed}/${goal}g`;
+              ? `${(consumed / 1000).toFixed(1)}/${(goal / 1000).toFixed(1)} L`
+              : `${consumed}/${goal} ${t("log.g")}`;
 
             return (
               <div key={macro.key}>

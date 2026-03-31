@@ -299,7 +299,7 @@ export default function LogFoodModal({ onDone }: Props) {
                   <div className="flex items-center rounded-lg mt-0.5 px-2.5 py-1.5" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}>
                     <NumericInput value={item.grams} onChange={(v) => updateItemGrams(i, v)} min={1}
                       className="flex-1 bg-transparent text-sm font-medium focus:outline-none" style={{ color: "var(--text-primary)" }} />
-                    <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? "mL" : "g"}</span>
+                    <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? t("water.ml") : t("log.g")}</span>
                   </div>
                 </div>
 

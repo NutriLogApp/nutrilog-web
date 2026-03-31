@@ -83,7 +83,7 @@ function LegacyMultiItemEdit({ entry, onClose }: { entry: EntryOut; onClose: () 
                 <NumericInput value={item.grams} onChange={(v) => updateItemGrams(idx, v)} min={1}
                   className="flex-1 bg-transparent text-sm font-medium tabular-nums focus:outline-none"
                   style={{ color: "var(--text-primary)" }} />
-                <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? "mL" : "g"}</span>
+                <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? t("water.ml") : t("log.g")}</span>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -296,7 +296,7 @@ export default function EntryEditModal({ entry, onClose }: Props) {
               className="flex-1 bg-transparent text-sm font-medium tabular-nums focus:outline-none"
               style={{ color: "var(--text-primary)" }}
             />
-            <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? "mL" : "g"}</span>
+            <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? t("water.ml") : t("log.g")}</span>
           </div>
         </div>
 

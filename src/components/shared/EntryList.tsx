@@ -43,7 +43,7 @@ export function EntryList({ entries, use24h, onEdit }: EntryListProps) {
                 style={{
                   height: "1px",
                   background: "var(--border-light)",
-                  marginLeft: "50px",
+                  marginInlineStart: "50px",
                 }}
               />
             )}
