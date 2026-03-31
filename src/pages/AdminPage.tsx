@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router-dom";
 import { getProfile } from "@/services/profileService";
-import { listUsers, updateUserStatus } from "@/services/adminService";
+import { listUsers, updateUserStatus, recalculateEntries } from "@/services/adminService";
 import {
   getAdminAnnouncements,
   createAnnouncement,
@@ -51,6 +51,10 @@ export default function AdminPage() {
   const [annTitle, setAnnTitle] = useState("");
   const [annBody, setAnnBody] = useState("");
 
+  const recalcMut = useMutation({
+    mutationFn: recalculateEntries,
+  });
+
   if (!profileLoading && profile?.role !== "admin") return <Navigate to="/" replace />;
 
   if (isLoading || profileLoading) {
@@ -77,6 +81,38 @@ export default function AdminPage() {
           <span>Backend</span>
           <span className="font-mono text-xs" style={{ color: "var(--text-primary)" }}>{apiHealth?.version ?? "..."}</span>
         </div>
+      </div>
+
+      {/* Recalculate entries tool */}
+      <div className="glass-card-sm p-4 mb-6 animate-fade-up">
+        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>
+          {t("admin.tools", "Tools")}
+        </p>
+        <p className="text-xs mb-3" style={{ color: "var(--text-secondary)" }}>
+          {t("admin.recalcDesc", "Re-detect nutrition values for all text/image entries using AI. Fixes entries with incorrect calorie calculations.")}
+        </p>
+        <button
+          onClick={() => recalcMut.mutate()}
+          disabled={recalcMut.isPending}
+          className="text-xs font-semibold px-5 py-2.5 rounded-xl text-white transition-all active:scale-[0.97] disabled:opacity-50"
+          style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", minHeight: 44 }}
+        >
+          {recalcMut.isPending ? t("admin.recalcRunning", "Running...") : t("admin.recalcButton", "Recalculate All Entries")}
+        </button>
+        {recalcMut.isSuccess && recalcMut.data && (
+          <div className="mt-3 p-3 rounded-xl text-xs space-y-1" style={{ backgroundColor: "rgba(16,185,129,0.08)", color: "var(--text-secondary)" }}>
+            <p><span className="font-semibold" style={{ color: "#10b981" }}>{recalcMut.data.entries_updated}</span> entries updated</p>
+            <p><span className="font-semibold">{recalcMut.data.entries_skipped}</span> skipped (unchanged)</p>
+            <p><span className="font-semibold">{recalcMut.data.recent_foods_updated}</span> recent foods updated</p>
+            <p><span className="font-semibold">{recalcMut.data.unique_foods_detected}</span> unique foods detected</p>
+            {recalcMut.data.errors.length > 0 && (
+              <p style={{ color: "#ef4444" }}>Errors: {recalcMut.data.errors.join(", ")}</p>
+            )}
+          </div>
+        )}
+        {recalcMut.isError && (
+          <p className="mt-3 text-xs" style={{ color: "#ef4444" }}>{t("admin.recalcError", "Failed to recalculate. Try again.")}</p>
+        )}
       </div>
 
       <div className="space-y-3 animate-fade-up stagger-1">

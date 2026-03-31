@@ -13,3 +13,16 @@ export async function updateUserStatus(userId: string, status: string): Promise<
   );
   return data;
 }
+
+export interface RecalculateResult {
+  entries_updated: number;
+  entries_skipped: number;
+  recent_foods_updated: number;
+  unique_foods_detected: number;
+  errors: string[];
+}
+
+export async function recalculateEntries(): Promise<RecalculateResult> {
+  const { data } = await apiClient.post<RecalculateResult>("/api/v1/admin/recalculate-entries");
+  return data;
+}
