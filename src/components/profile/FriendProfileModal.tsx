@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { X } from "lucide-react";
-import { getFriendProfile } from "@/services/socialService";
+import { X, UserMinus } from "lucide-react";
+import { getFriendProfile, removeFriend } from "@/services/socialService";
 import Avatar from "@/components/shared/Avatar";
 
 interface FriendProfileModalProps {
@@ -11,10 +12,22 @@ interface FriendProfileModalProps {
 
 export default function FriendProfileModal({ userId, onClose }: FriendProfileModalProps) {
   const { t } = useTranslation();
+  const qc = useQueryClient();
+  const [confirmRemove, setConfirmRemove] = useState(false);
   const { data: profile } = useQuery({
     queryKey: ["friendProfile", userId],
     queryFn: () => getFriendProfile(userId!),
     enabled: !!userId,
+  });
+
+  const removeM = useMutation({
+    mutationFn: () => removeFriend(userId!),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["friends"] });
+      qc.invalidateQueries({ queryKey: ["friendsLeaderboard"] });
+      setConfirmRemove(false);
+      onClose();
+    },
   });
 
   if (!userId) return null;
@@ -68,6 +81,40 @@ export default function FriendProfileModal({ userId, onClose }: FriendProfileMod
               <StatCard label={t("friends.bestStreak")} value={`🔥 ${profile.longest_streak} ${profile.longest_streak === 1 ? "day" : "days"}`} />
               <StatCard label={t("friends.friendsSince")} value={profile.friends_since} />
             </div>
+
+            {/* Remove friend */}
+            {!confirmRemove ? (
+              <button
+                onClick={() => setConfirmRemove(true)}
+                className="w-full mt-5 py-2.5 rounded-xl flex items-center justify-center gap-2 text-sm font-medium active:scale-[0.97] transition-all"
+                style={{ color: "#ef4444" }}
+              >
+                <UserMinus size={15} />
+                {t("friends.removeFriend")}
+              </button>
+            ) : (
+              <div className="mt-5 p-3 rounded-xl" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)" }}>
+                <p className="text-sm text-center mb-3" style={{ color: "var(--text-primary)" }}>
+                  {t("friends.removeFriendConfirm", { name: profile.name })}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setConfirmRemove(false)}
+                    className="flex-1 py-2 rounded-lg text-sm font-medium"
+                    style={{ background: "var(--bg-input)", color: "var(--text-secondary)" }}
+                  >
+                    {t("friends.cancel")}
+                  </button>
+                  <button
+                    onClick={() => removeM.mutate()}
+                    className="flex-1 py-2 rounded-lg text-sm font-semibold text-white"
+                    style={{ background: "#ef4444" }}
+                  >
+                    {t("friends.removeFriend")}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

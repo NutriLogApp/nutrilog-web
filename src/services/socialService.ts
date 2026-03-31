@@ -118,3 +118,7 @@ export async function getFriendProfile(userId: string): Promise<FriendProfile> {
   const { data } = await apiClient.get<FriendProfile>(`/api/v1/friends/${userId}/profile`);
   return data;
 }
+
+export async function removeFriend(userId: string): Promise<void> {
+  await apiClient.delete(`/api/v1/friends/${userId}`);
+}

@@ -188,7 +188,9 @@
     "inviteFriend": "הזמן חבר",
     "inviteDesc": "שתף את הקישור הזה כדי שיוכלו להוסיף אותך",
     "copyLink": "העתק קישור",
-    "linkCopied": "הקישור הועתק!"
+    "linkCopied": "הקישור הועתק!",
+    "removeFriend": "הסר חבר",
+    "removeFriendConfirm": "להסיר את {{name}} מהחברים שלך?"
   },
   "contest": {
     "title": "תחרות",
