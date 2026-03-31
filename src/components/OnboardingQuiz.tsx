@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { X, ChevronLeft, Loader2, Flame, Droplets, Dumbbell } from "lucide-react";
 import { calculateGoals, type GoalCalculateRequest, type GoalCalculateResponse } from "@/services/goalsService";
+import { getProfile } from "@/services/profileService";
+import NumericInput from "@/components/NumericInput";
 
 interface Props {
   onDone: () => void;
@@ -20,8 +22,29 @@ export default function OnboardingQuiz({ onDone, dismissable = true }: Props) {
     weight_kg: 70, height_cm: 170, age: 30, sex: "male",
     activity_level: "moderate", goal: "maintain",
     goal_weight_kg: undefined, body_fat_pct: undefined,
-    macro_preset: "balanced",
+    macro_preset: "flexible",
   });
+
+  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
+
+  const [prefilled, setPrefilled] = useState(false);
+  useEffect(() => {
+    if (profile?.onboarding_done && !prefilled) {
+      setData((d) => ({
+        ...d,
+        weight_kg: profile.weight_kg ?? d.weight_kg,
+        height_cm: profile.height_cm ?? d.height_cm,
+        age: profile.age ?? d.age,
+        sex: profile.sex ?? d.sex,
+        activity_level: profile.activity_level ?? d.activity_level,
+        goal: profile.goal ?? d.goal,
+        goal_weight_kg: profile.goal_weight_kg ?? d.goal_weight_kg,
+        body_fat_pct: profile.body_fat_pct ?? d.body_fat_pct,
+        macro_preset: profile.macro_preset ?? d.macro_preset,
+      }));
+      setPrefilled(true);
+    }
+  }, [profile, prefilled]);
 
   const calcMut = useMutation({
     mutationFn: () => calculateGoals(data),
@@ -105,8 +128,8 @@ export default function OnboardingQuiz({ onDone, dismissable = true }: Props) {
       ].map((f) => (
         <div key={f.key}>
           <label className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>{f.label} {f.unit && `(${f.unit})`}</label>
-          <input type="number" value={(data as unknown as Record<string, number>)[f.key]}
-            onChange={(e) => setData((d: GoalCalculateRequest) => ({ ...d, [f.key]: +e.target.value || 0 }))}
+          <NumericInput value={(data as unknown as Record<string, number>)[f.key]}
+            onChange={(v) => setData((d: GoalCalculateRequest) => ({ ...d, [f.key]: v }))}
             className="w-full rounded-2xl px-4 py-3.5 text-sm mt-1"
             style={{ backgroundColor: "var(--bg-card-solid)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
         </div>
@@ -158,7 +181,11 @@ export default function OnboardingQuiz({ onDone, dismissable = true }: Props) {
 
     // 5: Macro preset
     <div key="macro" className="space-y-2.5">
+      <p className="text-sm mb-1" style={{ color: "var(--text-muted)" }}>
+        {t("onboarding.nutritionStyleIntro")}
+      </p>
       {[
+        { v: "flexible", l: t("onboarding.flexible"), d: t("onboarding.flexibleDesc") },
         { v: "balanced", l: t("onboarding.balanced"), d: t("onboarding.balancedDesc") },
         { v: "high_protein", l: t("onboarding.highProtein"), d: t("onboarding.highProteinDesc") },
         { v: "keto", l: t("onboarding.keto"), d: t("onboarding.ketoDesc") },
