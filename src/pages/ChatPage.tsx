@@ -116,10 +116,27 @@ export default function ChatPage() {
     setInput("");
   }, []);
 
+  // Use visualViewport to handle iOS keyboard without squishing layout
+  const [chatHeight, setChatHeight] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    function update() {
+      // When keyboard opens, visualViewport.height shrinks to the visible area
+      // Subtract navbar (96px) only when keyboard is closed (full height)
+      const isKeyboardOpen = vv!.height < window.innerHeight * 0.75;
+      const navOffset = isKeyboardOpen ? 0 : 96;
+      setChatHeight(`${vv!.height - navOffset}px`);
+    }
+    vv.addEventListener("resize", update);
+    update();
+    return () => vv.removeEventListener("resize", update);
+  }, []);
+
   return (
     <div
       className="flex flex-col"
-      style={{ height: "calc(100lvh - 96px - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px))" }}
+      style={{ height: chatHeight ?? "calc(100dvh - 96px - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px))" }}
     >
       {/* Header */}
       <div
