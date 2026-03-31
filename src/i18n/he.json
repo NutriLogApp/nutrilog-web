@@ -330,7 +330,9 @@
   },
   "calorieSummary": {
     "remaining": "נותרו",
-    "dailyGoal": "יעד יומי",
+    "eaten": "נאכלו",
+    "dailyGoal": "יעד",
+    "over": "חריגה",
     "details": "פרטים",
     "consumed": "נצרכו"
   },
