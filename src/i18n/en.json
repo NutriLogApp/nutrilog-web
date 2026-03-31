@@ -178,7 +178,19 @@
     "usernameTaken": "Username taken or invalid",
     "usernameInvalid": "Username must be 3-30 characters (letters, numbers, underscores)",
     "username": "username",
-    "friendsCount": "Friends"
+    "friendsCount": "Friends",
+    "sentRequests": "Sent Requests",
+    "cancel": "Cancel",
+    "requestCancelled": "Request cancelled",
+    "joined": "Joined",
+    "bestStreak": "Best Streak",
+    "friendsSince": "Friends since",
+    "inviteFriend": "Invite a Friend",
+    "inviteDesc": "Share this link so they can add you",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link copied!",
+    "removeFriend": "Remove Friend",
+    "removeFriendConfirm": "Remove {{name}} from your friends?"
   },
   "contest": {
     "title": "Contest",

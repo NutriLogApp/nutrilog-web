@@ -19,6 +19,7 @@ export interface Standing {
   user_id: string;
   name: string;
   username: string | null;
+  avatar_url: string | null;
   total_points: number;
   days_logged: number;
   days_in_week: number;
@@ -28,6 +29,22 @@ export interface Standing {
 export interface LeaderboardResponse {
   week_start: string;
   standings: Standing[];
+}
+
+export interface SentRequest {
+  friendship_id: string;
+  addressee: Friend;
+  created_at: string;
+}
+
+export interface FriendProfile {
+  user_id: string;
+  name: string;
+  username: string | null;
+  avatar_url: string | null;
+  joined: string;
+  longest_streak: number;
+  friends_since: string;
 }
 
 export async function listFriends(): Promise<Friend[]> {
@@ -86,4 +103,22 @@ export async function resolveFriendCode(code: string): Promise<{ username: strin
   } catch {
     return null;
   }
+}
+
+export async function getSentRequests(): Promise<SentRequest[]> {
+  const { data } = await apiClient.get<SentRequest[]>("/api/v1/friends/requests/sent");
+  return data;
+}
+
+export async function cancelRequest(friendshipId: string): Promise<void> {
+  await apiClient.delete(`/api/v1/friends/requests/${friendshipId}`);
+}
+
+export async function getFriendProfile(userId: string): Promise<FriendProfile> {
+  const { data } = await apiClient.get<FriendProfile>(`/api/v1/friends/${userId}/profile`);
+  return data;
+}
+
+export async function removeFriend(userId: string): Promise<void> {
+  await apiClient.delete(`/api/v1/friends/${userId}`);
 }
