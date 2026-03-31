@@ -159,7 +159,7 @@
     "homeScreenFull": "מלא",
     "installApp": "התקן אפליקציה"
   },
-  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות" },
+  "macros": { "protein": "חלבון", "fat": "שומן", "carbs": "פחמימות", "proteinShort": "ח", "fatShort": "ש", "carbsShort": "פ" },
   "admin": { "title": "פאנל ניהול", "approve": "אשר", "suspend": "השהה", "pending": "ממתין", "active": "פעיל", "suspended": "מושהה", "announcements": "הודעות מערכת", "announcementTitle": "כותרת", "announcementBody": "תוכן (אופציונלי)", "send": "שלח", "inactive": "לא פעיל" },
   "friends": {
     "title": "חברים",
@@ -194,7 +194,9 @@
     "copyLink": "העתק קישור",
     "linkCopied": "הקישור הועתק!",
     "removeFriend": "הסר חבר",
-    "removeFriendConfirm": "להסיר את {{name}} מהחברים שלך?"
+    "removeFriendConfirm": "להסיר את {{name}} מהחברים שלך?",
+    "day": "יום",
+    "days": "ימים"
   },
   "contest": {
     "title": "תחרות",
@@ -210,10 +212,10 @@
     "yourPoints": "הנקודות שלך",
     "days": "ימים",
     "infoTitle": "התחרו עם חברים על עמידה ביעדי התזונה כל שבוע!",
-    "infoBody": "אפשר לצבור עד 20 נקודות ביום:\n• דיוק ביעד הקלורי — עד 10 נק׳\n• רישום ארוחות — עד 5 נק׳\n• עמידה ביעדי מאקרו — עד 5 נק׳\n\nהניקוד מתאפס בתחילת כל שבוע. עקביות מנצחת!"
+    "infoBody": "אפשר לצבור נקודות כל יום:\n\u2022 דיוק ביעד הקלורי — עד 10 נק׳\n\u2022 כל אוכל או שתייה שנרשמים — 1 נק׳ כל אחד\n\u2022 עמידה ביעדי מאקרו — עד 5 נק׳\n\nהניקוד מתאפס בתחילת כל שבוע. עקביות מנצחת!"
   },
   "insight": { "title": "תובנה יומית" },
-  "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות" },
+  "water": { "title": "מים", "ml": "מ״ל", "glasses": "כוסות", "label": "מים" },
   "weight": { "title": "משקל", "placeholder": "משקל היום (ק״ג)", "log": "שמור", "recent": "אחרון" },
   "onboarding": {
     "sex": "מהו המין שלך?",
@@ -279,6 +281,7 @@
     "delete": "מחק",
     "deleteConfirm": "בטוח שברצונך למחוק?"
   },
+  "units": { "kg": "ק״ג", "cal": "קלוריות" },
   "profileTabs": {
     "stats": "סטטיסטיקות",
     "friends": "חברים",
