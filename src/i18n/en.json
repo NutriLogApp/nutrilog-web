@@ -333,8 +333,7 @@
     "eaten": "Eaten",
     "dailyGoal": "Goal",
     "over": "Over",
-    "details": "details",
-    "consumed": "consumed"
+    "details": "details"
   },
   "notifications": {
     "title": "Notifications",
