@@ -1,4 +1,14 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, focusManager } from "@tanstack/react-query";
+
+// Use visibilitychange for PWA background/foreground detection.
+// This ensures data refreshes when the app is reopened on iOS/Android PWA,
+// when switching browser tabs, or when returning to the app on another device.
+focusManager.setEventListener((handleFocus) => {
+  if (typeof window === "undefined" || !window.addEventListener) return;
+  const handler = () => handleFocus(document.visibilityState === "visible");
+  window.addEventListener("visibilitychange", handler, false);
+  return () => window.removeEventListener("visibilitychange", handler);
+});
 
 /**
  * Global query client with mutation error handler.
@@ -6,10 +16,13 @@ import { QueryClient } from "@tanstack/react-query";
  */
 export const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 30_000, retry: 1 },
+    queries: {
+      staleTime: 30_000,
+      retry: 1,
+      refetchOnWindowFocus: true,
+    },
     mutations: {
       onError: () => {
-        // Show a temporary error toast
         const toast = document.createElement("div");
         toast.textContent = "Something went wrong. Please try again.";
         toast.style.cssText = `
