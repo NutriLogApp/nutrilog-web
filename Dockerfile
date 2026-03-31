@@ -3,11 +3,13 @@ FROM node:20-alpine AS build
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 ARG VITE_API_URL
+ARG COMMIT_HASH=unknown
 
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+ENV COMMIT_HASH=$COMMIT_HASH
 RUN npm run build
 
 FROM nginx:alpine
