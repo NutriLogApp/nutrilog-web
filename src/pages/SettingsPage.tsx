@@ -331,6 +331,26 @@ export default function SettingsPage() {
         </div>
       </Modal>
 
+      {/* Home Screen */}
+      <Modal open={modal === "homeScreen"} onClose={() => setModal(null)} title={t("profile.homeScreen")}>
+        <div className="flex gap-3">
+          {([
+            { val: "compact", label: t("profile.homeScreenCompact") },
+            { val: "full", label: t("profile.homeScreenFull") },
+          ]).map((opt) => (
+            <button key={opt.val} onClick={() => { updateMut.mutate({ home_view_mode: opt.val }); setModal(null); }}
+              className="flex-1 py-4 rounded-xl text-base font-semibold border-2 transition-all active:scale-[0.97]"
+              style={{
+                borderColor: (profile?.home_view_mode ?? "compact") === opt.val ? "var(--theme-accent)" : "var(--border)",
+                backgroundColor: (profile?.home_view_mode ?? "compact") === opt.val ? "var(--bg-input)" : "transparent",
+                color: "var(--text-primary)",
+              }}>
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </Modal>
+
       {/* Retake Quiz */}
       {modal === "quiz" && (
         <div className="fixed inset-0" style={{ zIndex: 70, backgroundColor: "var(--bg-page)" }}>

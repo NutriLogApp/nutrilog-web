@@ -7,6 +7,7 @@ import i18n from "@/i18n";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import type { EntryOut, FoodItem } from "@/types/api";
 import { reparseImage } from "@/services/foodService";
+import NumericInput from "@/components/NumericInput";
 
 /** Legacy fallback for existing multi-item entries — preserves the old editing flow */
 function LegacyMultiItemEdit({ entry, onClose }: { entry: EntryOut; onClose: () => void }) {
@@ -79,8 +80,7 @@ function LegacyMultiItemEdit({ entry, onClose }: { entry: EntryOut; onClose: () 
                 {isDrink ? t("log.milliliters") : t("log.grams")}
               </label>
               <div className="flex items-center rounded-lg mt-0.5 px-2.5 py-2" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}>
-                <input type="number" step="1" value={item.grams}
-                  onChange={(e) => updateItemGrams(idx, +(e.target.value) || 0)}
+                <NumericInput value={item.grams} onChange={(v) => updateItemGrams(idx, v)} min={1}
                   className="flex-1 bg-transparent text-sm font-medium tabular-nums focus:outline-none"
                   style={{ color: "var(--text-primary)" }} />
                 <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? "mL" : "g"}</span>
@@ -94,8 +94,7 @@ function LegacyMultiItemEdit({ entry, onClose }: { entry: EntryOut; onClose: () 
               ]).map(({ key, label, color }) => (
                 <div key={key}>
                   <label className="text-[10px] font-semibold" style={{ color }}>{label}</label>
-                  <input type="number" step="0.1" value={item[key]}
-                    onChange={(e) => updateItemMacro(idx, key, +(e.target.value) || 0)}
+                  <NumericInput value={item[key]} onChange={(v) => updateItemMacro(idx, key, v)} step="0.1" min={0}
                     className="w-full rounded-lg px-2 py-2 text-sm text-center mt-0.5 tabular-nums"
                     style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
                 </div>
@@ -290,11 +289,10 @@ export default function EntryEditModal({ entry, onClose }: Props) {
             {isDrink ? t("log.milliliters") : t("log.grams")}{qty > 1 ? ` (${t("myday.perUnit", "per unit")})` : ""}
           </label>
           <div className="flex items-center rounded-lg mt-0.5 px-2.5 py-2" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}>
-            <input
-              type="number"
-              step="1"
+            <NumericInput
               value={item.grams}
-              onChange={(e) => updateGrams(+(e.target.value) || 0)}
+              onChange={(v) => updateGrams(v)}
+              min={1}
               className="flex-1 bg-transparent text-sm font-medium tabular-nums focus:outline-none"
               style={{ color: "var(--text-primary)" }}
             />
@@ -311,11 +309,11 @@ export default function EntryEditModal({ entry, onClose }: Props) {
           ]).map(({ key, label, color }) => (
             <div key={key}>
               <label className="text-[10px] font-semibold" style={{ color }}>{label}</label>
-              <input
-                type="number"
-                step="0.1"
+              <NumericInput
                 value={item[key]}
-                onChange={(e) => updateMacro(key, +(e.target.value) || 0)}
+                onChange={(v) => updateMacro(key, v)}
+                step="0.1"
+                min={0}
                 className="w-full rounded-lg px-2 py-2 text-sm text-center mt-0.5 tabular-nums"
                 style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }}
               />

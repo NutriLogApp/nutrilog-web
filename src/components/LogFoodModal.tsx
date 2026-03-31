@@ -8,6 +8,7 @@ import { createEntry } from "@/services/entriesService";
 import { getRecentFoods } from "@/services/recentFoodsService";
 import { listDrinks, createDrink } from "@/services/drinksService";
 import type { FoodItem, EntryCreate, DrinkSuggestion } from "@/types/api";
+import NumericInput from "@/components/NumericInput";
 
 type Tab = "photo" | "text";
 
@@ -296,7 +297,7 @@ export default function LogFoodModal({ onDone }: Props) {
                     {isDrink ? t("log.milliliters") : t("log.grams")}
                   </span>
                   <div className="flex items-center rounded-lg mt-0.5 px-2.5 py-1.5" style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}>
-                    <input type="number" value={item.grams} onChange={(e) => updateItemGrams(i, +e.target.value || 0)}
+                    <NumericInput value={item.grams} onChange={(v) => updateItemGrams(i, v)} min={1}
                       className="flex-1 bg-transparent text-sm font-medium focus:outline-none" style={{ color: "var(--text-primary)" }} />
                     <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{isDrink ? "mL" : "g"}</span>
                   </div>
