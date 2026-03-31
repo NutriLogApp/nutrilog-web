@@ -24,16 +24,19 @@ export default function ProfileHero({ profile }: Props) {
 
   return (
     <div
-      className="relative px-5 pt-10 pb-4 text-center"
+      className="relative px-5 pb-4 text-center"
       style={{
         background: `linear-gradient(135deg, color-mix(in srgb, var(--theme-start) 14%, transparent), color-mix(in srgb, var(--theme-end) 8%, transparent))`,
+        marginTop: "calc(-1 * env(safe-area-inset-top, 0px))",
+        paddingTop: "calc(40px + env(safe-area-inset-top, 0px))",
       }}
     >
       {/* Gear icon */}
       <button
         onClick={() => navigate("/settings")}
-        className="absolute top-10 end-5 w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-90"
+        className="absolute end-5 w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-90"
         style={{
+          top: "calc(40px + env(safe-area-inset-top, 0px))",
           backgroundColor: "var(--bg-card)",
           border: "1px solid var(--border)",
         }}
