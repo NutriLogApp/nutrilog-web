@@ -9,6 +9,7 @@ import {
   createAnnouncement,
   updateAnnouncement,
 } from "@/services/announcementService";
+import apiClient from "@/services/apiClient";
 
 export default function AdminPage() {
   const { t } = useTranslation();
@@ -16,6 +17,11 @@ export default function AdminPage() {
 
   const { data: profile, isLoading: profileLoading } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const { data: users, isLoading } = useQuery({ queryKey: ["adminUsers"], queryFn: listUsers });
+  const { data: apiHealth } = useQuery({
+    queryKey: ["apiHealth"],
+    queryFn: async () => (await apiClient.get<{ status: string; version: string }>("/api/v1/health")).data,
+    staleTime: Infinity,
+  });
 
   const statusMut = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) => updateUserStatus(id, status),
@@ -59,6 +65,19 @@ export default function AdminPage() {
   return (
     <div className="px-5 pt-8 pb-8">
       <h1 className="text-[26px] font-bold tracking-tight mb-6 animate-fade-up" style={{ color: "var(--text-primary)" }}>{t("admin.title")}</h1>
+
+      {/* Version info */}
+      <div className="glass-card-sm p-4 mb-6 animate-fade-up">
+        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>Version</p>
+        <div className="flex justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
+          <span>Frontend</span>
+          <span className="font-mono text-xs" style={{ color: "var(--text-primary)" }}>{__APP_VERSION__}</span>
+        </div>
+        <div className="flex justify-between text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
+          <span>Backend</span>
+          <span className="font-mono text-xs" style={{ color: "var(--text-primary)" }}>{apiHealth?.version ?? "..."}</span>
+        </div>
+      </div>
 
       <div className="space-y-3 animate-fade-up stagger-1">
         {users?.map((user) => (
