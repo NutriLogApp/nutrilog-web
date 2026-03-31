@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Bell, ChevronDown, ChevronUp, Droplet, Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
 
 interface CalorieSummaryProps {
   caloriesConsumed: number;
@@ -56,6 +57,7 @@ export function CalorieSummary({
   }, [isFull]);
 
   const remaining = Math.max(caloriesGoal - caloriesConsumed, 0);
+  const animatedRemaining = useAnimatedNumber(remaining);
   const calorieProgress = Math.min(
     caloriesGoal > 0 ? caloriesConsumed / caloriesGoal : 0,
     1
@@ -137,7 +139,7 @@ export function CalorieSummary({
               color: "var(--text-primary)",
             }}
           >
-            {remaining.toLocaleString()}
+            {animatedRemaining.toLocaleString()}
           </span>
           <span style={{ fontSize: 16, fontWeight: 400, color: "var(--text-muted)", margin: "0 2px" }}>/</span>
           <span style={{ fontSize: 16, fontWeight: 500, color: "var(--text-secondary)" }}>
