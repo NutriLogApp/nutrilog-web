@@ -6,7 +6,7 @@ ARG VITE_API_URL
 ARG BUILD_NUMBER=0
 
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 RUN npm ci
 COPY . .
 ENV BUILD_NUMBER=$BUILD_NUMBER
