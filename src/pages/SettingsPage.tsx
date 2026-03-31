@@ -189,6 +189,11 @@ export default function SettingsPage() {
         </div>
 
         <button onClick={() => signOut()} className="w-full text-center text-sm py-3 font-medium text-red-400">{t("profile.signOut")}</button>
+
+        {/* Version */}
+        <p className="text-center text-[10px] mt-2 pb-2" style={{ color: "var(--text-muted)" }}>
+          v {__APP_VERSION__}
+        </p>
       </div>
 
       {/* ===== Modals ===== */}
