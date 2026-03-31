@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Scale, Flame, Beef, Droplets, Wheat, CircleDot, Trash2, AlertTriangle } from "lucide-react";
+import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Scale, Flame, Beef, Droplets, Wheat, CircleDot, Trash2, AlertTriangle, Monitor, Download } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
@@ -12,6 +12,8 @@ import DrinkManager from "@/components/DrinkManager";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import NumericInput from "@/components/NumericInput";
+import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
 function Chevron({ lang }: { lang: string }) {
   return (
@@ -66,6 +68,8 @@ export default function SettingsPage() {
   const [darkMode, setDarkMode] = useState<"auto" | "light" | "dark">("auto");
   const [weightInput, setWeightInput] = useState("");
   const [deleteWeightDate, setDeleteWeightDate] = useState<string | null>(null);
+  const { install, isIos, showButton: showInstall } = useInstallPrompt();
+  const [showIosModal, setShowIosModal] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -140,12 +144,21 @@ export default function SettingsPage() {
         <div className="animate-fade-up stagger-2">
           <SectionHeader icon={Settings} label={t("profile.appSettings")} />
           <div className="glass-card overflow-hidden">
-            <SettingRow icon={Palette} label={t("profile.appearance")} onClick={() => setModal("appearance")} lang={lang} isFirst
+            <SettingRow icon={Monitor} label={t("profile.homeScreen")} onClick={() => setModal("homeScreen")} lang={lang} isFirst
+              extra={<span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>
+                {profile?.home_view_mode === "full" ? t("profile.homeScreenFull") : t("profile.homeScreenCompact")}
+              </span>} />
+            <SettingRow icon={Palette} label={t("profile.appearance")} onClick={() => setModal("appearance")} lang={lang}
               extra={<span className="w-6 h-6 rounded-full shrink-0" style={{ background: `linear-gradient(135deg, ${currentTheme.start}, ${currentTheme.end})` }} />} />
             <SettingRow icon={Globe} label={t("profile.language")} onClick={() => setModal("language")} lang={lang}
               extra={<span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{lang === "he" ? "עברית" : "English"}</span>} />
             <SettingRow icon={Timer} label={t("profile.timeFormat")} onClick={() => setModal("timeFormat")} lang={lang}
               extra={<span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{profile?.use_24h ? "24h" : "12h"}</span>} />
+            {showInstall && (
+              <SettingRow icon={Download} label={t("profile.installApp")} onClick={async () => {
+                if (isIos) { setShowIosModal(true); } else { await install(); }
+              }} lang={lang} />
+            )}
           </div>
         </div>
 
@@ -198,7 +211,7 @@ export default function SettingsPage() {
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium mb-1" style={{ color: "var(--text-muted)" }}>{label}</p>
                 <div className="flex items-center gap-2">
-                  <input type="number" value={goals[key]} onChange={(e) => setGoals((g) => ({ ...g, [key]: +e.target.value || 0 }))}
+                  <NumericInput value={goals[key]} onChange={(v) => setGoals((g) => ({ ...g, [key]: v }))}
                     className="w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
                     style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
                   <span className="text-xs font-medium shrink-0" style={{ color: "var(--text-muted)" }}>{unit}</span>
@@ -331,6 +344,21 @@ export default function SettingsPage() {
         onConfirm={() => { if (deleteWeightDate) deleteWeightMut.mutate(deleteWeightDate); }}
         onCancel={() => setDeleteWeightDate(null)}
       />
+
+      <Modal open={showIosModal} onClose={() => setShowIosModal(false)} title={t("install.iosTitle")}>
+        <div className="space-y-4 text-sm" style={{ color: "var(--text-secondary)" }}>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+              style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", color: "white" }}>1</span>
+            <p>{t("install.iosStep1")}</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+              style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", color: "white" }}>2</span>
+            <p>{t("install.iosStep2")}</p>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

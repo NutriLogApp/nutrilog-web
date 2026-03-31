@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useDailySummary } from "@/hooks/useDailySummary";
 import { CalorieSummary } from "@/components/home/CalorieSummary";
@@ -13,17 +13,21 @@ import DrinkPickerModal from "@/components/DrinkPickerModal";
 import EntryEditModal from "@/components/EntryEditModal";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
+import InstallBanner from "@/components/InstallBanner";
+import { getProfile } from "@/services/profileService";
 import type { EntryOut } from "@/types/api";
 
 export default function HomePage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const summary = useDailySummary();
+  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   // Modal state
   const [showAddFood, setShowAddFood] = useState(false);
   const [showAddDrink, setShowAddDrink] = useState(false);
   const [editEntry, setEditEntry] = useState<EntryOut | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showIosInstall, setShowIosInstall] = useState(false);
 
   const { items, hasUnread, markRead, lastViewed } = useNotifications(summary.streak);
 
@@ -85,6 +89,7 @@ export default function HomePage() {
           streak={summary.streak}
           onBellClick={handleOpenNotifications}
           hasUnread={hasUnread}
+          homeViewMode={profile?.home_view_mode}
         />
       </div>
 
@@ -95,6 +100,8 @@ export default function HomePage() {
           onAddDrink={() => setShowAddDrink(true)}
         />
       </div>
+
+      <InstallBanner onShowIosInstructions={() => setShowIosInstall(true)} />
 
       {/* Entry List */}
       <div className="animate-fade-up stagger-3 px-4 mt-2">
@@ -129,6 +136,20 @@ export default function HomePage() {
         {editEntry && <EntryEditModal entry={editEntry} onClose={() => setEditEntry(null)} />}
       </Modal>
 
+      <Modal open={showIosInstall} onClose={() => setShowIosInstall(false)} title={t("install.iosTitle")}>
+        <div className="space-y-4 text-sm" style={{ color: "var(--text-secondary)" }}>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+              style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", color: "white" }}>1</span>
+            <p>{t("install.iosStep1")}</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+              style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))", color: "white" }}>2</span>
+            <p>{t("install.iosStep2")}</p>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
