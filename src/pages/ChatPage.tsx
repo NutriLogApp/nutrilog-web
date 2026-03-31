@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Bot, RotateCcw } from "lucide-react";
@@ -116,27 +117,12 @@ export default function ChatPage() {
     setInput("");
   }, []);
 
-  // Use visualViewport to handle iOS keyboard without squishing layout
-  const [chatHeight, setChatHeight] = useState<string | undefined>(undefined);
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-    function update() {
-      // When keyboard opens, visualViewport.height shrinks to the visible area
-      // Subtract navbar (96px) only when keyboard is closed (full height)
-      const isKeyboardOpen = vv!.height < window.innerHeight * 0.75;
-      const navOffset = isKeyboardOpen ? 0 : 96;
-      setChatHeight(`${vv!.height - navOffset}px`);
-    }
-    vv.addEventListener("resize", update);
-    update();
-    return () => vv.removeEventListener("resize", update);
-  }, []);
+  useVisualViewport();
 
   return (
     <div
-      className="flex flex-col"
-      style={{ height: chatHeight ?? "calc(100dvh - 96px - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px))" }}
+      className="flex flex-col overflow-hidden"
+      style={{ height: "calc(var(--vvh, 100dvh) - 96px - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px))" }}
     >
       {/* Header */}
       <div
@@ -240,6 +226,7 @@ export default function ChatPage() {
         style={{
           paddingBottom: "calc(12px + env(safe-area-inset-bottom, 0px))",
           borderTop: "1px solid var(--border)",
+          touchAction: "none",
         }}
       >
         <ChatInput
