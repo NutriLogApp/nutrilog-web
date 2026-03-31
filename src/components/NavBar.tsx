@@ -16,19 +16,19 @@ export default function NavBar() {
   const { t } = useTranslation();
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 pointer-events-none" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+    <div
+      className="fixed bottom-0 inset-x-0 z-50 pointer-events-none"
+      style={{
+        background: "var(--bg-elevated)",
+        backdropFilter: "var(--blur)",
+        WebkitBackdropFilter: "var(--blur)",
+        borderTop: "1px solid var(--border)",
+        boxShadow: "0 -4px 20px rgba(0,0,0,0.1)",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      }}
+    >
       <nav
         className="max-w-lg mx-auto flex justify-around py-2.5 pointer-events-auto"
-        style={{
-          background: "var(--bg-elevated)",
-          backdropFilter: "var(--blur)",
-          WebkitBackdropFilter: "var(--blur)",
-          borderRadius: "var(--radius) var(--radius) 0 0",
-          borderTop: "1px solid var(--border)",
-          borderLeft: "1px solid var(--border)",
-          borderRight: "1px solid var(--border)",
-          boxShadow: "0 -4px 20px rgba(0,0,0,0.1)",
-        }}
       >
         {tabs.map(({ path, icon: Icon, labelKey }) => {
           const active = path === "/"
