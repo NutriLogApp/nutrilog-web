@@ -114,7 +114,7 @@ export default function TrendsPage() {
               />
               {isWeek ? (
                 <>
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
+                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} formatter={(value: string) => <span style={{ marginInlineStart: 4 }}>{value}</span>} />
                   <Bar dataKey="protein" stackId="a" fill="#6366f1" name={t("macros.protein")} cursor={{ fill: "var(--bg-card)" } as any} />
                   <Bar dataKey="fat" stackId="a" fill="#f59e0b" name={t("macros.fat")} cursor={{ fill: "var(--bg-card)" } as any} />
                   <Bar dataKey="carbs" stackId="a" fill="#10b981" name={t("macros.carbs")} radius={[6, 6, 0, 0]} cursor={{ fill: "var(--bg-card)" } as any} />
@@ -136,9 +136,9 @@ export default function TrendsPage() {
           <div className="grid grid-cols-4 gap-2">
             {[
               { label: t("dashboard.kcal"), value: avg.cal, color: "var(--theme-accent)" },
-              { label: t("macros.protein"), value: `${avg.p}${t("log.g")}`, color: "#6366f1" },
-              { label: t("macros.fat"), value: `${avg.f}${t("log.g")}`, color: "#f59e0b" },
-              { label: t("macros.carbs"), value: `${avg.c}${t("log.g")}`, color: "#10b981" },
+              { label: t("macros.protein"), value: `${avg.p} ${t("log.g")}`, color: "#6366f1" },
+              { label: t("macros.fat"), value: `${avg.f} ${t("log.g")}`, color: "#f59e0b" },
+              { label: t("macros.carbs"), value: `${avg.c} ${t("log.g")}`, color: "#10b981" },
             ].map((item) => (
               <div key={item.label} className="glass-card-sm p-3 text-center">
                 <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>

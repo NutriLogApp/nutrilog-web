@@ -1,17 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Scale, Flame, Beef, Droplets, Wheat, CircleDot, Trash2, AlertTriangle, Monitor, Download } from "lucide-react";
+import { ChevronLeft, Shield, Palette, Clock, Target, Coffee, RefreshCw, Globe, Timer, Settings, UserCog, Flame, Beef, Droplets, Wheat, CircleDot, AlertTriangle, Monitor, Download } from "lucide-react";
 import { getProfile, updateProfile } from "@/services/profileService";
 import { useAuth } from "@/hooks/useAuth";
 import { themes, applyTheme, type ThemeName } from "@/themes/themes";
 import { useState, useEffect } from "react";
-import { logWeight, getWeightHistory, deleteWeight } from "@/services/weightService";
 import EatingWindows from "@/components/EatingWindows";
 import DrinkManager from "@/components/DrinkManager";
 import OnboardingQuiz from "@/components/OnboardingQuiz";
 import Modal from "@/components/Modal";
-import ConfirmDialog from "@/components/ConfirmDialog";
+
 import NumericInput from "@/components/NumericInput";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
@@ -55,7 +54,6 @@ export default function SettingsPage() {
 
   const { data: profile, isLoading } = useQuery({ queryKey: ["profile"], queryFn: getProfile });
   const updateMut = useMutation({ mutationFn: updateProfile, onSuccess: () => qc.invalidateQueries({ queryKey: ["profile"] }) });
-  const { data: weightHistory } = useQuery({ queryKey: ["weightHistory"], queryFn: getWeightHistory });
 
   const [goals, setGoals] = useState({ daily_cal_goal: 2000, daily_protein_goal_g: 120, daily_fat_goal_g: 78, daily_carbs_goal_g: 180, daily_water_goal_ml: 2000 });
   const [searchParams, setSearchParams] = useSearchParams();
@@ -66,8 +64,6 @@ export default function SettingsPage() {
   }
   const [activeTheme, setActiveTheme] = useState<ThemeName>("ocean");
   const [darkMode, setDarkMode] = useState<"auto" | "light" | "dark">("auto");
-  const [weightInput, setWeightInput] = useState("");
-  const [deleteWeightDate, setDeleteWeightDate] = useState<string | null>(null);
   const { install, isIos, showButton: showInstall } = useInstallPrompt();
   const [showIosModal, setShowIosModal] = useState(false);
 
@@ -90,16 +86,6 @@ export default function SettingsPage() {
     else if (mode === "light") root.classList.add("force-light");
   }
 
-  const logWeightMut = useMutation({
-    mutationFn: () => logWeight(parseFloat(weightInput)),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["weightHistory"] }); setWeightInput(""); setModal(null); },
-  });
-
-  const deleteWeightMut = useMutation({
-    mutationFn: (date: string) => deleteWeight(date),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["weightHistory"] }); setDeleteWeightDate(null); },
-  });
-
   if (isLoading) return (
     <div className="flex items-center justify-center h-64">
       <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--border)", borderTopColor: "var(--theme-accent)" }} />
@@ -108,7 +94,6 @@ export default function SettingsPage() {
 
   const lang = i18n.language;
   const currentTheme = themes[activeTheme];
-  const latestWeight = weightHistory?.[weightHistory.length - 1];
 
   return (
     <div className="pb-8">
@@ -133,8 +118,6 @@ export default function SettingsPage() {
           <div className="glass-card overflow-hidden">
             <SettingRow icon={Target} label={t("profile.goals")} onClick={() => setModal("goals")} lang={lang} isFirst />
             <SettingRow icon={Coffee} label={t("profile.customDrinks")} onClick={() => setModal("drinks")} lang={lang} />
-            <SettingRow icon={Scale} label={t("weight.title")} onClick={() => setModal("weight")} lang={lang}
-              extra={latestWeight && <span className="text-xs font-medium tabular-nums" style={{ color: "var(--text-muted)" }}>{latestWeight.weight_kg}kg</span>} />
             <SettingRow icon={Clock} label={t("profile.eatingWindows")} onClick={() => setModal("windows")} lang={lang} />
             <SettingRow icon={RefreshCw} label={t("profile.retakeQuiz")} onClick={() => setModal("quiz")} lang={lang} />
           </div>
@@ -234,40 +217,6 @@ export default function SettingsPage() {
         <DrinkManager />
       </Modal>
 
-      {/* Weight */}
-      <Modal open={modal === "weight"} onClose={() => setModal(null)} title={t("weight.title")}>
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <input type="number" step="0.1" value={weightInput} onChange={(e) => setWeightInput(e.target.value)}
-              placeholder={t("weight.placeholder")} className="flex-1 rounded-xl px-4 py-3 text-sm"
-              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }} />
-            <button onClick={() => logWeightMut.mutate()} disabled={!weightInput || logWeightMut.isPending}
-              className="px-6 py-3 rounded-xl text-white text-sm font-semibold disabled:opacity-50 active:scale-[0.98]"
-              style={{ background: "linear-gradient(135deg, var(--theme-start), var(--theme-end))" }}>
-              {t("weight.log")}
-            </button>
-          </div>
-          {weightHistory && weightHistory.length > 0 && (
-            <div className="space-y-2">
-              <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t("weight.recent")}</h3>
-              {weightHistory.slice(-5).reverse().map((w) => (
-                <div key={w.date} className="flex items-center justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
-                  <span>{w.date}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold tabular-nums">{w.weight_kg} kg</span>
-                    <button onClick={() => setDeleteWeightDate(w.date)}
-                      className="p-1.5 rounded-full transition-all hover:bg-red-500/10 active:scale-90"
-                      style={{ color: "var(--text-muted)" }}>
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </Modal>
-
       {/* Eating Windows */}
       <Modal open={modal === "windows"} onClose={() => setModal(null)} title={t("profile.eatingWindows")}>
         <EatingWindows onClose={() => setModal(null)} />
@@ -362,13 +311,6 @@ export default function SettingsPage() {
           <OnboardingQuiz onDone={() => { setModal(null); qc.invalidateQueries({ queryKey: ["profile"] }); }} />
         </div>
       )}
-
-      <ConfirmDialog
-        open={!!deleteWeightDate}
-        message={t("common.deleteConfirm")}
-        onConfirm={() => { if (deleteWeightDate) deleteWeightMut.mutate(deleteWeightDate); }}
-        onCancel={() => setDeleteWeightDate(null)}
-      />
 
       <Modal open={showIosModal} onClose={() => setShowIosModal(false)} title={t("install.iosTitle")}>
         <div className="space-y-4 text-sm" style={{ color: "var(--text-secondary)" }}>

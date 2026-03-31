@@ -8,10 +8,10 @@ import WeightChart from "./WeightChart";
 
 type RangeDays = 7 | 30 | 90;
 
-const RANGE_OPTIONS: { label: string; days: RangeDays }[] = [
-  { label: "7D", days: 7 },
-  { label: "30D", days: 30 },
-  { label: "90D", days: 90 },
+const RANGE_OPTIONS: { labelKey: string; days: RangeDays }[] = [
+  { labelKey: "profileTabs.7d", days: 7 },
+  { labelKey: "profileTabs.30d", days: 30 },
+  { labelKey: "profileTabs.90d", days: 90 },
 ];
 
 export default function WeightTab() {
@@ -95,7 +95,7 @@ export default function WeightTab() {
                 : { backgroundColor: "var(--bg-input)", color: "var(--text-muted)" }
             }
           >
-            {opt.label}
+            {t(opt.labelKey)}
           </button>
         ))}
       </div>

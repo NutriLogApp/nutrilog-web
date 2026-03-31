@@ -19,7 +19,7 @@ function formatDateRange(weekStart: string): string {
   end.setDate(end.getDate() + 6);
   const locale = i18n.language === "he" ? "he-IL" : "en-US";
   const fmt = (d: Date) =>
-    d.toLocaleDateString(locale, { month: "short", day: "numeric" });
+    d.toLocaleDateString(locale, { month: "long", day: "numeric" });
   return `${fmt(start)} - ${fmt(end)}`;
 }
 

@@ -94,13 +94,13 @@ export function EntryRow({
           {showMacros && (
             <div style={{ display: "flex", gap: "8px", marginTop: "2px" }}>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#0d9488" }}>
-                {Math.round(entry.total_protein_g)}g {t("macros.proteinShort")}
+                {t("macros.proteinShort")} {Math.round(entry.total_protein_g)} {t("log.g")}
               </span>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#f59e0b" }}>
-                {Math.round(entry.total_fat_g)}g {t("macros.fatShort")}
+                {t("macros.fatShort")} {Math.round(entry.total_fat_g)} {t("log.g")}
               </span>
               <span style={{ fontSize: "9px", fontWeight: 600, color: "#ec4899" }}>
-                {Math.round(entry.total_carbs_g)}g {t("macros.carbsShort")}
+                {t("macros.carbsShort")} {Math.round(entry.total_carbs_g)} {t("log.g")}
               </span>
             </div>
           )}
@@ -110,7 +110,7 @@ export function EntryRow({
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
                 </svg>
-                {Math.round(((item.volume_ml ?? item.grams ?? 0) * (item.water_pct ?? 0)) / 100)}{t("water.ml")}
+                {Math.round(((item.volume_ml ?? item.grams ?? 0) * (item.water_pct ?? 0)) / 100)} {t("water.ml")}
               </span>
             </div>
           )}

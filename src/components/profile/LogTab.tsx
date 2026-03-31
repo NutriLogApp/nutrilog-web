@@ -108,11 +108,11 @@ export default function LogTab({ use24h = true }: Props) {
               </p>
             </div>
             <div className="flex items-center justify-end gap-1.5 mt-0.5">
-              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#6366f1" }}>{totals.p}<span className="font-bold">{t("macros.proteinShort")}</span></span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#6366f1" }}>{totals.p} <span className="font-bold">{t("macros.proteinShort")}</span></span>
               <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
-              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#f59e0b" }}>{totals.f}<span className="font-bold">{t("macros.fatShort")}</span></span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#f59e0b" }}>{totals.f} <span className="font-bold">{t("macros.fatShort")}</span></span>
               <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
-              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#10b981" }}>{totals.c}<span className="font-bold">{t("macros.carbsShort")}</span></span>
+              <span className="text-[10px] font-semibold tabular-nums" style={{ color: "#10b981" }}>{totals.c} <span className="font-bold">{t("macros.carbsShort")}</span></span>
               {totals.waterMl > 0 && (
                 <>
                   <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>

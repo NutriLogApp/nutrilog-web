@@ -60,7 +60,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
       <div className="glass-card overflow-hidden">
         <div className="p-3.5">
           <div className="flex items-center">
-            <Flame size={18} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
+            <Flame size={18} style={{ color: "var(--theme-accent)", marginInlineEnd: 10, flexShrink: 0 }} />
             <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
               {t("profileTabs.currentStreak")}
             </span>
@@ -74,7 +74,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
         </div>
         <div className="p-3.5" style={{ borderTop: "1px solid var(--border)" }}>
           <div className="flex items-center">
-            <Target size={18} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
+            <Target size={18} style={{ color: "var(--theme-accent)", marginInlineEnd: 10, flexShrink: 0 }} />
             <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
               {t("profileTabs.bestStreak")}
             </span>
@@ -91,7 +91,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
       {/* Calorie adherence */}
       <div className="glass-card p-3.5">
         <div className="flex items-center mb-1">
-          <BarChart3 size={16} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
+          <BarChart3 size={16} style={{ color: "var(--theme-accent)", marginInlineEnd: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.weeklyGoalHit")}
           </span>
@@ -120,7 +120,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
         title={t("profileTabs.weightHint")}
       >
         <div className="flex items-center">
-          <Scale size={18} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
+          <Scale size={18} style={{ color: "var(--theme-accent)", marginInlineEnd: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.weightLabel")}
           </span>
