@@ -82,7 +82,8 @@ export function CalorieSummary({
     <div
       style={{
         background: `linear-gradient(135deg, color-mix(in srgb, var(--theme-start) 14%, transparent), color-mix(in srgb, var(--theme-end) 8%, transparent))`,
-        padding: "16px 16px 12px",
+        marginTop: "calc(-1 * env(safe-area-inset-top, 0px))",
+        padding: "calc(16px + env(safe-area-inset-top, 0px)) 16px 12px",
       }}
     >
       {/* Header row: streak pill + bell right-aligned */}
