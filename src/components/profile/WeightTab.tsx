@@ -137,7 +137,7 @@ export default function WeightTab() {
               min="0"
               value={logInput}
               onChange={(e) => setLogInput(e.target.value)}
-              placeholder="kg"
+              placeholder={t("units.kg")}
               autoFocus
               className="flex-1 rounded-xl px-4 py-2.5 text-sm mt-3"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-primary)" }}
@@ -202,7 +202,7 @@ export default function WeightTab() {
               ) : (
                 <>
                   <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--text-primary)" }}>
-                    {w.weight_kg} <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>kg</span>
+                    {w.weight_kg} <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>{t("units.kg")}</span>
                   </span>
                   <button
                     onClick={() => startEdit(w.date, w.weight_kg)}

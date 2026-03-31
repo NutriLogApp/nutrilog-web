@@ -60,7 +60,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
       <div className="glass-card overflow-hidden">
         <div className="p-3.5">
           <div className="flex items-center">
-            <Flame size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
+            <Flame size={18} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
             <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
               {t("profileTabs.currentStreak")}
             </span>
@@ -68,13 +68,13 @@ export default function StatsTab({ onSwitchTab }: Props) {
               {streak} {t("profileTabs.days")}
             </span>
           </div>
-          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)", paddingLeft: 28 }}>
+          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)", paddingInlineStart: 28 }}>
             {t("profileTabs.streakHint")}
           </p>
         </div>
         <div className="p-3.5" style={{ borderTop: "1px solid var(--border)" }}>
           <div className="flex items-center">
-            <Target size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
+            <Target size={18} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
             <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
               {t("profileTabs.bestStreak")}
             </span>
@@ -82,7 +82,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
               {bestStreak} {t("profileTabs.days")}
             </span>
           </div>
-          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)", paddingLeft: 28 }}>
+          <p className="text-[10px] mt-1" style={{ color: "var(--text-muted)", paddingInlineStart: 28 }}>
             {t("profileTabs.bestStreakHint")}
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
       {/* Calorie adherence */}
       <div className="glass-card p-3.5">
         <div className="flex items-center mb-1">
-          <BarChart3 size={16} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
+          <BarChart3 size={16} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.weeklyGoalHit")}
           </span>
@@ -99,7 +99,7 @@ export default function StatsTab({ onSwitchTab }: Props) {
             {t("profileTabs.daysCount", { hit: goalHit, total: 7 })}
           </span>
         </div>
-        <p className="text-[10px] mb-2" style={{ color: "var(--text-muted)", paddingLeft: 26 }}>
+        <p className="text-[10px] mb-2" style={{ color: "var(--text-muted)", paddingInlineStart: 26 }}>
           {t("profileTabs.weeklyGoalHint")}
         </p>
         <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--bg-input)" }}>
@@ -120,26 +120,26 @@ export default function StatsTab({ onSwitchTab }: Props) {
         title={t("profileTabs.weightHint")}
       >
         <div className="flex items-center">
-          <Scale size={18} style={{ color: "var(--theme-accent)", marginRight: 10, flexShrink: 0 }} />
+          <Scale size={18} style={{ color: "var(--theme-accent)", marginInlineStart: 10, flexShrink: 0 }} />
           <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
             {t("profileTabs.weightLabel")}
           </span>
           <span className="text-sm font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>
-            {latestWeight ? `${latestWeight.weight_kg} kg` : "-- kg"}
+            {latestWeight ? `${latestWeight.weight_kg} ${t("units.kg")}` : `-- ${t("units.kg")}`}
           </span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" style={{ marginLeft: 8 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" className="rtl:rotate-180" style={{ marginInlineStart: 8 }}>
             <path d="m9 18 6-6-6-6" />
           </svg>
         </div>
         {weightDelta !== null && (
-          <div className="flex items-center gap-1 mt-1" style={{ paddingLeft: 28 }}>
+          <div className="flex items-center gap-1 mt-1" style={{ paddingInlineStart: 28 }}>
             {weightDelta <= 0 ? (
               <TrendingDown size={12} style={{ color: "#22c55e" }} />
             ) : (
               <TrendingUp size={12} style={{ color: "#ef4444" }} />
             )}
             <span className="text-[11px]" style={{ color: weightDelta <= 0 ? "#22c55e" : "#ef4444" }}>
-              {weightDelta > 0 ? "+" : ""}{weightDelta} kg {t("profileTabs.thisMonth")}
+              {weightDelta > 0 ? "+" : ""}{weightDelta} {t("units.kg")} {t("profileTabs.thisMonth")}
             </span>
           </div>
         )}
