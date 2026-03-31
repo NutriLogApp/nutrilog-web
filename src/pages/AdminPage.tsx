@@ -75,7 +75,7 @@ export default function AdminPage() {
         <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>Version</p>
         <div className="flex justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
           <span>Frontend</span>
-          <span className="font-mono text-xs" style={{ color: "var(--text-primary)" }}>{__APP_VERSION__}</span>
+          <span className="font-mono text-xs select-all" style={{ color: "var(--text-primary)" }}>{__APP_VERSION__}</span>
         </div>
         <div className="flex justify-between text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
           <span>Backend</span>
