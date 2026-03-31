@@ -23,7 +23,7 @@ export default function FriendProfileModal({ userId, onClose }: FriendProfileMod
     <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.4)" }} />
       <div
-        className="relative w-full max-w-lg rounded-t-[20px] pb-8"
+        className="relative w-full max-w-lg rounded-t-[20px] pb-24"
         style={{
           background: "var(--bg-elevated)",
           border: "1px solid var(--border)",
